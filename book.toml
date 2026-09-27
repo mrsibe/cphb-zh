@@ -1,0 +1,32 @@
+[book]
+title = "Competitive Programmer's Handbook（中文版）"
+authors = ["Antti Laaksonen"]
+description = "Competitive Programmer's Handbook 中文翻译"
+language = "zh-CN"
+src = "src"
+# 只在本地/CI 中显式指定时可关闭 Git 集成
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/mrsibe/cphb-zh"
+edit-url-template = "https://github.com/mrsibe/cphb-zh/edit/master/src/{path}"
+site-url = "/cphb-zh/"
+additional-css = ["theme/mdbook-extra.css"]
+mathjax-support = true
+no-section-label = true
+
+[output.html.fold]
+enable = true
+level = 2
+
+[output.html.search]
+enable = true
+limit-results = 30
+teaser-word-count = 30
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 1
+boost-paragraph = 1
+expand = true
+heading-split-level = 3
+copy-js = true

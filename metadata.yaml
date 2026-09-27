@@ -1,0 +1,27 @@
+---
+title: "Competitive Programmer's Handbook"
+subtitle: "竞赛程序设计手册 · 中文翻译版"
+author: "Antti Laaksonen"
+date: "2021"
+lang: zh-CN
+papersize: a4
+fontsize: 11pt
+# 正文字体：优先思源宋体（跨平台），其次常见系统中文字体
+mainfont:
+  - "Noto Serif SC"
+  - "Noto Serif CJK SC"
+  - "Source Han Serif SC"
+  - "Songti SC"
+  - "SimSun"
+codefont:
+  - "DejaVu Sans Mono"
+  - "Consolas"
+  - "Courier New"
+# 章节编号（1 / 1.1 / 1.1.1）
+section-numbering: "1.1.1"
+toc: true
+toc-depth: 2
+linkcolor: "44548A"
+citecolor: "44548A"
+filecolor: "44548A"
+---

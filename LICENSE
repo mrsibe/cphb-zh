@@ -1,0 +1,35 @@
+# License
+
+## 中文翻译部分
+
+Copyright (c) 2026 mrsibe and contributors.
+
+本中文翻译（`src/` 下的所有翻译文本、`theme/` 下的排版模板，以及由本项目生成的
+网站 / PDF / EPUB）采用 **Creative Commons Attribution-NonCommercial-ShareAlike
+4.0 International License（CC BY-NC-SA 4.0）** 发布。
+
+你可以自由地：
+
+- **共享** —— 以任何媒介或格式复制、发行本作品；
+- **演绎** —— 修改、转换或以本作品为基础进行创作。
+
+惟须遵守下列条件：
+
+- **署名（BY）** —— 必须给出适当的署名，提供指向本许可协议的链接，并说明是否
+  作出了修改。
+- **非商业性使用（NC）** —— 不得将本作品用于商业目的。
+- **相同方式共享（SA）** —— 若你修改、转换或以本作品为基础进行创作，必须以
+  与原先许可协议相同的许可协议分发你的作品。
+
+许可协议全文：<https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-Hans>
+
+## 原书
+
+*Competitive Programmer's Handbook* 由 **Antti Laaksonen** 编写，
+同样以 CC BY-NC-SA 4.0 发布。
+
+- 原书主页：<https://cses.fi/book/>
+- 原始仓库：<https://github.com/pllk/cphb>
+
+本仓库保留的 `chapter*.tex`、`book.tex`、`list.tex`、`book.pdf` 等文件属于
+上游原文，版权归原作者所有，仅用于翻译与迁移来源。

@@ -1,0 +1,12 @@
+# Build outputs
+book/
+dist/
+.migrate/
+
+# Node
+node_modules/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp

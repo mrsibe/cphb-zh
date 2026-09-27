@@ -1,0 +1,29 @@
+/* Small additions on top of mdBook's default theme. */
+
+/* TikZ figures are SVGs with their natural (small) size; center them and
+   never let a wide diagram overflow the content column. */
+.content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.content p > img:only-child,
+.content p:has(> img) {
+  display: block;
+  margin: 1em auto;
+}
+
+/* Translator notes (blockquotes with a bold lead-in) get a subtle accent. */
+.content blockquote {
+  border-left: 4px solid #44548a;
+  background: #f4f6fb;
+  border-radius: 3px;
+  padding: 0.6em 1em;
+}
+
+/* Make long inline code a bit friendlier. */
+.content code {
+  word-break: break-word;
+}
+
+/* Numbered chapter labels in the sidebar are already provided by SUMMARY.md. */

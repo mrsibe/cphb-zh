@@ -1,0 +1,112 @@
+name: Build
+
+on:
+  push:
+    branches: [master, main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PANDOC_VERSION: "3.11"
+  TYPST_VERSION: "v0.15.1"
+  MDBOOK_VERSION: "0.5.4"
+
+jobs:
+  build:
+    name: Build site, PDF and EPUB
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mdBook
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -fsSL -o /tmp/mdbook.tar.gz \
+            "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          tar -xzf /tmp/mdbook.tar.gz -C "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          mdbook --version
+
+      - name: Install pandoc
+        run: |
+          curl -fsSL -o /tmp/pandoc.deb \
+            "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+          sudo dpkg -i /tmp/pandoc.deb || sudo apt-get install -f -y
+          pandoc --version | head -1
+
+      - name: Install typst
+        run: |
+          curl -fsSL -o /tmp/typst.tar.xz \
+            "https://github.com/typst/typst/releases/download/${TYPST_VERSION}/typst-x86_64-unknown-linux-musl.tar.xz"
+          tar -xJf /tmp/typst.tar.xz -C /tmp
+          sudo mv /tmp/typst-*/typst /usr/local/bin/typst
+          typst --version
+
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-list | grep -i "Noto Serif CJK" | head -3
+
+      - name: Build
+        run: make build
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: book
+
+      - name: Upload PDF and EPUB
+        uses: actions/upload-artifact@v4
+        with:
+          name: cphb-zh-pdf-epub
+          path: |
+            dist/cphb-zh.pdf
+            dist/cphb-zh.epub
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    name: Attach PDF and EPUB to release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cphb-zh-pdf-epub
+          path: dist
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/cphb-zh.pdf
+            dist/cphb-zh.epub
+          generate_release_notes: true

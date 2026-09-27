@@ -1,0 +1,7 @@
+# 统一换行符，避免 Windows/Linux 之间的 CRLF 抖动
+* text=auto eol=lf
+
+*.pdf binary
+*.png binary
+*.jpg binary
+*.woff2 binary
