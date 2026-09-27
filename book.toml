@@ -12,7 +12,9 @@ git-repository-url = "https://github.com/mrsibe/cphb-zh"
 edit-url-template = "https://github.com/mrsibe/cphb-zh/edit/master/src/{path}"
 site-url = "/cphb-zh/"
 additional-css = ["theme/mdbook-extra.css"]
-mathjax-support = true
+# 关闭 mdBook 内置的 MathJax 2（它只识别 \(...\) / \[...\]，不认 $...$）；
+# 改由 theme/head.hbs 自带配置的 MathJax 3 渲染。
+mathjax-support = false
 no-section-label = true
 
 [output.html.fold]
