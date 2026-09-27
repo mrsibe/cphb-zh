@@ -1,8 +1,8 @@
-# Combinatorics
+# 组合数学
 
-**Combinatorics** studies methods for counting combinations of objects. Usually, the goal is to find a way to count the combinations efficiently without generating each combination separately.
+**组合数学**（Combinatorics）研究对对象组合进行计数的方法。通常，目标是找到一种高效地对组合进行计数的方法，而不必逐一生成每个组合。
 
-As an example, consider the problem of counting the number of ways to represent an integer $n$ as a sum of positive integers. For example, there are 8 representations for $4$:
+作为一个例子，考虑把整数 $n$ 表示为若干个正整数之和的表示方法数的问题。例如，$4$ 有 8 种表示：
 
 2
 
@@ -22,14 +22,14 @@ As an example, consider the problem of counting the number of ways to represent 
 
 - $4$
 
-A combinatorial problem can often be solved using a recursive function. In this problem, we can define a function $f(n)$ that gives the number of representations for $n$. For example, $f(4)=8$ according to the above example. The values of the function can be recursively calculated as follows: $$\begin{equation*}
+组合问题常常可以用递归函数求解。在这个问题中，我们可以定义一个函数 $f(n)$，它给出 $n$ 的表示方法数。例如，根据上面的例子 $f(4)=8$。函数的值可以递归地计算如下： $$\begin{equation*}
     f(n) = \begin{cases}
                1               & n = 0\\
                f(0)+f(1)+\cdots+f(n-1) & n > 0\\
            \end{cases}
-\end{equation*}$$ The base case is $f(0)=1$, because the empty sum represents the number 0. Then, if $n>0$, we consider all ways to choose the first number of the sum. If the first number is $k$, there are $f(n-k)$ representations for the remaining part of the sum. Thus, we calculate the sum of all values of the form $f(n-k)$ where $k<n$.
+\end{equation*}$$ 基本情况是 $f(0)=1$，因为空和表示数字 0。然后，若 $n>0$，我们考虑选择和中第一个数的所有方式。如果第一个数是 $k$，则和剩余部分有 $f(n-k)$ 种表示。因此，我们计算所有形如 $f(n-k)$（其中 $k<n$）的值之和。
 
-The first values for the function are: $$\begin{array}{lcl}
+该函数的前几个值为： $$\begin{array}{lcl}
 f(0) & = & 1 \\
 f(1) & = & 1 \\
 f(2) & = & 2 \\
@@ -37,36 +37,36 @@ f(3) & = & 4 \\
 f(4) & = & 8 \\
 \end{array}$$
 
-Sometimes, a recursive formula can be replaced with a closed-form formula. In this problem, $$f(n)=2^{n-1},$$ which is based on the fact that there are $n-1$ possible positions for +-signs in the sum and we can choose any subset of them.
+有时，递归公式可以用闭式公式替换。在这个问题中，$$f(n)=2^{n-1},$$ 这基于以下事实：和式中 + 号有 $n-1$ 个可能的位置，我们可以选择其中任意一个子集。
 
-## Binomial coefficients
+## 二项式系数
 
-The **binomial coefficient** ${n \choose k}$ equals the number of ways we can choose a subset of $k$ elements from a set of $n$ elements. For example, ${5 \choose 3}=10$, because the set $\{1,2,3,4,5\}$ has 10 subsets of 3 elements: $$\{1,2,3\}, \{1,2,4\}, \{1,2,5\}, \{1,3,4\}, \{1,3,5\},
+**二项式系数** ${n \choose k}$ 等于从 $n$ 个元素的集合中选出 $k$ 个元素的子集的方法数。例如，${5 \choose 3}=10$，因为集合 $\{1,2,3,4,5\}$ 有 10 个含 3 个元素的子集： $$\{1,2,3\}, \{1,2,4\}, \{1,2,5\}, \{1,3,4\}, \{1,3,5\},
 \{1,4,5\}, \{2,3,4\}, \{2,3,5\}, \{2,4,5\}, \{3,4,5\}$$
 
-#### Formula 1
+#### 公式 1
 
-Binomial coefficients can be recursively calculated as follows:
+二项式系数可以递归地计算如下：
 
 $${n \choose k}  =  {n-1 \choose k-1} + {n-1 \choose k}$$
 
-The idea is to fix an element $x$ in the set. If $x$ is included in the subset, we have to choose $k-1$ elements from $n-1$ elements, and if $x$ is not included in the subset, we have to choose $k$ elements from $n-1$ elements.
+其思路是固定集合中的一个元素 $x$。如果子集包含 $x$，则必须从 $n-1$ 个元素中选出 $k-1$ 个元素；如果子集不包含 $x$，则必须从 $n-1$ 个元素中选出 $k$ 个元素。
 
-The base cases for the recursion are $${n \choose 0}  =  {n \choose n} = 1,$$ because there is always exactly one way to construct an empty subset and a subset that contains all the elements.
+递归的基本情况为 $${n \choose 0}  =  {n \choose n} = 1,$$ 因为构造空子集和包含所有元素的子集都恰好只有一种方法。
 
-#### Formula 2
+#### 公式 2
 
-Another way to calculate binomial coefficients is as follows: $${n \choose k}  =  \frac{n!}{k!(n-k)!}.$$
+计算二项式系数的另一种方法如下：$${n \choose k}  =  \frac{n!}{k!(n-k)!}.$$
 
-There are $n!$ permutations of $n$ elements. We go through all permutations and always include the first $k$ elements of the permutation in the subset. Since the order of the elements in the subset and outside the subset does not matter, the result is divided by $k!$ and $(n-k)!$
+$n$ 个元素有 $n!$ 种排列。我们遍历所有排列，并总是把排列的前 $k$ 个元素纳入子集。由于子集内外元素的顺序无关紧要，结果要除以 $k!$ 和 $(n-k)!$
 
-#### Properties
+#### 性质
 
-For binomial coefficients, $${n \choose k}  =  {n \choose n-k},$$ because we actually divide a set of $n$ elements into two subsets: the first contains $k$ elements and the second contains $n-k$ elements.
+对于二项式系数，$${n \choose k}  =  {n \choose n-k},$$ 因为我们实际上是把 $n$ 个元素的集合划分为两个子集：第一个含 $k$ 个元素，第二个含 $n-k$ 个元素。
 
-The sum of binomial coefficients is $${n \choose 0}+{n \choose 1}+{n \choose 2}+\ldots+{n \choose n}=2^n.$$
+二项式系数之和为 $${n \choose 0}+{n \choose 1}+{n \choose 2}+\ldots+{n \choose n}=2^n.$$
 
-The reason for the name "binomial coefficient" can be seen when the binomial $(a+b)$ is raised to the $n$th power:
+把二项式 $(a+b)$ 升到 $n$ 次幂，就能看出“二项式系数”这一名称的由来：
 
 $$(a+b)^n =
 {n \choose 0} a^n b^0 +
@@ -75,43 +75,43 @@ $$(a+b)^n =
 {n \choose n-1} a^1 b^{n-1} +
 {n \choose n} a^0 b^n.$$
 
-Binomial coefficients also appear in **Pascal's triangle** where each value equals the sum of two above values:
+二项式系数也出现在**帕斯卡三角**（Pascal's triangle）中，其中每个值等于其上方两个值之和：
 
 ![](assets/images/ch22-fig01.svg)
 
-#### Boxes and balls
+#### 盒子与球
 
-"Boxes and balls" is a useful model, where we count the ways to place $k$ balls in $n$ boxes. Let us consider three scenarios:
+“盒子与球”是一个有用的模型，我们用它来计数把 $k$ 个球放入 $n$ 个盒子的方法数。让我们考虑三种情形：
 
-*Scenario 1*: Each box can contain at most one ball. For example, when $n=5$ and $k=2$, there are 10 solutions:
+*情形 1*：每个盒子至多放一个球。例如，当 $n=5$、$k=2$ 时，有 10 种方案：
 
 ![](assets/images/ch22-fig02.svg)
 
-In this scenario, the answer is directly the binomial coefficient ${n \choose k}$.
+在这种情形下，答案直接就是二项式系数 ${n \choose k}$。
 
-*Scenario 2*: A box can contain multiple balls. For example, when $n=5$ and $k=2$, there are 15 solutions:
+*情形 2*：盒子可以放多个球。例如，当 $n=5$、$k=2$ 时，有 15 种方案：
 
 ![](assets/images/ch22-fig03.svg)
 
-The process of placing the balls in the boxes can be represented as a string that consists of symbols "o" and "$\rightarrow$". Initially, assume that we are standing at the leftmost box. The symbol "o" means that we place a ball in the current box, and the symbol "$\rightarrow$" means that we move to the next box to the right.
+把球放入盒子的过程可以表示为一个由符号“o”和“$\rightarrow$”构成的字符串。一开始，假设我们站在最左边的盒子处。符号“o”表示在当前盒子中放一个球，符号“$\rightarrow$”表示向右移动到下一个盒子。
 
-Using this notation, each solution is a string that contains $k$ times the symbol "o" and $n-1$ times the symbol "$\rightarrow$". For example, the upper-right solution in the above picture corresponds to the string "$\rightarrow$ $\rightarrow$ o $\rightarrow$ o $\rightarrow$". Thus, the number of solutions is ${k+n-1 \choose k}$.
+使用这种记号，每种方案都是一个包含 $k$ 个符号“o”和 $n-1$ 个符号“$\rightarrow$”的字符串。例如，上图中右上角的方案对应字符串“$\rightarrow$ $\rightarrow$ o $\rightarrow$ o $\rightarrow$”。因此，方案数为 ${k+n-1 \choose k}$。
 
-*Scenario 3*: Each box may contain at most one ball, and in addition, no two adjacent boxes may both contain a ball. For example, when $n=5$ and $k=2$, there are 6 solutions:
+*情形 3*：每个盒子至多放一个球，此外，任意两个相邻的盒子不能都放球。例如，当 $n=5$、$k=2$ 时，有 6 种方案：
 
 ![](assets/images/ch22-fig04.svg)
 
-In this scenario, we can assume that $k$ balls are initially placed in boxes and there is an empty box between each two adjacent boxes. The remaining task is to choose the positions for the remaining empty boxes. There are $n-2k+1$ such boxes and $k+1$ positions for them. Thus, using the formula of scenario 2, the number of solutions is ${n-k+1 \choose n-2k+1}$.
+在这种情形下，我们可以假设 $k$ 个球已经先放入盒子，而且每两个相邻盒子之间有一个空盒子。剩下的任务是为其余空盒子选择位置。这样的盒子有 $n-2k+1$ 个，位置有 $k+1$ 个。因此，套用情形 2 的公式，方案数为 ${n-k+1 \choose n-2k+1}$。
 
-#### Multinomial coefficients
+#### 多项系数
 
-The **multinomial coefficient** $${n \choose k_1,k_2,\ldots,k_m} = \frac{n!}{k_1! k_2! \cdots k_m!},$$ equals the number of ways we can divide $n$ elements into subsets of sizes $k_1,k_2,\ldots,k_m$, where $k_1+k_2+\cdots+k_m=n$. Multinomial coefficients can be seen as a generalization of binomial cofficients; if $m=2$, the above formula corresponds to the binomial coefficient formula.
+**多项系数** $${n \choose k_1,k_2,\ldots,k_m} = \frac{n!}{k_1! k_2! \cdots k_m!},$$ 等于把 $n$ 个元素划分为大小分别为 $k_1,k_2,\ldots,k_m$ 的子集的方法数，其中 $k_1+k_2+\cdots+k_m=n$。多项系数可以看作二项式系数的推广；若 $m=2$，上式就对应二项式系数公式。
 
-## Catalan numbers
+## Catalan 数
 
-The **Catalan number** $C_n$ equals the number of valid parenthesis expressions that consist of $n$ left parentheses and $n$ right parentheses.
+**Catalan 数** $C_n$ 等于由 $n$ 个左括号和 $n$ 个右括号构成的合法括号表达式的数量。
 
-For example, $C_3=5$, because we can construct the following parenthesis expressions using three left and right parentheses:
+例如，$C_3=5$，因为用三个左括号和三个右括号可以构造出以下括号表达式：
 
 - `()()()`
 
@@ -123,87 +123,87 @@ For example, $C_3=5$, because we can construct the following parenthesis express
 
 - `(()())`
 
-#### Parenthesis expressions
+#### 括号表达式
 
-What is exactly a *valid parenthesis expression*? The following rules precisely define all valid parenthesis expressions:
+究竟什么是*合法括号表达式*？以下规则精确地定义了所有合法括号表达式：
 
-- An empty parenthesis expression is valid.
+- 空括号表达式是合法的。
 
-- If an expression $A$ is valid, then also the expression `(`$A$`)` is valid.
+- 如果表达式 $A$ 合法，则表达式 `(`$A$`)` 也合法。
 
-- If expressions $A$ and $B$ are valid, then also the expression $AB$ is valid.
+- 如果表达式 $A$ 和 $B$ 都合法，则表达式 $AB$ 也合法。
 
-Another way to characterize valid parenthesis expressions is that if we choose any prefix of such an expression, it has to contain at least as many left parentheses as right parentheses. In addition, the complete expression has to contain an equal number of left and right parentheses.
+刻画合法括号表达式的另一种方式是：如果取这种表达式的任意一个前缀，它包含的左括号数量必须不少于右括号数量。此外，整个表达式包含的左括号和右括号数量必须相等。
 
-#### Formula 1
+#### 公式 1
 
-Catalan numbers can be calculated using the formula $$C_n = \sum_{i=0}^{n-1} C_{i} C_{n-i-1}.$$
+Catalan 数可以用如下公式计算 $$C_n = \sum_{i=0}^{n-1} C_{i} C_{n-i-1}.$$
 
-The sum goes through the ways to divide the expression into two parts such that both parts are valid expressions and the first part is as short as possible but not empty. For any $i$, the first part contains $i+1$ pairs of parentheses and the number of expressions is the product of the following values:
+该求和遍历把表达式分成两部分、且两部分都是合法表达式、第一部分尽可能短但非空的所有方式。对任意 $i$，第一部分包含 $i+1$ 对括号，表达式数量是以下各值的乘积：
 
-- $C_{i}$: the number of ways to construct an expression using the parentheses of the first part, not counting the outermost parentheses
+- $C_{i}$：使用第一部分的括号（不计最外层括号）构造表达式的方法数
 
-- $C_{n-i-1}$: the number of ways to construct an expression using the parentheses of the second part
+- $C_{n-i-1}$：使用第二部分的括号构造表达式的方法数
 
-The base case is $C_0=1$, because we can construct an empty parenthesis expression using zero pairs of parentheses.
+基本情况是 $C_0=1$，因为用零对括号可以构造出空括号表达式。
 
-#### Formula 2
+#### 公式 2
 
-Catalan numbers can also be calculated using binomial coefficients: $$C_n = \frac{1}{n+1} {2n \choose n}$$ The formula can be explained as follows:
+Catalan 数也可以用二项式系数计算：$$C_n = \frac{1}{n+1} {2n \choose n}$$ 该公式可以这样解释：
 
-There are a total of ${2n \choose n}$ ways to construct a (not necessarily valid) parenthesis expression that contains $n$ left parentheses and $n$ right parentheses. Let us calculate the number of such expressions that are *not* valid.
+总共有 ${2n \choose n}$ 种方式构造一个包含 $n$ 个左括号和 $n$ 个右括号的（未必合法的）括号表达式。让我们来计算其中*不*合法的表达式数量。
 
-If a parenthesis expression is not valid, it has to contain a prefix where the number of right parentheses exceeds the number of left parentheses. The idea is to reverse each parenthesis that belongs to such a prefix. For example, the expression `())()(` contains a prefix `())`, and after reversing the prefix, the expression becomes `)((()(`.
+如果一个括号表达式不合法，它必定包含一个右括号数量超过左括号数量的前缀。思路是把属于该前缀的每个括号反转。例如，表达式 `())()(` 包含前缀 `())`，反转该前缀后，表达式变为 `)((()(`。
 
-The resulting expression consists of $n+1$ left parentheses and $n-1$ right parentheses. The number of such expressions is ${2n \choose n+1}$, which equals the number of non-valid parenthesis expressions. Thus, the number of valid parenthesis expressions can be calculated using the formula $${2n \choose n}-{2n \choose n+1} = {2n \choose n} - \frac{n}{n+1} {2n \choose n} = \frac{1}{n+1} {2n \choose n}.$$
+得到的表达式包含 $n+1$ 个左括号和 $n-1$ 个右括号。这类表达式的数量是 ${2n \choose n+1}$，它等于不合法括号表达式的数量。因此，合法括号表达式的数量可以用如下公式计算 $${2n \choose n}-{2n \choose n+1} = {2n \choose n} - \frac{n}{n+1} {2n \choose n} = \frac{1}{n+1} {2n \choose n}.$$
 
-#### Counting trees
+#### 树的计数
 
-Catalan numbers are also related to trees:
+Catalan 数也与树有关：
 
-- there are $C_n$ binary trees of $n$ nodes
+- 含 $n$ 个结点的二叉树有 $C_n$ 棵
 
-- there are $C_{n-1}$ rooted trees of $n$ nodes
+- 含 $n$ 个结点的有根树有 $C_{n-1}$ 棵
 
-For example, for $C_3=5$, the binary trees are
+例如，当 $C_3=5$ 时，二叉树为
 
 ![](assets/images/ch22-fig05.svg)
 
-and the rooted trees are
+而有根树为
 
 ![](assets/images/ch22-fig06.svg)
 
-## Inclusion-exclusion
+## 容斥原理
 
-**Inclusion-exclusion** is a technique that can be used for counting the size of a union of sets when the sizes of the intersections are known, and vice versa. A simple example of the technique is the formula $$|A \cup B| = |A| + |B| - |A \cap B|,$$ where $A$ and $B$ are sets and $|X|$ denotes the size of $X$. The formula can be illustrated as follows:
+**容斥原理**（inclusion-exclusion）是一种技术，当已知各个交集的大小时，可用它来计数集合并集的大小，反之亦然。该技术的一个简单例子是公式 $$|A \cup B| = |A| + |B| - |A \cap B|,$$ 其中 $A$ 和 $B$ 是集合，$|X|$ 表示 $X$ 的大小。该公式可以如下所示：
 
 ![](assets/images/ch22-fig07.svg)
 
-Our goal is to calculate the size of the union $A \cup B$ that corresponds to the area of the region that belongs to at least one circle. The picture shows that we can calculate the area of $A \cup B$ by first summing the areas of $A$ and $B$ and then subtracting the area of $A \cap B$.
+我们的目标是计算并集 $A \cup B$ 的大小，它对应至少属于一个圆的区域面积。图中显示，我们可以先求 $A$ 和 $B$ 的面积之和，再减去 $A \cap B$ 的面积，从而算出 $A \cup B$ 的面积。
 
-The same idea can be applied when the number of sets is larger. When there are three sets, the inclusion-exclusion formula is $$|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B|  - |A \cap C|  - |B \cap C| + |A \cap B \cap C|$$ and the corresponding picture is
+当集合的数目更多时，同样的思路也适用。当有三个集合时，容斥公式为 $$|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B|  - |A \cap C|  - |B \cap C| + |A \cap B \cap C|$$ 对应的图为
 
 ![](assets/images/ch22-fig08.svg)
 
-In the general case, the size of the union $X_1 \cup X_2 \cup \cdots \cup X_n$ can be calculated by going through all possible intersections that contain some of the sets $X_1,X_2,\ldots,X_n$. If the intersection contains an odd number of sets, its size is added to the answer, and otherwise its size is subtracted from the answer.
+在一般情况下，并集 $X_1 \cup X_2 \cup \cdots \cup X_n$ 的大小可以通过遍历所有包含 $X_1,X_2,\ldots,X_n$ 中某些集合的可能的交集来计算。如果该交集包含奇数个集合，就把其大小加入答案，否则从答案中减去其大小。
 
-Note that there are similar formulas for calculating the size of an intersection from the sizes of unions. For example, $$|A \cap B| = |A| + |B| - |A \cup B|$$ and $$|A \cap B \cap C| = |A| + |B| + |C| - |A \cup B|  - |A \cup C|  - |B \cup C| + |A \cup B \cup C| .$$
+注意，也有类似的公式可以从并集的大小计算交集的大小。例如，$$|A \cap B| = |A| + |B| - |A \cup B|$$ 以及 $$|A \cap B \cap C| = |A| + |B| + |C| - |A \cup B|  - |A \cup C|  - |B \cup C| + |A \cup B \cup C| .$$
 
-#### Derangements
+#### 错排
 
-As an example, let us count the number of **derangements** of elements $\{1,2,\ldots,n\}$, i.e., permutations where no element remains in its original place. For example, when $n=3$, there are two derangements: $(2,3,1)$ and $(3,1,2)$.
+作为一个例子，让我们计数元素 $\{1,2,\ldots,n\}$ 的**错排**（derangement）数量，即没有任何元素留在原位的排列。例如，当 $n=3$ 时，有两种错排：$(2,3,1)$ 和 $(3,1,2)$。
 
-One approach for solving the problem is to use inclusion-exclusion. Let $X_k$ be the set of permutations that contain the element $k$ at position $k$. For example, when $n=3$, the sets are as follows: $$\begin{array}{lcl}
+解决该问题的一种方法是使用容斥原理。设 $X_k$ 为在位置 $k$ 含有元素 $k$ 的排列的集合。例如，当 $n=3$ 时，各集合如下： $$\begin{array}{lcl}
 X_1 & = & \{(1,2,3),(1,3,2)\} \\
 X_2 & = & \{(1,2,3),(3,2,1)\} \\
 X_3 & = & \{(1,2,3),(2,1,3)\} \\
-\end{array}$$ Using these sets, the number of derangements equals $$n! - |X_1 \cup X_2 \cup \cdots \cup X_n|,$$ so it suffices to calculate the size of the union. Using inclusion-exclusion, this reduces to calculating sizes of intersections which can be done efficiently. For example, when $n=3$, the size of $|X_1 \cup X_2 \cup X_3|$ is $$\begin{array}{lcl}
+\end{array}$$ 利用这些集合，错排的数量等于 $$n! - |X_1 \cup X_2 \cup \cdots \cup X_n|,$$ 因此只需计算并集的大小。使用容斥原理，问题化归为计算各个交集的大小，而这可以高效地完成。例如，当 $n=3$ 时，$|X_1 \cup X_2 \cup X_3|$ 的大小为 $$\begin{array}{lcl}
  & & |X_1| + |X_2| + |X_3| - |X_1 \cap X_2|  - |X_1 \cap X_3|  - |X_2 \cap X_3| + |X_1 \cap X_2 \cap X_3| \\
  & = & 2+2+2-1-1-1+1 \\
  & = & 4, \\
-\end{array}$$ so the number of solutions is $3!-4=2$.
+\end{array}$$ 因此方案数为 $3!-4=2$。
 
-It turns out that the problem can also be solved without using inclusion-exclusion. Let $f(n)$ denote the number of derangements for $\{1,2,\ldots,n\}$. We can use the following recursive formula:
+结果表明，该问题也可以不用容斥原理求解。设 $f(n)$ 表示 $\{1,2,\ldots,n\}$ 的错排数量。我们可以使用如下递归公式：
 
 $$\begin{equation*}
     f(n) = \begin{cases}
@@ -213,58 +213,58 @@ $$\begin{equation*}
            \end{cases}
 \end{equation*}$$
 
-The formula can be derived by considering the possibilities how the element 1 changes in the derangement. There are $n-1$ ways to choose an element $x$ that replaces the element 1. In each such choice, there are two options:
+该公式可以通过考虑元素 1 在错排中如何变化而推导出来。有 $n-1$ 种方式选择替换元素 1 的元素 $x$。在每种这样的选择中，有两种情况：
 
-*Option 1:* We also replace the element $x$ with the element 1. After this, the remaining task is to construct a derangement of $n-2$ elements.
+*情况 1*：我们也用元素 1 替换元素 $x$。此后，剩余任务是构造 $n-2$ 个元素的错排。
 
-*Option 2:* We replace the element $x$ with some other element than 1. Now we have to construct a derangement of $n-1$ element, because we cannot replace the element $x$ with the element $1$, and all other elements must be changed.
+*情况 2*：我们用 1 以外的某个其他元素替换元素 $x$。现在我们必须构造 $n-1$ 个元素的错排，因为我们不能用元素 $1$ 替换元素 $x$，而所有其他元素都必须改变。
 
-## Burnside's lemma
+## Burnside 引理
 
-**Burnside's lemma** can be used to count the number of combinations so that only one representative is counted for each group of symmetric combinations. Burnside's lemma states that the number of combinations is $$\sum_{k=1}^n \frac{c(k)}{n},$$ where there are $n$ ways to change the position of a combination, and there are $c(k)$ combinations that remain unchanged when the $k$th way is applied.
+**Burnside 引理**可用于对组合计数，使得每一组对称的组合只计一个代表。Burnside 引理指出，组合的数量为 $$\sum_{k=1}^n \frac{c(k)}{n},$$ 其中改变一个组合位置的方式有 $n$ 种，而当应用第 $k$ 种方式时，保持不变的组合有 $c(k)$ 个。
 
-As an example, let us calculate the number of necklaces of $n$ pearls, where each pearl has $m$ possible colors. Two necklaces are symmetric if they are similar after rotating them. For example, the necklace
+作为一个例子，让我们计算由 $n$ 颗珠子构成的项链数量，其中每颗珠子有 $m$ 种可能的颜色。如果两个项链旋转后相同，则它们是对称的。例如，项链
 
 ![](assets/images/ch22-fig09.svg)
 
-has the following symmetric necklaces:
+有下列对称项链：
 
 ![](assets/images/ch22-fig10.svg)
 
-There are $n$ ways to change the position of a necklace, because we can rotate it $0,1,\ldots,n-1$ steps clockwise. If the number of steps is 0, all $m^n$ necklaces remain the same, and if the number of steps is 1, only the $m$ necklaces where each pearl has the same color remain the same.
+改变项链位置的方式有 $n$ 种，因为我们可以把它顺时针旋转 $0,1,\ldots,n-1$ 步。如果步数为 0，全部 $m^n$ 个项链都保持不变；如果步数为 1，则只有所有珠子颜色相同的 $m$ 个项链保持不变。
 
-More generally, when the number of steps is $k$, a total of $$m^{\textrm{gcd}(k,n)}$$ necklaces remain the same, where $\textrm{gcd}(k,n)$ is the greatest common divisor of $k$ and $n$. The reason for this is that blocks of pearls of size $\textrm{gcd}(k,n)$ will replace each other. Thus, according to Burnside's lemma, the number of necklaces is $$\sum_{i=0}^{n-1} \frac{m^{\textrm{gcd}(i,n)}}{n}.$$ For example, the number of necklaces of length 4 with 3 colors is $$\frac{3^4+3+3^2+3}{4} = 24.$$
+更一般地，当步数为 $k$ 时，共有 $$m^{\textrm{gcd}(k,n)}$$ 个项链保持不变，其中 $\textrm{gcd}(k,n)$ 是 $k$ 和 $n$ 的最大公约数。原因在于大小为 $\textrm{gcd}(k,n)$ 的珠子块会互相替换。因此，根据 Burnside 引理，项链的数量为 $$\sum_{i=0}^{n-1} \frac{m^{\textrm{gcd}(i,n)}}{n}.$$ 例如，长度为 4、有 3 种颜色的项链数量为 $$\frac{3^4+3+3^2+3}{4} = 24.$$
 
-## Cayley's formula
+## Cayley 公式
 
-**Cayley's formula** states that there are $n^{n-2}$ labeled trees that contain $n$ nodes. The nodes are labeled $1,2,\ldots,n$, and two trees are different if either their structure or labeling is different.
+**Cayley 公式**指出，含 $n$ 个结点的带标号树有 $n^{n-2}$ 棵。结点标号为 $1,2,\ldots,n$，如果两棵树的结构或标号不同，则它们不同。
 
-For example, when $n=4$, the number of labeled trees is $4^{4-2}=16$:
+例如，当 $n=4$ 时，带标号树的数量为 $4^{4-2}=16$：
 
 ![](assets/images/ch22-fig11.svg)
 
-Next we will see how Cayley's formula can be derived using Prüfer codes.
+接下来我们将看到如何用 Prüfer 编码推导 Cayley 公式。
 
-#### Prüfer code
+#### Prüfer 编码
 
-A **Prüfer code** is a sequence of $n-2$ numbers that describes a labeled tree. The code is constructed by following a process that removes $n-2$ leaves from the tree. At each step, the leaf with the smallest label is removed, and the label of its only neighbor is added to the code.
+**Prüfer 编码**是一个由 $n-2$ 个数构成的序列，它描述一棵带标号树。编码的构造过程是：从树中删除 $n-2$ 个叶结点。每一步删除标号最小的叶结点，并把其唯一邻居的标号加入编码。
 
-For example, let us calculate the Prüfer code of the following graph:
+例如，让我们计算下面这张图的 Prüfer 编码：
 
 ![](assets/images/ch22-fig12.svg)
 
-First we remove node 1 and add node 4 to the code:
+首先删除结点 1，并把结点 4 加入编码：
 
 ![](assets/images/ch22-fig13.svg)
 
-Then we remove node 3 and add node 4 to the code:
+然后删除结点 3，并把结点 4 加入编码：
 
 ![](assets/images/ch22-fig14.svg)
 
-Finally we remove node 4 and add node 2 to the code:
+最后删除结点 4，并把结点 2 加入编码：
 
 ![](assets/images/ch22-fig15.svg)
 
-Thus, the Prüfer code of the graph is $[4,4,2]$.
+因此，这张图的 Prüfer 编码是 $[4,4,2]$。
 
-We can construct a Prüfer code for any tree, and more importantly, the original tree can be reconstructed from a Prüfer code. Hence, the number of labeled trees of $n$ nodes equals $n^{n-2}$, the number of Prüfer codes of size $n$.
+我们可以为任意一棵树构造 Prüfer 编码，更重要的是，原始树可以从 Prüfer 编码重建。因此，含 $n$ 个结点的带标号树的数量等于 $n^{n-2}$，即大小为 $n$ 的 Prüfer 编码的数量。

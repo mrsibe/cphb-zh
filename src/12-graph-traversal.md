@@ -1,91 +1,91 @@
-# Graph traversal
+# 图的遍历
 
-This chapter discusses two fundamental graph algorithms: depth-first search and breadth-first search. Both algorithms are given a starting node in the graph, and they visit all nodes that can be reached from the starting node. The difference in the algorithms is the order in which they visit the nodes.
+本章讨论两种基本的图算法：深度优先搜索与广度优先搜索。这两种算法都会给定图中的一个起点，并访问从起点出发能够到达的所有结点。两种算法的区别在于访问结点的顺序。
 
-## Depth-first search
+## 深度优先搜索
 
-**Depth-first search** (DFS) is a straightforward graph traversal technique. The algorithm begins at a starting node, and proceeds to all other nodes that are reachable from the starting node using the edges of the graph.
+**深度优先搜索**（DFS）是一种直接的图遍历技术。算法从起点出发，沿着图中的边，前往从起点能够到达的所有其他结点。
 
-Depth-first search always follows a single path in the graph as long as it finds new nodes. After this, it returns to previous nodes and begins to explore other parts of the graph. The algorithm keeps track of visited nodes, so that it processes each node only once.
+深度优先搜索只要还能发现新结点，就始终沿着图中的一条路径前进。此后，它回退到之前的结点，并开始探索图的其他部分。算法会记录已访问的结点，因此每个结点只被处理一次。
 
-#### Example
+#### 示例
 
-Let us consider how depth-first search processes the following graph:
+让我们考察深度优先搜索如何处理下面这个图：
 
 ![](assets/images/ch12-fig01.svg)
 
-We may begin the search at any node of the graph; now we will begin the search at node 1.
+我们可以从图中的任意结点开始搜索；现在我们从结点 1 开始搜索。
 
-The search first proceeds to node 2:
+搜索首先前往结点 2：
 
 ![](assets/images/ch12-fig02.svg)
 
-After this, nodes 3 and 5 will be visited:
+此后，结点 3 和 5 将被访问：
 
 ![](assets/images/ch12-fig03.svg)
 
-The neighbors of node 5 are 2 and 3, but the search has already visited both of them, so it is time to return to the previous nodes. Also the neighbors of nodes 3 and 2 have been visited, so we next move from node 1 to node 4:
+结点 5 的邻接结点是 2 和 3，但搜索已经访问过它们两个，所以是时候返回之前的结点了。结点 3 和 2 的邻接结点也都已被访问，因此接下来我们从结点 1 移动到结点 4：
 
 ![](assets/images/ch12-fig04.svg)
 
-After this, the search terminates because it has visited all nodes.
+此后，搜索终止，因为它已经访问了所有结点。
 
-The time complexity of depth-first search is $O(n+m)$ where $n$ is the number of nodes and $m$ is the number of edges, because the algorithm processes each node and edge once.
+深度优先搜索的时间复杂度为 $O(n+m)$，其中 $n$ 是结点数，$m$ 是边数，因为算法对每个结点和每条边都只处理一次。
 
-#### Implementation
+#### 实现
 
-Depth-first search can be conveniently implemented using recursion. The following function `dfs` begins a depth-first search at a given node. The function assumes that the graph is stored as adjacency lists in an array
+深度优先搜索可以方便地用递归实现。下面的函数 `dfs` 从给定结点开始一次深度优先搜索。该函数假定图以邻接表的形式存储在数组中
 
 ```cpp
 vector<int> adj[N];
 ```
 
-and also maintains an array
+并另外维护一个数组
 
 ```cpp
 bool visited[N];
 ```
 
-that keeps track of the visited nodes. Initially, each array value is `false`, and when the search arrives at node $s$, the value of `visited`[$s$] becomes `true`. The function can be implemented as follows:
+用于记录已访问的结点。初始时，数组的每个值都是 `false`，当搜索到达结点 $s$ 时，`visited`[$s$] 的值变为 `true`。该函数可以实现如下：
 
 ```cpp
 void dfs(int s) {
     if (visited[s]) return;
     visited[s] = true;
-    // process node s
+    // 处理结点 s
     for (auto u: adj[s]) {
         dfs(u);
     }
 }
 ```
 
-## Breadth-first search
+## 广度优先搜索
 
-**Breadth-first search** (BFS) visits the nodes in increasing order of their distance from the starting node. Thus, we can calculate the distance from the starting node to all other nodes using breadth-first search. However, breadth-first search is more difficult to implement than depth-first search.
+**广度优先搜索**（BFS）按照到起点的距离递增的顺序访问结点。因此，我们可以用广度优先搜索计算从起点到所有其他结点的距离。不过，广度优先搜索比深度优先搜索更难实现。
 
-Breadth-first search goes through the nodes one level after another. First the search explores the nodes whose distance from the starting node is 1, then the nodes whose distance is 2, and so on. This process continues until all nodes have been visited.
+广度优先搜索一层接一层地经过各个结点。首先，搜索探索到起点的距离为 1 的结点，然后是距离为 2 的结点，依此类推。这个过程一直持续到所有结点都被访问为止。
 
-#### Example
+#### 示例
 
-Let us consider how breadth-first search processes the following graph:
+让我们考察广度优先搜索如何处理下面这个图：
 
 ![](assets/images/ch12-fig05.svg)
 
-Suppose that the search begins at node 1. First, we process all nodes that can be reached from node 1 using a single edge:
+假设搜索从结点 1 开始。首先，我们处理从结点 1 经由一条边就能到达的所有结点：
 
 ![](assets/images/ch12-fig06.svg)
 
-After this, we proceed to nodes 3 and 5:
+此后，我们前往结点 3 和 5：
 
 ![](assets/images/ch12-fig07.svg)
 
-Finally, we visit node 6:
+最后，我们访问结点 6：
 
 ![](assets/images/ch12-fig08.svg)
 
-Now we have calculated the distances from the starting node to all nodes of the graph. The distances are as follows:
+现在我们计算出了从起点到图中所有结点的距离。各距离如下：
 
-| node | distance |
+| 结点 | 距离 |
 |:-----|:---------|
 | 1    | 0        |
 | 2    | 1        |
@@ -95,13 +95,13 @@ Now we have calculated the distances from the starting node to all nodes of the 
 | 6    | 3        |
 |      |          |
 
-Like in depth-first search, the time complexity of breadth-first search is $O(n+m)$, where $n$ is the number of nodes and $m$ is the number of edges.
+与深度优先搜索一样，广度优先搜索的时间复杂度为 $O(n+m)$，其中 $n$ 是结点数，$m$ 是边数。
 
-#### Implementation
+#### 实现
 
-Breadth-first search is more difficult to implement than depth-first search, because the algorithm visits nodes in different parts of the graph. A typical implementation is based on a queue that contains nodes. At each step, the next node in the queue will be processed.
+广度优先搜索比深度优先搜索更难实现，因为该算法会访问图中不同部位的结点。一种典型的实现基于一个包含结点的队列。每一步都处理队列中的下一个结点。
 
-The following code assumes that the graph is stored as adjacency lists and maintains the following data structures:
+下面的代码假定图以邻接表的形式存储，并维护以下数据结构：
 
 ```cpp
 queue<int> q;
@@ -109,9 +109,9 @@ bool visited[N];
 int distance[N];
 ```
 
-The queue `q` contains nodes to be processed in increasing order of their distance. New nodes are always added to the end of the queue, and the node at the beginning of the queue is the next node to be processed. The array `visited` indicates which nodes the search has already visited, and the array `distance` will contain the distances from the starting node to all nodes of the graph.
+队列 `q` 按照距离递增的顺序包含待处理的结点。新结点总是被添加到队列末尾，而队列开头的结点就是下一个要处理的结点。数组 `visited` 记录搜索已经访问过哪些结点，数组 `distance` 将包含从起点到图中所有结点的距离。
 
-The search can be implemented as follows, starting at node $x$:
+搜索可以实现如下，从结点 $x$ 开始：
 
 ```cpp
 visited[x] = true;
@@ -119,7 +119,7 @@ distance[x] = 0;
 q.push(x);
 while (!q.empty()) {
     int s = q.front(); q.pop();
-    // process node s
+    // 处理结点 s
     for (auto u : adj[s]) {
         if (visited[u]) continue;
         visited[u] = true;
@@ -129,54 +129,54 @@ while (!q.empty()) {
 }
 ```
 
-## Applications
+## 应用
 
-Using the graph traversal algorithms, we can check many properties of graphs. Usually, both depth-first search and breadth-first search may be used, but in practice, depth-first search is a better choice, because it is easier to implement. In the following applications we will assume that the graph is undirected.
+利用图的遍历算法，我们可以检验图的许多性质。通常，深度优先搜索和广度优先搜索都可以使用，但在实践中，深度优先搜索是更好的选择，因为它更容易实现。在下面的应用中，我们假定图是无向的。
 
-#### Connectivity check
+#### 连通性检查
 
-A graph is connected if there is a path between any two nodes of the graph. Thus, we can check if a graph is connected by starting at an arbitrary node and finding out if we can reach all other nodes.
+如果图中任意两个结点之间都存在一条路径，那么该图是连通的。因此，我们可以从任意一个结点开始，判断能否到达所有其他结点，以此来检查图是否连通。
 
-For example, in the graph
+例如，在下面这个图中
 
 ![](assets/images/ch12-fig09.svg)
 
-a depth-first search from node $1$ visits the following nodes:
+从结点 $1$ 开始的深度优先搜索访问了以下结点：
 
 ![](assets/images/ch12-fig10.svg)
 
-Since the search did not visit all the nodes, we can conclude that the graph is not connected. In a similar way, we can also find all connected components of a graph by iterating through the nodes and always starting a new depth-first search if the current node does not belong to any component yet.
+由于搜索没有访问所有结点，我们可以断定该图不连通。以类似的方式，我们还可以找出图的所有连通分量：遍历各个结点，只要当前结点还不属于任何分量，就总是开始一次新的深度优先搜索。
 
-#### Finding cycles
+#### 寻找环
 
-A graph contains a cycle if during a graph traversal, we find a node whose neighbor (other than the previous node in the current path) has already been visited. For example, the graph
+如果图遍历过程中发现某个结点的邻接结点（不是当前路径中的前一个结点）已被访问，那么图中就包含一个环。例如，下面这个图
 
 ![](assets/images/ch12-fig11.svg)
 
-contains two cycles and we can find one of them as follows:
+包含两个环，我们可以按如下方式找到其中一个：
 
 ![](assets/images/ch12-fig12.svg)
 
-After moving from node 2 to node 5 we notice that the neighbor 3 of node 5 has already been visited. Thus, the graph contains a cycle that goes through node 3, for example, $3 \rightarrow 2 \rightarrow 5 \rightarrow 3$.
+从结点 2 移动到结点 5 之后，我们注意到结点 5 的邻接结点 3 已被访问。因此，图中包含一个经过结点 3 的环，例如 $3 \rightarrow 2 \rightarrow 5 \rightarrow 3$。
 
-Another way to find out whether a graph contains a cycle is to simply calculate the number of nodes and edges in every component. If a component contains $c$ nodes and no cycle, it must contain exactly $c-1$ edges (so it has to be a tree). If there are $c$ or more edges, the component surely contains a cycle.
+判断图是否包含环的另一种方法是简单地计算每个分量中的结点数和边数。如果一个分量包含 $c$ 个结点且没有环，那么它必然恰好包含 $c-1$ 条边（因此它一定是一棵树）。如果有 $c$ 条或更多条边，那么该分量必定包含一个环。
 
-#### Bipartiteness check
+#### 二分性检查
 
-A graph is bipartite if its nodes can be colored using two colors so that there are no adjacent nodes with the same color. It is surprisingly easy to check if a graph is bipartite using graph traversal algorithms.
+如果可以用两种颜色给图的结点染色，使得没有相邻结点具有相同的颜色，那么该图是二分图。令人惊讶的是，用图的遍历算法检查一个图是否为二分图非常容易。
 
-The idea is to color the starting node blue, all its neighbors red, all their neighbors blue, and so on. If at some point of the search we notice that two adjacent nodes have the same color, this means that the graph is not bipartite. Otherwise the graph is bipartite and one coloring has been found.
+思路是把起点染成蓝色，把它的所有邻接结点染成红色，把它们的邻接结点染成蓝色，依此类推。如果在搜索的某个时刻发现两个相邻结点具有相同的颜色，这就意味着该图不是二分图。否则该图是二分图，并且已经找到了一种染色方案。
 
-For example, the graph
+例如，下面这个图
 
 ![](assets/images/ch12-fig13.svg)
 
-is not bipartite, because a search from node 1 proceeds as follows:
+不是二分图，因为从结点 1 开始的搜索按如下方式进行：
 
 ![](assets/images/ch12-fig14.svg)
 
-We notice that the color of both nodes 2 and 5 is red, while they are adjacent nodes in the graph. Thus, the graph is not bipartite.
+我们注意到结点 2 和结点 5 的颜色都是红色，而它们在图中是相邻结点。因此，该图不是二分图。
 
-This algorithm always works, because when there are only two colors available, the color of the starting node in a component determines the colors of all other nodes in the component. It does not make any difference whether the starting node is red or blue.
+这个算法总是有效的，因为当只有两种颜色可用时，一个分量中起点的颜色决定了该分量中所有其他结点的颜色。起点是红色还是蓝色并无差别。
 
-Note that in the general case, it is difficult to find out if the nodes in a graph can be colored using $k$ colors so that no adjacent nodes have the same color. Even when $k=3$, no efficient algorithm is known but the problem is NP-hard.
+注意，在一般情况下，判断图中结点能否用 $k$ 种颜色染色，使得没有相邻结点具有相同颜色，是很困难的。即使当 $k=3$ 时，也没有已知的高效算法，该问题是 NP 困难的。

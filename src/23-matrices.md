@@ -1,20 +1,20 @@
-# Matrices
+# 矩阵
 
-A **matrix** is a mathematical concept that corresponds to a two-dimensional array in programming. For example, $$A =
+**矩阵**（matrix）是一个数学概念，在程序设计中对应一个二维数组。例如，$$A =
  \begin{bmatrix}
   6 & 13 & 7 & 4 \\
   7 & 0 & 8 & 2 \\
   9 & 5 & 4 & 18 \\
- \end{bmatrix}$$ is a matrix of size $3 \times 4$, i.e., it has 3 rows and 4 columns. The notation $[i,j]$ refers to the element in row $i$ and column $j$ in a matrix. For example, in the above matrix, $A[2,3]=8$ and $A[3,1]=9$.
+ \end{bmatrix}$$ 是一个大小为 $3 \times 4$ 的矩阵，即有 3 行 4 列。记号 $[i,j]$ 表示矩阵中第 $i$ 行第 $j$ 列的元素。例如，在上面的矩阵中，$A[2,3]=8$ 且 $A[3,1]=9$。
 
-A special case of a matrix is a **vector** that is a one-dimensional matrix of size $n \times 1$. For example, $$V =
+矩阵的一个特例是**向量**（vector），它是一个大小为 $n \times 1$ 的一维矩阵。例如，$$V =
 \begin{bmatrix}
 4 \\
 7 \\
 5 \\
-\end{bmatrix}$$ is a vector that contains three elements.
+\end{bmatrix}$$ 是一个包含三个元素的向量。
 
-The **transpose** $A^T$ of a matrix $A$ is obtained when the rows and columns of $A$ are swapped, i.e., $A^T[i,j]=A[j,i]$: $$A^T =
+矩阵 $A$ 的**转置**（transpose）$A^T$ 通过交换 $A$ 的行与列得到，即 $A^T[i,j]=A[j,i]$：$$A^T =
  \begin{bmatrix}
   6 & 7 & 9 \\
   13 & 0 & 5 \\
@@ -22,7 +22,7 @@ The **transpose** $A^T$ of a matrix $A$ is obtained when the rows and columns of
   4 & 2 & 18 \\
  \end{bmatrix}$$
 
-A matrix is a **square matrix** if it has the same number of rows and columns. For example, the following matrix is a square matrix:
+若矩阵的行数与列数相同，则称其为**方阵**（square matrix）。例如，下面的矩阵是一个方阵：
 
 $$S =
  \begin{bmatrix}
@@ -31,11 +31,11 @@ $$S =
   0 & 2 & 4 \\
  \end{bmatrix}$$
 
-## Operations
+## 运算
 
-The sum $A+B$ of matrices $A$ and $B$ is defined if the matrices are of the same size. The result is a matrix where each element is the sum of the corresponding elements in $A$ and $B$.
+矩阵 $A$ 与 $B$ 的和 $A+B$ 在两者大小相同时才有定义。其结果是一个矩阵，其中每个元素等于 $A$ 与 $B$ 中对应元素之和。
 
-For example, $$\begin{bmatrix}
+例如，$$\begin{bmatrix}
   6 & 1 & 4 \\
   3 & 9 & 2 \\
  \end{bmatrix}
@@ -55,7 +55,7 @@ For example, $$\begin{bmatrix}
   11 & 10 & 5 \\
  \end{bmatrix}.$$
 
-Multiplying a matrix $A$ by a value $x$ means that each element of $A$ is multiplied by $x$. For example, $$2 \cdot \begin{bmatrix}
+用数值 $x$ 乘以矩阵 $A$，意味着 $A$ 的每个元素都乘以 $x$。例如，$$2 \cdot \begin{bmatrix}
   6 & 1 & 4 \\
   3 & 9 & 2 \\
  \end{bmatrix}
@@ -70,15 +70,15 @@ Multiplying a matrix $A$ by a value $x$ means that each element of $A$ is multip
   6 & 18 & 4 \\
  \end{bmatrix}.$$
 
-#### Matrix multiplication
+#### 矩阵乘法
 
-The product $AB$ of matrices $A$ and $B$ is defined if $A$ is of size $a \times n$ and $B$ is of size $n \times b$, i.e., the width of $A$ equals the height of $B$. The result is a matrix of size $a \times b$ whose elements are calculated using the formula $$AB[i,j] = \sum_{k=1}^n A[i,k] \cdot B[k,j].$$
+矩阵 $A$ 与 $B$ 的乘积 $AB$ 在 $A$ 的大小为 $a \times n$ 且 $B$ 的大小为 $n \times b$ 时才有定义，即 $A$ 的宽度等于 $B$ 的高度。其结果是一个大小为 $a \times b$ 的矩阵，其中的元素按下面的公式计算：$$AB[i,j] = \sum_{k=1}^n A[i,k] \cdot B[k,j].$$
 
-The idea is that each element of $AB$ is a sum of products of elements of $A$ and $B$ according to the following picture:
+其含义是，$AB$ 的每个元素都是 $A$ 与 $B$ 中元素的乘积之和，如下图所示：
 
 ![](assets/images/ch23-fig01.svg)
 
-For example,
+例如，
 
 $$\begin{bmatrix}
   1 & 4 \\
@@ -103,15 +103,15 @@ $$\begin{bmatrix}
   20 & 102 \\
  \end{bmatrix}.$$
 
-Matrix multiplication is associative, so $A(BC)=(AB)C$ holds, but it is not commutative, so $AB = BA$ does not usually hold.
+矩阵乘法满足结合律，因此 $A(BC)=(AB)C$ 成立，但它不满足交换律，所以通常 $AB = BA$ 并不成立。
 
-An **identity matrix** is a square matrix where each element on the diagonal is 1 and all other elements are 0. For example, the following matrix is the $3 \times 3$ identity matrix: $$I = \begin{bmatrix}
+**单位矩阵**（identity matrix）是一个方阵，其中对角线上的每个元素都是 1，其余元素都是 0。例如，下面的矩阵是 $3 \times 3$ 单位矩阵：$$I = \begin{bmatrix}
   1 & 0 & 0 \\
   0 & 1 & 0 \\
   0 & 0 & 1 \\
  \end{bmatrix}$$
 
-Multiplying a matrix by an identity matrix does not change it. For example, $$\begin{bmatrix}
+将一个矩阵乘以单位矩阵不会改变它。例如，$$\begin{bmatrix}
   1 & 0 & 0 \\
   0 & 1 & 0 \\
   0 & 0 & 1 \\
@@ -145,11 +145,11 @@ Multiplying a matrix by an identity matrix does not change it. For example, $$\b
   8 & 6 \\
  \end{bmatrix}.$$
 
-Using a straightforward algorithm, we can calculate the product of two $n \times n$ matrices in $O(n^3)$ time. There are also more efficient algorithms for matrix multiplication[^1], but they are mostly of theoretical interest and such algorithms are not necessary in competitive programming.
+使用朴素算法，我们可以在 $O(n^3)$ 时间内计算两个 $n \times n$ 矩阵的乘积。矩阵乘法还有更高效的算法[^1]，但它们多半只有理论意义，在算法竞赛中并不需要这类算法。
 
-#### Matrix power
+#### 矩阵幂
 
-The power $A^k$ of a matrix $A$ is defined if $A$ is a square matrix. The definition is based on matrix multiplication: $$A^k = \underbrace{A \cdot A \cdot A \cdots A}_{\textrm{$k$ times}}$$ For example,
+矩阵 $A$ 的幂 $A^k$ 在 $A$ 为方阵时才有定义。其定义基于矩阵乘法：$$A^k = \underbrace{A \cdot A \cdot A \cdots A}_{\textrm{$k$ times}}$$ 例如，
 
 $$\begin{bmatrix}
   2 & 5 \\
@@ -170,7 +170,7 @@ $$\begin{bmatrix}
  \begin{bmatrix}
   48 & 165 \\
   33 & 114 \\
- \end{bmatrix}.$$ In addition, $A^0$ is an identity matrix. For example, $$\begin{bmatrix}
+ \end{bmatrix}.$$ 此外，$A^0$ 是单位矩阵。例如，$$\begin{bmatrix}
   2 & 5 \\
   1 & 4 \\
  \end{bmatrix}^0 =
@@ -179,7 +179,7 @@ $$\begin{bmatrix}
   0 & 1 \\
  \end{bmatrix}.$$
 
-The matrix $A^k$ can be efficiently calculated in $O(n^3 \log k)$ time using the algorithm in Chapter 21.2. For example, $$\begin{bmatrix}
+利用第 21.2 章的算法，可以在 $O(n^3 \log k)$ 时间内高效地计算矩阵 $A^k$。例如，$$\begin{bmatrix}
   2 & 5 \\
   1 & 4 \\
  \end{bmatrix}^8 =
@@ -192,14 +192,14 @@ The matrix $A^k$ can be efficiently calculated in $O(n^3 \log k)$ time using the
   1 & 4 \\
  \end{bmatrix}^4.$$
 
-#### Determinant
+#### 行列式
 
-The **determinant** $\det(A)$ of a matrix $A$ is defined if $A$ is a square matrix. If $A$ is of size $1 \times 1$, then $\det(A)=A[1,1]$. The determinant of a larger matrix is calculated recursively using the formula $$\det(A)=\sum_{j=1}^n A[1,j] C[1,j],$$ where $C[i,j]$ is the **cofactor** of $A$ at $[i,j]$. The cofactor is calculated using the formula $$C[i,j] = (-1)^{i+j} \det(M[i,j]),$$ where $M[i,j]$ is obtained by removing row $i$ and column $j$ from $A$. Due to the coefficient $(-1)^{i+j}$ in the cofactor, every other determinant is positive and negative. For example, $$\det(
+矩阵 $A$ 的**行列式**（determinant）$\det(A)$ 在 $A$ 为方阵时才有定义。若 $A$ 的大小为 $1 \times 1$，则 $\det(A)=A[1,1]$。更大矩阵的行列式用下面的公式递归计算：$$\det(A)=\sum_{j=1}^n A[1,j] C[1,j],$$ 其中 $C[i,j]$ 是 $A$ 在 $[i,j]$ 处的**代数余子式**（cofactor）。代数余子式用下面的公式计算：$$C[i,j] = (-1)^{i+j} \det(M[i,j]),$$ 其中 $M[i,j]$ 由从 $A$ 中去掉第 $i$ 行和第 $j$ 列得到。由于代数余子式中的系数 $(-1)^{i+j}$，各项行列式的符号正负交替。例如，$$\det(
  \begin{bmatrix}
   3 & 4 \\
   1 & 6 \\
  \end{bmatrix}
-) = 3 \cdot 6 - 4 \cdot 1 = 14$$ and $$\det(
+) = 3 \cdot 6 - 4 \cdot 1 = 14$$ 且 $$\det(
  \begin{bmatrix}
   2 & 4 & 3 \\
   5 & 1 & 6 \\
@@ -228,11 +228,11 @@ The **determinant** $\det(A)$ of a matrix $A$ is defined if $A$ is a square matr
  \end{bmatrix}
 ) = 81.$$
 
-The determinant of $A$ tells us whether there is an **inverse matrix** $A^{-1}$ such that $A \cdot A^{-1} = I$, where $I$ is an identity matrix. It turns out that $A^{-1}$ exists exactly when $\det(A) \neq 0$, and it can be calculated using the formula
+$A$ 的行列式告诉我们是否存在**逆矩阵**（inverse matrix）$A^{-1}$ 使得 $A \cdot A^{-1} = I$，其中 $I$ 是单位矩阵。事实上，$A^{-1}$ 恰在 $\det(A) \neq 0$ 时存在，并且可以用下面的公式计算：
 
 $$A^{-1}[i,j] = \frac{C[j,i]}{det(A)}.$$
 
-For example,
+例如，
 
 $$\underbrace{
  \begin{bmatrix}
@@ -259,21 +259,21 @@ $$\underbrace{
  \end{bmatrix}
 }_{I}.$$
 
-## Linear recurrences
+## 线性递推
 
-A **linear recurrence** is a function $f(n)$ whose initial values are $f(0),f(1),\ldots,f(k-1)$ and larger values are calculated recursively using the formula $$f(n) = c_1 f(n-1) + c_2 f(n-2) + \ldots + c_k f (n-k),$$ where $c_1,c_2,\ldots,c_k$ are constant coefficients.
+**线性递推**（linear recurrence）是一个函数 $f(n)$，其初始值为 $f(0),f(1),\ldots,f(k-1)$，更大的值用下面的公式递归计算：$$f(n) = c_1 f(n-1) + c_2 f(n-2) + \ldots + c_k f (n-k),$$ 其中 $c_1,c_2,\ldots,c_k$ 为常数系数。
 
-Dynamic programming can be used to calculate any value of $f(n)$ in $O(kn)$ time by calculating all values of $f(0),f(1),\ldots,f(n)$ one after another. However, if $k$ is small, it is possible to calculate $f(n)$ much more efficiently in $O(k^3 \log n)$ time using matrix operations.
+利用动态规划，可以通过依次计算 $f(0),f(1),\ldots,f(n)$ 的所有值，在 $O(kn)$ 时间内求出 $f(n)$ 的任意值。然而，若 $k$ 较小，则可以用矩阵运算在 $O(k^3 \log n)$ 时间内更高效地计算 $f(n)$。
 
-#### Fibonacci numbers
+#### 斐波那契数
 
-A simple example of a linear recurrence is the following function that defines the Fibonacci numbers: $$\begin{array}{lcl}
+线性递推的一个简单例子是下面这个定义斐波那契数的函数：$$\begin{array}{lcl}
 f(0) & = & 0 \\
 f(1) & = & 1 \\
 f(n) & = & f(n-1)+f(n-2) \\
-\end{array}$$ In this case, $k=2$ and $c_1=c_2=1$.
+\end{array}$$ 此时 $k=2$ 且 $c_1=c_2=1$。
 
-To efficiently calculate Fibonacci numbers, we represent the Fibonacci formula as a square matrix $X$ of size $2 \times 2$, for which the following holds: $$X \cdot
+为了高效地计算斐波那契数，我们把斐波那契公式表示为一个 $2 \times 2$ 的方阵 $X$，使其满足：$$X \cdot
  \begin{bmatrix}
   f(i) \\
   f(i+1) \\
@@ -282,7 +282,7 @@ To efficiently calculate Fibonacci numbers, we represent the Fibonacci formula a
  \begin{bmatrix}
   f(i+1) \\
   f(i+2) \\
- \end{bmatrix}$$ Thus, values $f(i)$ and $f(i+1)$ are given as "input" for $X$, and $X$ calculates values $f(i+1)$ and $f(i+2)$ from them. It turns out that such a matrix is
+ \end{bmatrix}$$ 于是 $f(i)$ 与 $f(i+1)$ 的值作为 $X$ 的“输入”，$X$ 据此计算出 $f(i+1)$ 与 $f(i+2)$ 的值。这样的矩阵是
 
 $$X =
  \begin{bmatrix}
@@ -290,7 +290,7 @@ $$X =
   1 & 1 \\
  \end{bmatrix}.$$
 
-For example, $$\begin{bmatrix}
+例如，$$\begin{bmatrix}
   0 & 1 \\
   1 & 1 \\
  \end{bmatrix}
@@ -318,7 +318,7 @@ For example, $$\begin{bmatrix}
  \begin{bmatrix}
   f(6) \\
   f(7) \\
- \end{bmatrix}.$$ Thus, we can calculate $f(n)$ using the formula $$\begin{bmatrix}
+ \end{bmatrix}.$$ 于是，我们可以用下面的公式计算 $f(n)$：$$\begin{bmatrix}
   f(n) \\
   f(n+1) \\
  \end{bmatrix}
@@ -337,11 +337,11 @@ X^n \cdot
  \begin{bmatrix}
   0 \\
   1 \\
- \end{bmatrix}.$$ The value of $X^n$ can be calculated in $O(\log n)$ time, so the value of $f(n)$ can also be calculated in $O(\log n)$ time.
+ \end{bmatrix}.$$ $X^n$ 的值可以在 $O(\log n)$ 时间内计算，因此 $f(n)$ 的值也可以在 $O(\log n)$ 时间内计算。
 
-#### General case
+#### 一般情形
 
-Let us now consider the general case where $f(n)$ is any linear recurrence. Again, our goal is to construct a matrix $X$ for which
+现在我们考虑一般情形，即 $f(n)$ 是任意线性递推。我们的目标依然是构造一个矩阵 $X$，使得
 
 $$X \cdot
  \begin{bmatrix}
@@ -356,7 +356,7 @@ $$X \cdot
   f(i+2) \\
   \vdots \\
   f(i+k) \\
- \end{bmatrix}.$$ Such a matrix is $$X =
+ \end{bmatrix}.$$ 这样的矩阵是 $$X =
  \begin{bmatrix}
   0 & 1 & 0 & 0 & \cdots & 0 \\
   0 & 0 & 1 & 0 & \cdots & 0 \\
@@ -364,9 +364,9 @@ $$X \cdot
   \vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
   0 & 0 & 0 & 0 & \cdots & 1 \\
   c_k & c_{k-1} & c_{k-2} & c_{k-3} & \cdots & c_1 \\
- \end{bmatrix}.$$ In the first $k-1$ rows, each element is 0 except that one element is 1. These rows replace $f(i)$ with $f(i+1)$, $f(i+1)$ with $f(i+2)$, and so on. The last row contains the coefficients of the recurrence to calculate the new value $f(i+k)$.
+ \end{bmatrix}.$$ 在前 $k-1$ 行中，除一个元素为 1 外，其余元素都是 0。这些行把 $f(i)$ 替换为 $f(i+1)$，把 $f(i+1)$ 替换为 $f(i+2)$，依此类推。最后一行包含递推的系数，用来计算新值 $f(i+k)$。
 
-Now, $f(n)$ can be calculated in $O(k^3 \log n)$ time using the formula $$\begin{bmatrix}
+现在，可以用下面的公式在 $O(k^3 \log n)$ 时间内计算 $f(n)$：$$\begin{bmatrix}
   f(n) \\
   f(n+1) \\
   \vdots \\
@@ -381,41 +381,41 @@ X^n \cdot
   f(k-1) \\
  \end{bmatrix}.$$
 
-## Graphs and matrices
+## 图与矩阵
 
-#### Counting paths
+#### 路径计数
 
-The powers of an adjacency matrix of a graph have an interesting property. When $V$ is an adjacency matrix of an unweighted graph, the matrix $V^n$ contains the numbers of paths of $n$ edges between the nodes in the graph.
+图的邻接矩阵的幂有一个有趣的性质。当 $V$ 是无权图的邻接矩阵时，矩阵 $V^n$ 包含图中结点之间长度为 $n$ 条边的路径数目。
 
-For example, for the graph
+例如，对于图
 
 ![](assets/images/ch23-fig02.svg)
 
-the adjacency matrix is $$V= \begin{bmatrix}
+其邻接矩阵为 $$V= \begin{bmatrix}
   0 & 0 & 0 & 1 & 0 & 0 \\
   1 & 0 & 0 & 0 & 1 & 1 \\
   0 & 1 & 0 & 0 & 0 & 0 \\
   0 & 1 & 0 & 0 & 0 & 0 \\
   0 & 0 & 0 & 0 & 0 & 0 \\
   0 & 0 & 1 & 0 & 1 & 0 \\
- \end{bmatrix}.$$ Now, for example, the matrix $$V^4= \begin{bmatrix}
+ \end{bmatrix}.$$ 现在，例如矩阵 $$V^4= \begin{bmatrix}
   0 & 0 & 1 & 1 & 1 & 0 \\
   2 & 0 & 0 & 0 & 2 & 2 \\
   0 & 2 & 0 & 0 & 0 & 0 \\
   0 & 2 & 0 & 0 & 0 & 0 \\
   0 & 0 & 0 & 0 & 0 & 0 \\
   0 & 0 & 1 & 1 & 1 & 0 \\
- \end{bmatrix}$$ contains the numbers of paths of 4 edges between the nodes. For example, $V^4[2,5]=2$, because there are two paths of 4 edges from node 2 to node 5: $2 \rightarrow 1 \rightarrow 4 \rightarrow 2 \rightarrow 5$ and $2 \rightarrow 6 \rightarrow 3 \rightarrow 2 \rightarrow 5$.
+ \end{bmatrix}$$ 包含结点之间长度为 4 条边的路径数目。例如，$V^4[2,5]=2$，因为从结点 2 到结点 5 有两条长度为 4 条边的路径：$2 \rightarrow 1 \rightarrow 4 \rightarrow 2 \rightarrow 5$ 和 $2 \rightarrow 6 \rightarrow 3 \rightarrow 2 \rightarrow 5$。
 
-#### Shortest paths
+#### 最短路
 
-Using a similar idea in a weighted graph, we can calculate for each pair of nodes the minimum length of a path between them that contains exactly $n$ edges. To calculate this, we have to define matrix multiplication in a new way, so that we do not calculate the numbers of paths but minimize the lengths of paths.
+在带权图中使用类似的想法，我们可以计算每对结点之间恰好包含 $n$ 条边的最短路径长度。为此，我们需要以一种新的方式定义矩阵乘法，使得我们不是计算路径数目，而是最小化路径长度。
 
-As an example, consider the following graph:
+作为例子，考虑下面的图：
 
 ![](assets/images/ch23-fig03.svg)
 
-Let us construct an adjacency matrix where $\infty$ means that an edge does not exist, and other values correspond to edge weights. The matrix is $$V= \begin{bmatrix}
+我们构造一个邻接矩阵，其中 $\infty$ 表示边不存在，其他值对应边权。该矩阵为 $$V= \begin{bmatrix}
   \infty & \infty & \infty & 4 & \infty & \infty \\
   2 & \infty & \infty & \infty & 1 & 2 \\
   \infty & 4 & \infty & \infty & \infty & \infty \\
@@ -424,35 +424,35 @@ Let us construct an adjacency matrix where $\infty$ means that an edge does not 
   \infty & \infty & 3 & \infty & 2 & \infty \\
  \end{bmatrix}.$$
 
-Instead of the formula $$AB[i,j] = \sum_{k=1}^n A[i,k] \cdot B[k,j]$$ we now use the formula $$AB[i,j] = \min_{k=1}^n A[i,k] + B[k,j]$$ for matrix multiplication, so we calculate a minimum instead of a sum, and a sum of elements instead of a product. After this modification, matrix powers correspond to shortest paths in the graph.
+现在，我们不用公式 $$AB[i,j] = \sum_{k=1}^n A[i,k] \cdot B[k,j]$$ 而是用公式 $$AB[i,j] = \min_{k=1}^n A[i,k] + B[k,j]$$ 来定义矩阵乘法，即我们求最小值而非求和，求元素之和而非求积。经过这样的修改后，矩阵的幂就对应图中的最短路径。
 
-For example, as $$V^4= \begin{bmatrix}
+例如，由于 $$V^4= \begin{bmatrix}
   \infty & \infty & 10 & 11 & 9 & \infty \\
   9 & \infty & \infty & \infty & 8 & 9 \\
   \infty & 11 & \infty & \infty & \infty & \infty \\
   \infty & 8 & \infty & \infty & \infty & \infty \\
   \infty & \infty & \infty & \infty & \infty & \infty \\
   \infty & \infty & 12 & 13 & 11 & \infty \\
- \end{bmatrix},$$ we can conclude that the minimum length of a path of 4 edges from node 2 to node 5 is 8. Such a path is $2 \rightarrow 1 \rightarrow 4 \rightarrow 2 \rightarrow 5$.
+ \end{bmatrix},$$ 我们可以得出，从结点 2 到结点 5 长度为 4 条边的最短路径长度为 8。这样的一条路径是 $2 \rightarrow 1 \rightarrow 4 \rightarrow 2 \rightarrow 5$。
 
-#### Kirchhoff's theorem
+#### Kirchhoff 定理
 
-**Kirchhoff's theorem** provides a way to calculate the number of spanning trees of a graph as a determinant of a special matrix. For example, the graph
+**Kirchhoff 定理**给出了一种把图的生成树数目表示为某个特殊矩阵的行列式的方法。例如，图
 
 ![](assets/images/ch23-fig04.svg)
 
-has three spanning trees:
+有三棵生成树：
 
 ![](assets/images/ch23-fig05.svg)
 
-To calculate the number of spanning trees, we construct a **Laplacean matrix** $L$, where $L[i,i]$ is the degree of node $i$ and $L[i,j]=-1$ if there is an edge between nodes $i$ and $j$, and otherwise $L[i,j]=0$. The Laplacean matrix for the above graph is as follows: $$L= \begin{bmatrix}
+为了计算生成树的数目，我们构造一个**拉普拉斯矩阵**（Laplacean matrix）$L$，其中 $L[i,i]$ 是结点 $i$ 的度数，若结点 $i$ 与 $j$ 之间有边，则 $L[i,j]=-1$，否则 $L[i,j]=0$。上述图的拉普拉斯矩阵如下：$$L= \begin{bmatrix}
   3 & -1 & -1 & -1 \\
   -1 & 1 & 0 & 0 \\
   -1 & 0 & 2 & -1 \\
   -1 & 0 & -1 & 2 \\
  \end{bmatrix}$$
 
-It can be shown that the number of spanning trees equals the determinant of a matrix that is obtained when we remove any row and any column from $L$. For example, if we remove the first row and column, the result is
+可以证明，生成树的数目等于从 $L$ 中去掉任意一行和任意一列后所得矩阵的行列式。例如，如果我们去掉第一行和第一列，结果为
 
 $$\det(
 \begin{bmatrix}
@@ -460,9 +460,9 @@ $$\det(
   0 & 2 & -1 \\
   0 & -1 & 2 \\
  \end{bmatrix}
-) =3.$$ The determinant is always the same, regardless of which row and column we remove from $L$.
+) =3.$$ 无论我们从 $L$ 中去掉哪一行和哪一列，行列式总是相同的。
 
-Note that Cayley's formula in Chapter 22.5 is a special case of Kirchhoff's theorem, because in a complete graph of $n$ nodes
+注意第 22.5 章的 Cayley 公式是 Kirchhoff 定理的一个特例，因为对于 $n$ 个结点的完全图，
 
 $$\det(
 \begin{bmatrix}
@@ -473,4 +473,4 @@ $$\det(
  \end{bmatrix}
 ) =n^{n-2}.$$
 
-[^1]: The first such algorithm was Strassen's algorithm, published in 1969 [71], whose time complexity is $O(n^{2.80735})$; the best current algorithm [30] works in $O(n^{2.37286})$ time.
+[^1]: 第一个这样的算法是 Strassen 算法，发表于 1969 年 [71]，其时间复杂度为 $O(n^{2.80735})$；目前最好的算法 [30] 的时间复杂度为 $O(n^{2.37286})$。

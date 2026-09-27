@@ -1,197 +1,197 @@
-# Greedy algorithms
+# 贪心算法
 
-A **greedy algorithm** constructs a solution to the problem by always making a choice that looks the best at the moment. A greedy algorithm never takes back its choices, but directly constructs the final solution. For this reason, greedy algorithms are usually very efficient.
+**贪心算法**通过每一步都做出当前看来最好的选择来构造问题的解。贪心算法从不反悔已经做出的选择，而是直接构造出最终的解。正因如此，贪心算法通常非常高效。
 
-The difficulty in designing greedy algorithms is to find a greedy strategy that always produces an optimal solution to the problem. The locally optimal choices in a greedy algorithm should also be globally optimal. It is often difficult to argue that a greedy algorithm works.
+设计贪心算法的难点在于找到一个总能产生最优解的贪心策略。贪心算法中的局部最优选择也应当是全局最优的。要论证一个贪心算法是正确的往往很困难。
 
-## Coin problem
+## 硬币问题
 
-As a first example, we consider a problem where we are given a set of coins and our task is to form a sum of money $n$ using the coins. The values of the coins are $\texttt{coins}=\{c_1,c_2,\ldots,c_k\}$, and each coin can be used as many times we want. What is the minimum number of coins needed?
+作为第一个例子，我们考虑这样一个问题：给定一组硬币，我们的任务是用这些硬币凑出金额 $n$。硬币的面值为 $\texttt{coins}=\{c_1,c_2,\ldots,c_k\}$，每种硬币可以使用任意多次。最少需要多少枚硬币？
 
-For example, if the coins are the euro coins (in cents) $$\{1,2,5,10,20,50,100,200\}$$ and $n=520$, we need at least four coins. The optimal solution is to select coins $200+200+100+20$ whose sum is 520.
+例如，如果硬币是欧元硬币（以分为单位）$$\{1,2,5,10,20,50,100,200\}$$ 且 $n=520$，我们至少需要四枚硬币。最优解是选取硬币 $200+200+100+20$，其和为 520。
 
-#### Greedy algorithm
+#### 贪心算法
 
-A simple greedy algorithm to the problem always selects the largest possible coin, until the required sum of money has been constructed. This algorithm works in the example case, because we first select two 200 cent coins, then one 100 cent coin and finally one 20 cent coin. But does this algorithm always work?
+一个简单的贪心算法总是选取尽可能大的硬币，直到凑出所需的金额。在这个例子中该算法是可行的，因为我们先选取两枚 200 分硬币，再选取一枚 100 分硬币，最后选取一枚 20 分硬币。但这个算法总是可行吗？
 
-It turns out that if the coins are the euro coins, the greedy algorithm *always* works, i.e., it always produces a solution with the fewest possible number of coins. The correctness of the algorithm can be shown as follows:
+结果表明，如果硬币是欧元硬币，贪心算法*总是*可行的，即它总能给出使用硬币数量最少的解。算法的正确性可以这样证明：
 
-First, each coin 1, 5, 10, 50 and 100 appears at most once in an optimal solution, because if the solution would contain two such coins, we could replace them by one coin and obtain a better solution. For example, if the solution would contain coins $5+5$, we could replace them by coin $10$.
+首先，面值 1、5、10、50 和 100 的每种硬币在最优解中至多出现一次，因为如果解中包含两枚这样的硬币，我们就可以用一枚硬币替换它们，从而得到更好的解。例如，如果解中包含硬币 $5+5$，我们可以用硬币 $10$ 替换它们。
 
-In the same way, coins 2 and 20 appear at most twice in an optimal solution, because we could replace coins $2+2+2$ by coins $5+1$ and coins $20+20+20$ by coins $50+10$. Moreover, an optimal solution cannot contain coins $2+2+1$ or $20+20+10$, because we could replace them by coins $5$ and $50$.
+同理，面值 2 和 20 的硬币在最优解中至多出现两次，因为我们可以用硬币 $5+1$ 替换硬币 $2+2+2$，用硬币 $50+10$ 替换硬币 $20+20+20$。此外，最优解不可能包含硬币 $2+2+1$ 或 $20+20+10$，因为我们可以分别用硬币 $5$ 和 $50$ 替换它们。
 
-Using these observations, we can show for each coin $x$ that it is not possible to optimally construct a sum $x$ or any larger sum by only using coins that are smaller than $x$. For example, if $x=100$, the largest optimal sum using the smaller coins is $50+20+20+5+2+2=99$. Thus, the greedy algorithm that always selects the largest coin produces the optimal solution.
+利用这些观察，我们可以对每种硬币 $x$ 证明：仅使用比 $x$ 小的硬币，不可能最优地凑出面额 $x$ 或任何更大的面额。例如，若 $x=100$，用较小硬币能凑出的最大最优面额为 $50+20+20+5+2+2=99$。因此，总是选取最大硬币的贪心算法产生了最优解。
 
-This example shows that it can be difficult to argue that a greedy algorithm works, even if the algorithm itself is simple.
+这个例子表明，即使算法本身很简单，要论证一个贪心算法是正确的也可能很困难。
 
-#### General case
+#### 一般情形
 
-In the general case, the coin set can contain any coins and the greedy algorithm *does not* necessarily produce an optimal solution.
+在一般情形下，硬币集合可以包含任意硬币，而贪心算法*不一定*产生最优解。
 
-We can prove that a greedy algorithm does not work by showing a counterexample where the algorithm gives a wrong answer. In this problem we can easily find a counterexample: if the coins are $\{1,3,4\}$ and the target sum is 6, the greedy algorithm produces the solution $4+1+1$ while the optimal solution is $3+3$.
+我们可以通过给出一个算法得到错误答案的反例来证明贪心算法不可行。在这个问题中我们很容易找到反例：如果硬币是 $\{1,3,4\}$，目标金额是 6，贪心算法给出的解是 $4+1+1$，而最优解是 $3+3$。
 
-It is not known if the general coin problem can be solved using any greedy algorithm[^1]. However, as we will see in Chapter 7, in some cases, the general problem can be efficiently solved using a dynamic programming algorithm that always gives the correct answer.
+目前尚不清楚一般的硬币问题能否用任何贪心算法求解[^1]。不过，正如我们将在第 7 章看到的，在某些情况下，一般问题可以用总是给出正确答案的动态规划算法高效求解。
 
-## Scheduling
+## 调度
 
-Many scheduling problems can be solved using greedy algorithms. A classic problem is as follows: Given $n$ events with their starting and ending times, find a schedule that includes as many events as possible. It is not possible to select an event partially. For example, consider the following events:
+许多调度问题可以用贪心算法求解。一个经典问题如下：给定 $n$ 个事件及其开始和结束时间，求一个包含尽可能多事件的安排。事件不能被部分选取。例如，考虑以下事件：
 
-| event | starting time | ending time |
+| 事件 | 开始时间 | 结束时间 |
 |:------|:--------------|:------------|
 | $A$   | 1             | 3           |
 | $B$   | 2             | 5           |
 | $C$   | 3             | 9           |
 | $D$   | 6             | 8           |
 
-In this case the maximum number of events is two. For example, we can select events $B$ and $D$ as follows:
+在这个例子中，最多能选两个事件。例如，我们可以如下选取事件 $B$ 和 $D$：
 
 ![](assets/images/ch06-fig01.svg)
 
-It is possible to invent several greedy algorithms for the problem, but which of them works in every case?
+可以针对这个问题想出若干种贪心算法，但哪一种在每种情况下都可行呢？
 
-#### Algorithm 1
+#### 算法 1
 
-The first idea is to select as *short* events as possible. In the example case this algorithm selects the following events:
+第一个想法是选取尽可能*短*的事件。在这个例子中该算法选取以下事件：
 
 ![](assets/images/ch06-fig02.svg)
 
-However, selecting short events is not always a correct strategy. For example, the algorithm fails in the following case:
+然而，选取短事件并非总是正确的策略。例如，该算法在下面这种情况下会失败：
 
 ![](assets/images/ch06-fig03.svg)
 
-If we select the short event, we can only select one event. However, it would be possible to select both long events.
+如果我们选取那个短事件，就只能选取一个事件。然而，本来可以选取两个长事件。
 
-#### Algorithm 2
+#### 算法 2
 
-Another idea is to always select the next possible event that *begins* as *early* as possible. This algorithm selects the following events:
+另一个想法是总是选取*开始*时间尽可能*早*的下一个可选事件。该算法选取以下事件：
 
 ![](assets/images/ch06-fig04.svg)
 
-However, we can find a counterexample also for this algorithm. For example, in the following case, the algorithm only selects one event:
+然而，我们也能为这个算法找到反例。例如，在下面这种情况下，该算法只选取一个事件：
 
 ![](assets/images/ch06-fig05.svg)
 
-If we select the first event, it is not possible to select any other events. However, it would be possible to select the other two events.
+如果我们选取第一个事件，就无法再选取任何其他事件。然而，本来可以选取另外两个事件。
 
-#### Algorithm 3
+#### 算法 3
 
-The third idea is to always select the next possible event that *ends* as *early* as possible. This algorithm selects the following events:
+第三个想法是总是选取*结束*时间尽可能*早*的下一个可选事件。该算法选取以下事件：
 
 ![](assets/images/ch06-fig06.svg)
 
-It turns out that this algorithm *always* produces an optimal solution. The reason for this is that it is always an optimal choice to first select an event that ends as early as possible. After this, it is an optimal choice to select the next event using the same strategy, etc., until we cannot select any more events.
+结果表明，该算法*总是*产生最优解。原因在于，首先选取一个结束时间尽可能早的事件总是一个最优选择。此后，用同样的策略选取下一个事件等，直到我们无法再选取任何事件，都是最优选择。
 
-One way to argue that the algorithm works is to consider what happens if we first select an event that ends later than the event that ends as early as possible. Now, we will have at most an equal number of choices how we can select the next event. Hence, selecting an event that ends later can never yield a better solution, and the greedy algorithm is correct.
+论证该算法正确的一种方法是考虑：如果我们首先选取一个结束时间比「结束时间最早的事件」更晚的事件，会怎样。此时，我们在如何选取下一个事件上至多只有不多于原先的选择。因此，选取一个结束更晚的事件绝不可能得到更好的解，贪心算法是正确的。
 
-## Tasks and deadlines
+## 任务与截止时间
 
-Let us now consider a problem where we are given $n$ tasks with durations and deadlines and our task is to choose an order to perform the tasks. For each task, we earn $d-x$ points where $d$ is the task's deadline and $x$ is the moment when we finish the task. What is the largest possible total score we can obtain?
+现在我们来考虑这样一个问题：给定 $n$ 个带有持续时间和截止时间的任务，我们的任务是选择一个执行任务的顺序。对于每个任务，我们获得 $d-x$ 分，其中 $d$ 是任务的截止时间，$x$ 是我们完成任务的那一刻。我们能获得的最大总分是多少？
 
-For example, suppose that the tasks are as follows:
+例如，假设任务如下：
 
-| task | duration | deadline |
+| 任务 | 持续时间 | 截止时间 |
 |:-----|:---------|:---------|
 | $A$  | 4        | 2        |
 | $B$  | 3        | 5        |
 | $C$  | 2        | 7        |
 | $D$  | 4        | 5        |
 
-In this case, an optimal schedule for the tasks is as follows:
+在这个例子中，任务的一个最优安排如下：
 
 ![](assets/images/ch06-fig07.svg)
 
-In this solution, $C$ yields 5 points, $B$ yields 0 points, $A$ yields $-7$ points and $D$ yields $-8$ points, so the total score is $-10$.
+在这个解中，$C$ 得 5 分，$B$ 得 0 分，$A$ 得 $-7$ 分，$D$ 得 $-8$ 分，所以总分是 $-10$。
 
-Surprisingly, the optimal solution to the problem does not depend on the deadlines at all, but a correct greedy strategy is to simply perform the tasks *sorted by their durations* in increasing order. The reason for this is that if we ever perform two tasks one after another such that the first task takes longer than the second task, we can obtain a better solution if we swap the tasks. For example, consider the following schedule:
+令人惊讶的是，该问题的最优解完全不依赖于截止时间，而一个正确的贪心策略只是按持续时间递增的顺序执行任务。原因在于，如果我们将两个任务一前一后执行，且第一个任务比第二个任务耗时更长，那么交换这两个任务可以得到更好的解。例如，考虑以下安排：
 
 ![](assets/images/ch06-fig08.svg)
 
-Here $a>b$, so we should swap the tasks:
+这里 $a>b$，所以我们应该交换这两个任务：
 
 ![](assets/images/ch06-fig09.svg)
 
-Now $X$ gives $b$ points less and $Y$ gives $a$ points more, so the total score increases by $a-b > 0$. In an optimal solution, for any two consecutive tasks, it must hold that the shorter task comes before the longer task. Thus, the tasks must be performed sorted by their durations.
+现在 $X$ 少得 $b$ 分，$Y$ 多得 $a$ 分，所以总分增加了 $a-b > 0$。在最优解中，对于任意两个相邻任务，较短的任务都必须排在较长的任务之前。因此，任务必须按持续时间排序后执行。
 
-## Minimizing sums
+## 最小化求和
 
-We next consider a problem where we are given $n$ numbers $a_1,a_2,\ldots,a_n$ and our task is to find a value $x$ that minimizes the sum $$|a_1-x|^c+|a_2-x|^c+\cdots+|a_n-x|^c.$$ We focus on the cases $c=1$ and $c=2$.
+接下来我们考虑这样一个问题：给定 $n$ 个数 $a_1,a_2,\ldots,a_n$，我们的任务是求一个值 $x$，使和 $$|a_1-x|^c+|a_2-x|^c+\cdots+|a_n-x|^c.$$ 最小。我们重点关注 $c=1$ 和 $c=2$ 两种情形。
 
-#### Case $c=1$
+#### 情形 $c=1$
 
-In this case, we should minimize the sum $$|a_1-x|+|a_2-x|+\cdots+|a_n-x|.$$ For example, if the numbers are $[1,2,9,2,6]$, the best solution is to select $x=2$ which produces the sum $$|1-2|+|2-2|+|9-2|+|2-2|+|6-2|=12.$$ In the general case, the best choice for $x$ is the *median* of the numbers, i.e., the middle number after sorting. For example, the list $[1,2,9,2,6]$ becomes $[1,2,2,6,9]$ after sorting, so the median is 2.
+在这种情况下，我们应当最小化和 $$|a_1-x|+|a_2-x|+\cdots+|a_n-x|.$$ 例如，如果这些数是 $[1,2,9,2,6]$，最优解是选取 $x=2$，它产生的和为 $$|1-2|+|2-2|+|9-2|+|2-2|+|6-2|=12.$$ 在一般情形下，$x$ 的最佳选择是这些数的*中位数*，即排序后位于中间的数。例如，列表 $[1,2,9,2,6]$ 排序后变为 $[1,2,2,6,9]$，所以中位数是 2。
 
-The median is an optimal choice, because if $x$ is smaller than the median, the sum becomes smaller by increasing $x$, and if $x$ is larger then the median, the sum becomes smaller by decreasing $x$. Hence, the optimal solution is that $x$ is the median. If $n$ is even and there are two medians, both medians and all values between them are optimal choices.
+中位数是最优选择，因为如果 $x$ 小于中位数，增大 $x$ 会使和变小；如果 $x$ 大于中位数，减小 $x$ 会使和变小。因此，最优解是 $x$ 取中位数。如果 $n$ 是偶数且有两个中位数，那么这两个中位数以及它们之间的所有值都是最优选择。
 
-#### Case $c=2$
+#### 情形 $c=2$
 
-In this case, we should minimize the sum $$(a_1-x)^2+(a_2-x)^2+\cdots+(a_n-x)^2.$$ For example, if the numbers are $[1,2,9,2,6]$, the best solution is to select $x=4$ which produces the sum $$(1-4)^2+(2-4)^2+(9-4)^2+(2-4)^2+(6-4)^2=46.$$ In the general case, the best choice for $x$ is the *average* of the numbers. In the example the average is $(1+2+9+2+6)/5=4$. This result can be derived by presenting the sum as follows: $$nx^2 - 2x(a_1+a_2+\cdots+a_n) + (a_1^2+a_2^2+\cdots+a_n^2)$$ The last part does not depend on $x$, so we can ignore it. The remaining parts form a function $nx^2-2xs$ where $s=a_1+a_2+\cdots+a_n$. This is a parabola opening upwards with roots $x=0$ and $x=2s/n$, and the minimum value is the average of the roots $x=s/n$, i.e., the average of the numbers $a_1,a_2,\ldots,a_n$.
+在这种情况下，我们应当最小化和 $$(a_1-x)^2+(a_2-x)^2+\cdots+(a_n-x)^2.$$ 例如，如果这些数是 $[1,2,9,2,6]$，最优解是选取 $x=4$，它产生的和为 $$(1-4)^2+(2-4)^2+(9-4)^2+(2-4)^2+(6-4)^2=46.$$ 在一般情形下，$x$ 的最佳选择是这些数的*平均值*。在例子中平均值是 $(1+2+9+2+6)/5=4$。这个结果可以通过如下改写该和来推导：$$nx^2 - 2x(a_1+a_2+\cdots+a_n) + (a_1^2+a_2^2+\cdots+a_n^2)$$ 最后一部分不依赖于 $x$，所以我们可以忽略它。剩下的部分构成函数 $nx^2-2xs$，其中 $s=a_1+a_2+\cdots+a_n$。这是一条开口向上的抛物线，其根为 $x=0$ 和 $x=2s/n$，最小值取在两根的平均值处 $x=s/n$，即数 $a_1,a_2,\ldots,a_n$ 的平均值。
 
-## Data compression
+## 数据压缩
 
-A **binary code** assigns for each character of a string a **codeword** that consists of bits. We can *compress* the string using the binary code by replacing each character by the corresponding codeword. For example, the following binary code assigns codewords for characters `A`--`D`:
+**二进制编码**为字符串的每个字符分配一个由比特组成的**码字**。我们可以用二进制编码通过把每个字符替换为相应的码字来*压缩*字符串。例如，下面的二进制编码为字符 `A`--`D` 分配了码字：
 
-| character | codeword |
+| 字符 | 码字 |
 |----------:|---------:|
 |       `A` |       00 |
 |       `B` |       01 |
 |       `C` |       10 |
 |       `D` |       11 |
 
-This is a **constant-length** code which means that the length of each codeword is the same. For example, we can compress the string `AABACDACA` as follows: $$00\,00\,01\,00\,10\,11\,00\,10\,00$$ Using this code, the length of the compressed string is 18 bits. However, we can compress the string better if we use a **variable-length** code where codewords may have different lengths. Then we can give short codewords for characters that appear often and long codewords for characters that appear rarely. It turns out that an **optimal** code for the above string is as follows:
+这是一种**定长**编码，意味着每个码字的长度都相同。例如，我们可以如下压缩字符串 `AABACDACA`：$$00\,00\,01\,00\,10\,11\,00\,10\,00$$ 使用这种编码，压缩后字符串的长度是 18 比特。然而，如果使用**变长**编码，其中码字的长度可以不同，我们就能把字符串压缩得更好。这样我们可以为频繁出现的字符分配短码字，为很少出现的字符分配长码字。结果表明，对于上述字符串，一个**最优**编码如下：
 
-| character | codeword |
+| 字符 | 码字 |
 |----------:|---------:|
 |       `A` |        0 |
 |       `B` |      110 |
 |       `C` |       10 |
 |       `D` |      111 |
 
-An optimal code produces a compressed string that is as short as possible. In this case, the compressed string using the optimal code is $$0\,0\,110\,0\,10\,111\,0\,10\,0,$$ so only 15 bits are needed instead of 18 bits. Thus, thanks to a better code it was possible to save 3 bits in the compressed string.
+最优编码产生的压缩字符串尽可能短。在这个例子中，使用最优编码得到的压缩字符串是 $$0\,0\,110\,0\,10\,111\,0\,10\,0,$$ 所以只需要 15 比特，而不是 18 比特。因此，得益于更好的编码，压缩字符串能够节省 3 比特。
 
-We require that no codeword is a prefix of another codeword. For example, it is not allowed that a code would contain both codewords 10 and 1011. The reason for this is that we want to be able to generate the original string from the compressed string. If a codeword could be a prefix of another codeword, this would not always be possible. For example, the following code is *not* valid:
+我们要求任何码字都不是另一个码字的前缀。例如，不允许一个编码同时包含码字 10 和 1011。原因在于，我们希望能够从压缩字符串还原出原始字符串。如果某个码字可以是另一个码字的前缀，这一点就无法总是做到。例如，下面的编码是*不*合法的：
 
-| character | codeword |
+| 字符 | 码字 |
 |----------:|---------:|
 |       `A` |       10 |
 |       `B` |       11 |
 |       `C` |     1011 |
 |       `D` |      111 |
 
-Using this code, it would not be possible to know if the compressed string 1011 corresponds to the string `AB` or the string `C`.
+使用这种编码，就无法判断压缩字符串 1011 对应的是字符串 `AB` 还是字符串 `C`。
 
-#### Huffman coding
+#### 哈夫曼编码
 
-**Huffman coding**[^2] is a greedy algorithm that constructs an optimal code for compressing a given string. The algorithm builds a binary tree based on the frequencies of the characters in the string, and each character's codeword can be read by following a path from the root to the corresponding node. A move to the left corresponds to bit 0, and a move to the right corresponds to bit 1.
+**哈夫曼编码**[^2] 是一种贪心算法，它为压缩给定字符串构造一个最优编码。该算法根据字符串中字符的频率构建一棵二叉树，每个字符的码字可以通过从根到相应结点的路径读出。向左移动对应比特 0，向右移动对应比特 1。
 
-Initially, each character of the string is represented by a node whose weight is the number of times the character occurs in the string. Then at each step two nodes with minimum weights are combined by creating a new node whose weight is the sum of the weights of the original nodes. The process continues until all nodes have been combined.
+最初，字符串的每个字符由一个结点表示，其权重是该字符在字符串中出现的次数。然后在每一步中，将两个权重最小的结点合并，创建一个新结点，其权重是原先两个结点权重之和。这个过程一直持续到所有结点都被合并为止。
 
-Next we will see how Huffman coding creates the optimal code for the string `AABACDACA`. Initially, there are four nodes that correspond to the characters of the string:
+接下来我们看看哈夫曼编码如何为字符串 `AABACDACA` 构造最优编码。最初有四个结点，对应字符串的各个字符：
 
 ![](assets/images/ch06-fig10.svg)
 
-The node that represents character `A` has weight 5 because character `A` appears 5 times in the string. The other weights have been calculated in the same way.
+表示字符 `A` 的结点权重为 5，因为字符 `A` 在字符串中出现 5 次。其他权重也以同样的方式计算。
 
-The first step is to combine the nodes that correspond to characters `B` and `D`, both with weight 1. The result is:
+第一步是合并对应字符 `B` 和 `D` 的两个结点，它们的权重都为 1。结果如下：
 
 ![](assets/images/ch06-fig11.svg)
 
-After this, the nodes with weight 2 are combined:
+此后，合并权重为 2 的结点：
 
 ![](assets/images/ch06-fig12.svg)
 
-Finally, the two remaining nodes are combined:
+最后，合并剩下的两个结点：
 
 ![](assets/images/ch06-fig13.svg)
 
-Now all nodes are in the tree, so the code is ready. The following codewords can be read from the tree:
+现在所有结点都在树中了，所以编码就绪。可以从树中读出以下码字：
 
-| character | codeword |
+| 字符 | 码字 |
 |----------:|---------:|
 |       `A` |        0 |
 |       `B` |      110 |
 |       `C` |       10 |
 |       `D` |      111 |
 
-[^1]: However, it is possible to *check* in polynomial time if the greedy algorithm presented in this chapter works for a given set of coins [60].
+[^1]: 不过，可以在多项式时间内*检验*本章给出的贪心算法对给定的硬币集合是否可行 [60]。
 
-[^2]: D. A. Huffman discovered this method when solving a university course assignment and published the algorithm in 1952 [44].
+[^2]: D. A. Huffman 在完成一门大学课程作业时发现了这个方法，并于 1952 年发表了该算法 [44]。

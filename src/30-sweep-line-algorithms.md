@@ -1,101 +1,101 @@
-# Sweep line algorithms
+# 扫描线算法
 
-Many geometric problems can be solved using **sweep line** algorithms. The idea in such algorithms is to represent an instance of the problem as a set of events that correspond to points in the plane. The events are processed in increasing order according to their x or y coordinates.
+许多几何问题都可以用**扫描线**算法来解决。这类算法的思想是：把问题的一个实例表示为一组事件，每个事件对应平面上的一个点。这些事件按照 x 坐标或 y 坐标递增的顺序被依次处理。
 
-As an example, consider the following problem: There is a company that has $n$ employees, and we know for each employee their arrival and leaving times on a certain day. Our task is to calculate the maximum number of employees that were in the office at the same time.
+举个例子，考虑下面这个问题：有一家公司有 $n$ 名员工，对于每名员工，我们已知他们某一天的到达时间和离开时间。我们的任务是计算同一时刻办公室里人数最多是多少。
 
-The problem can be solved by modeling the situation so that each employee is assigned two events that correspond to their arrival and leaving times. After sorting the events, we go through them and keep track of the number of people in the office. For example, the table
+这个问题可以通过如下建模来解决：为每名员工指定两个事件，分别对应他们的到达时间和离开时间。把事件排序后，我们依次遍历它们，同时用一个计数器记录办公室里的人数。例如，下表
 
-| person | arrival time | leaving time |
+| 人员 | 到达时间 | 离开时间 |
 |:------:|:------------:|:------------:|
 |  John  |      10      |      15      |
 | Maria  |      6       |      12      |
 | Peter  |      14      |      16      |
 |  Lisa  |      5       |      13      |
 
-corresponds to the following events:
+对应如下事件：
 
 ![](assets/images/ch30-fig01.svg)
 
-We go through the events from left to right and maintain a counter. Always when a person arrives, we increase the value of the counter by one, and when a person leaves, we decrease the value of the counter by one. The answer to the problem is the maximum value of the counter during the algorithm.
+我们从左到右遍历这些事件并维护一个计数器。每当有人到达，就把计数器的值加一；每当有人离开，就把计数器的值减一。问题的答案就是算法执行过程中计数器的最大值。
 
-In the example, the events are processed as follows:
+在这个例子中，事件的处理过程如下：
 
 ![](assets/images/ch30-fig02.svg)
 
-The symbols $+$ and $-$ indicate whether the value of the counter increases or decreases, and the value of the counter is shown below. The maximum value of the counter is 3 between John's arrival and Maria's leaving.
+符号 $+$ 和 $-$ 表示计数器的值是增加还是减少，计数器的值显示在下方。计数器的最大值是 3，出现在 John 到达与 Maria 离开之间。
 
-The running time of the algorithm is $O(n \log n)$, because sorting the events takes $O(n \log n)$ time and the rest of the algorithm takes $O(n)$ time.
+该算法的时间复杂度是 $O(n \log n)$，因为对事件排序需要 $O(n \log n)$ 的时间，而算法的其余部分需要 $O(n)$ 的时间。
 
-## Intersection points
+## 交点
 
-Given a set of $n$ line segments, each of them being either horizontal or vertical, consider the problem of counting the total number of intersection points. For example, when the line segments are
+给定一个由 $n$ 条线段组成的集合，每条线段要么是水平的要么是垂直的，考虑统计交点总数的问题。例如，当这些线段为
 
 ![](assets/images/ch30-fig03.svg)
 
-there are three intersection points:
+共有三个交点：
 
 ![](assets/images/ch30-fig04.svg)
 
-It is easy to solve the problem in $O(n^2)$ time, because we can go through all possible pairs of line segments and check if they intersect. However, we can solve the problem more efficiently in $O(n \log n)$ time using a sweep line algorithm and a range query data structure.
+这个问题很容易在 $O(n^2)$ 时间内解决，因为我们可以遍历所有可能的线段对并检查它们是否相交。不过，借助扫描线算法和区间查询数据结构，我们可以在 $O(n \log n)$ 时间内更高效地解决该问题。
 
-The idea is to process the endpoints of the line segments from left to right and focus on three types of events:
+其思想是从左到右处理线段的端点，并关注三种类型的事件：
 
-1.  horizontal segment begins
+1.  水平线段开始
 
-2.  horizontal segment ends
+2.  水平线段结束
 
-3.  vertical segment
+3.  垂直线段
 
-The following events correspond to the example:
+以下事件对应于上面的例子：
 
 ![](assets/images/ch30-fig05.svg)
 
-We go through the events from left to right and use a data structure that maintains a set of y coordinates where there is an active horizontal segment. At event 1, we add the y coordinate of the segment to the set, and at event 2, we remove the y coordinate from the set.
+我们从左到右遍历事件，并使用一个数据结构来维护当前存在活跃水平线段的那些 y 坐标构成的集合。在事件 1 处，我们把该线段的 y 坐标加入集合；在事件 2 处，我们把该 y 坐标从集合中移除。
 
-Intersection points are calculated at event 3. When there is a vertical segment between points $y_1$ and $y_2$, we count the number of active horizontal segments whose y coordinate is between $y_1$ and $y_2$, and add this number to the total number of intersection points.
+交点在事件 3 处计算。当有一条位于 $y_1$ 和 $y_2$ 两点之间的垂直线段时，我们统计 y 坐标位于 $y_1$ 和 $y_2$ 之间的活跃水平线段的数目，并把该数目加到交点总数上。
 
-To store y coordinates of horizontal segments, we can use a binary indexed or segment tree, possibly with index compression. When such structures are used, processing each event takes $O(\log n)$ time, so the total running time of the algorithm is $O(n \log n)$.
+为了存储水平线段的 y 坐标，我们可以使用树状数组或线段树，必要时还可以配合下标压缩。使用这类结构时，处理每个事件需要 $O(\log n)$ 时间，因此该算法的总运行时间是 $O(n \log n)$。
 
-## Closest pair problem
+## 最近点对问题
 
-Given a set of $n$ points, our next problem is to find two points whose Euclidean distance is minimum. For example, if the points are
+给定一个由 $n$ 个点组成的集合，我们接下来的问题是找出欧几里得距离最小的一对点。例如，如果这些点是
 
 ![](assets/images/ch30-fig06.svg)
 
-we should find the following points:
+我们应该找出下面这两个点：
 
 ![](assets/images/ch30-fig07.svg)
 
-This is another example of a problem that can be solved in $O(n \log n)$ time using a sweep line algorithm[^1]. We go through the points from left to right and maintain a value $d$: the minimum distance between two points seen so far. At each point, we find the nearest point to the left. If the distance is less than $d$, it is the new minimum distance and we update the value of $d$.
+这是另一个可以用扫描线算法在 $O(n \log n)$ 时间内解决的问题[^1]。我们从左到右遍历这些点，并维护一个值 $d$：到目前为止所见过的两点之间的最小距离。对于每个点，我们找出其左侧最近的点。如果该距离小于 $d$，它就是新的最小距离，我们更新 $d$ 的值。
 
-If the current point is $(x,y)$ and there is a point to the left within a distance of less than $d$, the x coordinate of such a point must be between $[x-d,x]$ and the y coordinate must be between $[y-d,y+d]$. Thus, it suffices to only consider points that are located in those ranges, which makes the algorithm efficient.
+如果当前点是 $(x,y)$，并且在左侧存在一个距离小于 $d$ 的点，那么这样的点的 x 坐标必定位于 $[x-d,x]$ 之间，而 y 坐标必定位于 $[y-d,y+d]$ 之间。因此，只需考虑位于这些范围内的点即可，这使得算法变得高效。
 
-For example, in the following picture, the region marked with dashed lines contains the points that can be within a distance of $d$ from the active point:
+例如，在下面的图中，用虚线标出的区域包含了所有可能与当前活动点的距离在 $d$ 以内的点：
 
 ![](assets/images/ch30-fig08.svg)
 
-The efficiency of the algorithm is based on the fact that the region always contains only $O(1)$ points. We can go through those points in $O(\log n)$ time by maintaining a set of points whose x coordinate is between $[x-d,x]$, in increasing order according to their y coordinates.
+该算法的高效性基于这样一个事实：这个区域内始终只包含 $O(1)$ 个点。通过维护一个 x 坐标位于 $[x-d,x]$ 之间、且按 y 坐标递增排序的点集，我们可以在 $O(\log n)$ 时间内遍历这些点。
 
-The time complexity of the algorithm is $O(n \log n)$, because we go through $n$ points and find for each point the nearest point to the left in $O(\log n)$ time.
+该算法的时间复杂度是 $O(n \log n)$，因为我们遍历 $n$ 个点，并为每个点在 $O(\log n)$ 时间内找出其左侧最近的点。
 
-## Convex hull problem
+## 凸包问题
 
-A **convex hull** is the smallest convex polygon that contains all points of a given set. Convexity means that a line segment between any two vertices of the polygon is completely inside the polygon.
+**凸包**是包含给定点集中所有点的最小凸多边形。凸性意味着多边形任意两个顶点之间的线段都完全位于多边形内部。
 
-For example, for the points
+例如，对于这些点
 
 ![](assets/images/ch30-fig09.svg)
 
-the convex hull is as follows:
+其凸包如下：
 
 ![](assets/images/ch30-fig10.svg)
 
-**Andrew's algorithm** [3] provides an easy way to construct the convex hull for a set of points in $O(n \log n)$ time. The algorithm first locates the leftmost and rightmost points, and then constructs the convex hull in two parts: first the upper hull and then the lower hull. Both parts are similar, so we can focus on constructing the upper hull.
+**Andrew 算法** [3] 提供了一种简便的方法，可以在 $O(n \log n)$ 时间内构造点集的凸包。该算法首先定位最左和最右的点，然后分两部分构造凸包：先构造上凸包，再构造下凸包。两部分类似，因此我们可以重点关注上凸包的构造。
 
-First, we sort the points primarily according to x coordinates and secondarily according to y coordinates. After this, we go through the points and add each point to the hull. Always after adding a point to the hull, we make sure that the last line segment in the hull does not turn left. As long as it turns left, we repeatedly remove the second last point from the hull.
+首先，我们按照 x 坐标为主、y 坐标为辅对点进行排序。之后，我们遍历这些点并把每个点加入凸包。每当把一个点加入凸包后，我们都确保凸包中最后一条线段不会向左转。只要它还向左转，我们就反复地把倒数第二个点从凸包中移除。
 
-The following pictures show how Andrew's algorithm works:  
+下面的图片展示了 Andrew 算法的工作过程：  
 
 |  |  |  |  |  |  |  |
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|
@@ -122,4 +122,4 @@ The following pictures show how Andrew's algorithm works:
 | ![](assets/images/ch30-fig27.svg) |  | ![](assets/images/ch30-fig28.svg) |  | ![](assets/images/ch30-fig29.svg) |  | ![](assets/images/ch30-fig30.svg) |
 | 17 |  | 18 |  | 19 |  | 20 |
 
-[^1]: Besides this approach, there is also an $O(n \log n)$ time divide-and-conquer algorithm [64] that divides the points into two sets and recursively solves the problem for both sets.
+[^1]: 除了这种方法之外，还有一种 $O(n \log n)$ 时间的分治算法 [64]，它把点分成两个集合，并对两个集合递归地求解该问题。

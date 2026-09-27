@@ -1,24 +1,24 @@
-# Tree queries
+# 树查询
 
-This chapter discusses techniques for processing queries on subtrees and paths of a rooted tree. For example, such queries are:
+本章讨论处理有根树的子树与路径上查询的各种技巧。例如，这类查询包括：
 
-- what is the $k$th ancestor of a node?
+- 一个结点的第 $k$ 个祖先是什么？
 
-- what is the sum of values in the subtree of a node?
+- 一个结点的子树中数值之和是多少？
 
-- what is the sum of values on a path between two nodes?
+- 两个结点之间的路径上数值之和是多少？
 
-- what is the lowest common ancestor of two nodes?
+- 两个结点的最近公共祖先是什么？
 
-## Finding ancestors
+## 查找祖先
 
-The $k$th **ancestor** of a node $x$ in a rooted tree is the node that we will reach if we move $k$ levels up from $x$. Let $\texttt{ancestor}(x,k)$ denote the $k$th ancestor of a node $x$ (or $0$ if there is no such an ancestor). For example, in the following tree, $\texttt{ancestor}(2,1)=1$ and $\texttt{ancestor}(8,2)=4$.
+有根树中结点 $x$ 的第 $k$ 个**祖先**是从 $x$ 向上移动 $k$ 层所到达的结点。我们用 $\texttt{ancestor}(x,k)$ 表示结点 $x$ 的第 $k$ 个祖先（若不存在这样的祖先则为 $0$）。例如，在下面这棵树中，$\texttt{ancestor}(2,1)=1$ 且 $\texttt{ancestor}(8,2)=4$。
 
 ![](assets/images/ch18-fig01.svg)
 
-An easy way to calculate any value of $\texttt{ancestor}(x,k)$ is to perform a sequence of $k$ moves in the tree. However, the time complexity of this method is $O(k)$, which may be slow, because a tree of $n$ nodes may have a chain of $n$ nodes.
+计算任意 $\texttt{ancestor}(x,k)$ 的一种简单方法是在树中进行 $k$ 次移动。然而，这种方法的时间复杂度为 $O(k)$，可能较慢，因为一棵 $n$ 个结点的树可能包含一条 $n$ 个结点的链。
 
-Fortunately, using a technique similar to that used in Chapter 16.3, any value of $\texttt{ancestor}(x,k)$ can be efficiently calculated in $O(\log k)$ time after preprocessing. The idea is to precalculate all values $\texttt{ancestor}(x,k)$ where $k \le n$ is a power of two. For example, the values for the above tree are as follows:
+幸运的是，使用与第 16.3 章类似的技巧，经过预处理后可以在 $O(\log k)$ 时间内高效地计算任意 $\texttt{ancestor}(x,k)$。其思路是预计算出所有 $\texttt{ancestor}(x,k)$，其中 $k \le n$ 是 2 的幂。例如，上述树的值如下：
 
 |                      $x$ |   1 |   2 |   3 |   4 |   5 |   6 |   7 |   8 |     |
 |-------------------------:|----:|----:|----:|----:|----:|----:|----:|----:|----:|
@@ -27,186 +27,186 @@ Fortunately, using a technique similar to that used in Chapter 16.3, any value o
 | $\texttt{ancestor}(x,4)$ |   0 |   0 |   0 |   0 |   0 |   0 |   0 |   0 |     |
 |                 $\cdots$ |     |     |     |     |     |     |     |     |     |
 
-The preprocessing takes $O(n \log n)$ time, because $O(\log n)$ values are calculated for each node. After this, any value of $\texttt{ancestor}(x,k)$ can be calculated in $O(\log k)$ time by representing $k$ as a sum where each term is a power of two.
+预处理的耗时为 $O(n \log n)$，因为每个结点需要计算 $O(\log n)$ 个值。之后，通过将 $k$ 表示为若干 2 的幂之和，可以在 $O(\log k)$ 时间内计算任意 $\texttt{ancestor}(x,k)$。
 
-## Subtrees and paths
+## 子树与路径
 
-A **tree traversal array** contains the nodes of a rooted tree in the order in which a depth-first search from the root node visits them. For example, in the tree
+**树遍历数组**按从根结点出发的深度优先搜索访问结点的顺序，包含有根树的各结点。例如，在树
 
 ![](assets/images/ch18-fig02.svg)
 
-a depth-first search proceeds as follows:
+中，深度优先搜索的过程如下：
 
 ![](assets/images/ch18-fig03.svg)
 
-Hence, the corresponding tree traversal array is as follows:
+因此，相应的树遍历数组如下：
 
 ![](assets/images/ch18-fig04.svg)
 
-#### Subtree queries
+#### 子树查询
 
-Each subtree of a tree corresponds to a subarray of the tree traversal array such that the first element of the subarray is the root node. For example, the following subarray contains the nodes of the subtree of node $4$:
+树的每个子树都对应于树遍历数组的一个子数组，该子数组的第一个元素是子树的根结点。例如，下面的子数组包含结点 $4$ 的子树中的各个结点：
 
 ![](assets/images/ch18-fig05.svg)
 
-Using this fact, we can efficiently process queries that are related to subtrees of a tree. As an example, consider a problem where each node is assigned a value, and our task is to support the following queries:
+利用这一事实，我们可以高效地处理与树的子树相关的查询。作为一个例子，考虑这样一个问题：每个结点被赋予一个值，我们的任务是支持以下查询：
 
-- update the value of a node
+- 更新某个结点的值
 
-- calculate the sum of values in the subtree of a node
+- 计算某个结点的子树中数值之和
 
-Consider the following tree where the blue numbers are the values of the nodes. For example, the sum of the subtree of node $4$ is $3+4+3+1=11$.
+考虑下面这棵树，其中蓝色数字是各结点的值。例如，结点 $4$ 的子树之和为 $3+4+3+1=11$。
 
 ![](assets/images/ch18-fig06.svg)
 
-The idea is to construct a tree traversal array that contains three values for each node: the identifier of the node, the size of the subtree, and the value of the node. For example, the array for the above tree is as follows:
+思路是构造一个树遍历数组，其中对每个结点包含三个值：结点的标识、子树的大小以及结点的值。例如，上述树的数组如下：
 
 ![](assets/images/ch18-fig07.svg)
 
-Using this array, we can calculate the sum of values in any subtree by first finding out the size of the subtree and then the values of the corresponding nodes. For example, the values in the subtree of node $4$ can be found as follows:
+利用这个数组，我们可以先找出子树的大小，再找到相应结点的值，从而计算任意子树中数值之和。例如，结点 $4$ 的子树中的值可以这样找到：
 
 ![](assets/images/ch18-fig08.svg)
 
-To answer the queries efficiently, it suffices to store the values of the nodes in a binary indexed or segment tree. After this, we can both update a value and calculate the sum of values in $O(\log n)$ time.
+为了高效地回答查询，只需将各结点的值存储在树状数组或线段树中。之后，我们便可以在 $O(\log n)$ 时间内既更新一个值又计算数值之和。
 
-#### Path queries
+#### 路径查询
 
-Using a tree traversal array, we can also efficiently calculate sums of values on paths from the root node to any node of the tree. Consider a problem where our task is to support the following queries:
+利用树遍历数组，我们还可以高效地计算从根结点到树中任意结点的路径上数值之和。考虑这样一个问题：我们的任务是支持以下查询：
 
-- change the value of a node
+- 修改某个结点的值
 
-- calculate the sum of values on a path from the root to a node
+- 计算从根到某个结点的路径上数值之和
 
-For example, in the following tree, the sum of values from the root node to node 7 is $4+5+5=14$:
+例如，在下面这棵树中，从根结点到结点 7 的数值之和为 $4+5+5=14$：
 
 ![](assets/images/ch18-fig09.svg)
 
-We can solve this problem like before, but now each value in the last row of the array is the sum of values on a path from the root to the node. For example, the following array corresponds to the above tree:
+我们可以像之前那样来解决这个问题，不过现在数组最后一行的每个值是从根到该结点路径上的数值之和。例如，下面的数组对应于上述树：
 
 ![](assets/images/ch18-fig10.svg)
 
-When the value of a node increases by $x$, the sums of all nodes in its subtree increase by $x$. For example, if the value of node 4 increases by 1, the array changes as follows:
+当某个结点的值增加 $x$ 时，其子树中所有结点的和都增加 $x$。例如，若结点 4 的值增加 1，则数组的变化如下：
 
 ![](assets/images/ch18-fig11.svg)
 
-Thus, to support both the operations, we should be able to increase all values in a range and retrieve a single value. This can be done in $O(\log n)$ time using a binary indexed or segment tree (see Chapter 9.4).
+因此，为了同时支持这两种操作，我们应当能够增大一个区间内的所有值并查询单个值。这可以利用树状数组或线段树在 $O(\log n)$ 时间内完成（见第 9.4 章）。
 
-## Lowest common ancestor
+## 最近公共祖先
 
-The **lowest common ancestor** of two nodes of a rooted tree is the lowest node whose subtree contains both the nodes. A typical problem is to efficiently process queries that ask to find the lowest common ancestor of two nodes.
+有根树中两个结点的**最近公共祖先**是子树同时包含这两个结点的最低结点。一个典型问题是高效地处理查询两个结点最近公共祖先的询问。
 
-For example, in the following tree, the lowest common ancestor of nodes 5 and 8 is node 2:
+例如，在下面这棵树中，结点 5 和结点 8 的最近公共祖先是结点 2：
 
 ![](assets/images/ch18-fig12.svg)
 
-Next we will discuss two efficient techniques for finding the lowest common ancestor of two nodes.
+接下来我们讨论两种高效查找两个结点最近公共祖先的技巧。
 
-#### Method 1
+#### 方法 1
 
-One way to solve the problem is to use the fact that we can efficiently find the $k$th ancestor of any node in the tree. Using this, we can divide the problem of finding the lowest common ancestor into two parts.
+解决该问题的一种方法是利用我们能够高效查找树中任意结点第 $k$ 个祖先这一事实。借此，我们可以将查找最近公共祖先的问题分成两部分。
 
-We use two pointers that initially point to the two nodes whose lowest common ancestor we should find. First, we move one of the pointers upwards so that both pointers point to nodes at the same level.
+我们使用两个指针，初始时分别指向需要查找最近公共祖先的两个结点。首先，我们将其中一个指针向上移动，使两个指针指向同一层上的结点。
 
-In the example scenario, we move the second pointer one level up so that it points to node 6 which is at the same level with node 5:
+在示例情形中，我们将第二个指针向上移动一层，使其指向结点 6，它与结点 5 处于同一层：
 
 ![](assets/images/ch18-fig13.svg)
 
-After this, we determine the minimum number of steps needed to move both pointers upwards so that they will point to the same node. The node to which the pointers point after this is the lowest common ancestor.
+之后，我们确定两个指针向上移动所需的最少步数，使它们指向同一个结点。指针在此之后所指的结点就是最近公共祖先。
 
-In the example scenario, it suffices to move both pointers one step upwards to node 2, which is the lowest common ancestor:
+在示例情形中，只需将两个指针都向上移动一步到结点 2，它就是最近公共祖先：
 
 ![](assets/images/ch18-fig14.svg)
 
-Since both parts of the algorithm can be performed in $O(\log n)$ time using precomputed information, we can find the lowest common ancestor of any two nodes in $O(\log n)$ time.
+由于算法的两部分都可以利用预计算的信息在 $O(\log n)$ 时间内完成，因此我们可以在 $O(\log n)$ 时间内查找任意两个结点的最近公共祖先。
 
-#### Method 2
+#### 方法 2
 
-Another way to solve the problem is based on a tree traversal array[^1]. Once again, the idea is to traverse the nodes using a depth-first search:
+另一种解决该问题的方法基于树遍历数组[^1]。同样地，思路是使用深度优先搜索来遍历各结点：
 
 ![](assets/images/ch18-fig15.svg)
 
-However, we use a different tree traversal array than before: we add each node to the array *always* when the depth-first search walks through the node, and not only at the first visit. Hence, a node that has $k$ children appears $k+1$ times in the array and there are a total of $2n-1$ nodes in the array.
+然而，我们使用一个与之前不同的树遍历数组：每当深度优先搜索经过某个结点时，我们*总是*将该结点加入数组，而不仅仅在首次访问时加入。因此，一个有 $k$ 个子结点的结点在数组中出现 $k+1$ 次，数组中总共有 $2n-1$ 个结点。
 
-We store two values in the array: the identifier of the node and the depth of the node in the tree. The following array corresponds to the above tree:
+我们在数组中存储两个值：结点的标识以及结点在树中的深度。下面的数组对应于上述树：
 
 ![](assets/images/ch18-fig16.svg)
 
-Now we can find the lowest common ancestor of nodes $a$ and $b$ by finding the node with the *minimum* depth between nodes $a$ and $b$ in the array. For example, the lowest common ancestor of nodes $5$ and $8$ can be found as follows:
+现在，我们可以通过查找数组中介于结点 $a$ 和 $b$ 之间深度*最小*的结点，来找到结点 $a$ 和 $b$ 的最近公共祖先。例如，结点 $5$ 和 $8$ 的最近公共祖先可以这样找到：
 
 ![](assets/images/ch18-fig17.svg)
 
-Node 5 is at position 2, node 8 is at position 5, and the node with minimum depth between positions $2 \ldots 5$ is node 2 at position 3 whose depth is 2. Thus, the lowest common ancestor of nodes 5 and 8 is node 2.
+结点 5 位于位置 2，结点 8 位于位置 5，而位置 $2 \ldots 5$ 之间深度最小的结点是位于位置 3 的结点 2，其深度为 2。因此，结点 5 和 8 的最近公共祖先是结点 2。
 
-Thus, to find the lowest common ancestor of two nodes it suffices to process a range minimum query. Since the array is static, we can process such queries in $O(1)$ time after an $O(n \log n)$ time preprocessing.
+于是，要查找两个结点的最近公共祖先，只需处理一个区间最小值查询。由于该数组是静态的，我们经过 $O(n \log n)$ 时间的预处理后，可以在 $O(1)$ 时间内处理这类查询。
 
-#### Distances of nodes
+#### 结点的距离
 
-The distance between nodes $a$ and $b$ equals the length of the path from $a$ to $b$. It turns out that the problem of calculating the distance between nodes reduces to finding their lowest common ancestor.
+结点 $a$ 和 $b$ 之间的距离等于从 $a$ 到 $b$ 的路径长度。事实证明，计算结点间距离的问题可以归结为查找它们的最近公共祖先。
 
-First, we root the tree arbitrarily. After this, the distance of nodes $a$ and $b$ can be calculated using the formula $$\texttt{depth}(a)+\texttt{depth}(b)-2 \cdot \texttt{depth}(c),$$ where $c$ is the lowest common ancestor of $a$ and $b$ and $\texttt{depth}(s)$ denotes the depth of node $s$. For example, consider the distance of nodes 5 and 8:
+首先，我们任意地为树定根。之后，结点 $a$ 和 $b$ 之间的距离可以用公式 $$\texttt{depth}(a)+\texttt{depth}(b)-2 \cdot \texttt{depth}(c),$$ 来计算，其中 $c$ 是 $a$ 和 $b$ 的最近公共祖先，$\texttt{depth}(s)$ 表示结点 $s$ 的深度。例如，考虑结点 5 和 8 之间的距离：
 
 ![](assets/images/ch18-fig18.svg)
 
-The lowest common ancestor of nodes 5 and 8 is node 2. The depths of the nodes are $\texttt{depth}(5)=3$, $\texttt{depth}(8)=4$ and $\texttt{depth}(2)=2$, so the distance between nodes 5 and 8 is $3+4-2\cdot2=3$.
+结点 5 和 8 的最近公共祖先是结点 2。各结点的深度为 $\texttt{depth}(5)=3$、$\texttt{depth}(8)=4$ 以及 $\texttt{depth}(2)=2$，因此结点 5 和 8 之间的距离为 $3+4-2\cdot2=3$。
 
-## Offline algorithms
+## 离线算法
 
-So far, we have discussed *online* algorithms for tree queries. Those algorithms are able to process queries one after another so that each query is answered before receiving the next query.
+到目前为止，我们讨论的都是树查询的*在线*算法。这类算法能够一个接一个地处理查询，使得在收到下一个查询之前先回答当前查询。
 
-However, in many problems, the online property is not necessary. In this section, we focus on *offline* algorithms. Those algorithms are given a set of queries which can be answered in any order. It is often easier to design an offline algorithm compared to an online algorithm.
+然而，在许多问题中，在线性质并非必要。在本节中，我们关注*离线*算法。这类算法给定一组查询，可以按任意顺序回答。与在线算法相比，设计离线算法通常更容易。
 
-#### Merging data structures
+#### 合并数据结构
 
-One method to construct an offline algorithm is to perform a depth-first tree traversal and maintain data structures in nodes. At each node $s$, we create a data structure $\texttt{d}[s]$ that is based on the data structures of the children of $s$. Then, using this data structure, all queries related to $s$ are processed.
+构造离线算法的一种方法是执行深度优先树遍历，并在结点处维护数据结构。在每个结点 $s$ 处，我们基于 $s$ 的子结点们的数据结构创建一个数据结构 $\texttt{d}[s]$。然后，利用这个数据结构处理所有与 $s$ 相关的查询。
 
-As an example, consider the following problem: We are given a tree where each node has some value. Our task is to process queries of the form "calculate the number of nodes with value $x$ in the subtree of node $s$". For example, in the following tree, the subtree of node $4$ contains two nodes whose value is 3.
+作为一个例子，考虑以下问题：给定一棵树，其中每个结点都有某个值。我们的任务是处理形如「计算结点 $s$ 的子树中值为 $x$ 的结点个数」的查询。例如，在下面这棵树中，结点 $4$ 的子树包含两个值为 3 的结点。
 
 ![](assets/images/ch18-fig19.svg)
 
-In this problem, we can use map structures to answer the queries. For example, the maps for node 4 and its children are as follows:
+在这个问题中，我们可以使用 map 结构来回答查询。例如，结点 4 及其子结点的 map 如下：
 
 ![](assets/images/ch18-fig20.svg)
 
-If we create such a data structure for each node, we can easily process all given queries, because we can handle all queries related to a node immediately after creating its data structure. For example, the above map structure for node 4 tells us that its subtree contains two nodes whose value is 3.
+如果我们为每个结点创建这样的数据结构，就能轻松地处理所有给定的查询，因为我们可以创建完某个结点的数据结构后立即处理所有与该结点相关的查询。例如，上述结点 4 的 map 结构告诉我们，其子树包含两个值为 3 的结点。
 
-However, it would be too slow to create all data structures from scratch. Instead, at each node $s$, we create an initial data structure $\texttt{d}[s]$ that only contains the value of $s$. After this, we go through the children of $s$ and *merge* $\texttt{d}[s]$ and all data structures $\texttt{d}[u]$ where $u$ is a child of $s$.
+然而，从头创建所有数据结构会太慢。相反，在每个结点 $s$ 处，我们创建一个初始数据结构 $\texttt{d}[s]$，其中只包含 $s$ 的值。之后，我们遍历 $s$ 的子结点，并将 $\texttt{d}[s]$ 与所有数据结构 $\texttt{d}[u]$ *合并*，其中 $u$ 是 $s$ 的子结点。
 
-For example, in the above tree, the map for node $4$ is created by merging the following maps:
+例如，在上述树中，结点 $4$ 的 map 通过合并以下 map 得到：
 
 ![](assets/images/ch18-fig21.svg)
 
-Here the first map is the initial data structure for node 4, and the other three maps correspond to nodes 7, 8 and 9.
+这里第一个 map 是结点 4 的初始数据结构，其余三个 map 对应于结点 7、8 和 9。
 
-The merging at node $s$ can be done as follows: We go through the children of $s$ and at each child $u$ merge $\texttt{d}[s]$ and $\texttt{d}[u]$. We always copy the contents from $\texttt{d}[u]$ to $\texttt{d}[s]$. However, before this, we *swap* the contents of $\texttt{d}[s]$ and $\texttt{d}[u]$ if $\texttt{d}[s]$ is smaller than $\texttt{d}[u]$. By doing this, each value is copied only $O(\log n)$ times during the tree traversal, which ensures that the algorithm is efficient.
+在结点 $s$ 处的合并可以这样进行：我们遍历 $s$ 的子结点，并在每个子结点 $u$ 处合并 $\texttt{d}[s]$ 和 $\texttt{d}[u]$。我们总是将 $\texttt{d}[u]$ 的内容复制到 $\texttt{d}[s]$。然而在此之前，如果 $\texttt{d}[s]$ 比 $\texttt{d}[u]$ 小，我们就*交换* $\texttt{d}[s]$ 和 $\texttt{d}[u]$ 的内容。通过这样做，每个值在树遍历过程中只会被复制 $O(\log n)$ 次，从而保证算法是高效的。
 
-To swap the contents of two data structures $a$ and $b$ efficiently, we can just use the following code:
+为了高效地交换两个数据结构 $a$ 和 $b$ 的内容，我们只需使用以下代码：
 
 ```cpp
 swap(a,b);
 ```
 
-It is guaranteed that the above code works in constant time when $a$ and $b$ are C++ standard library data structures.
+可以保证，当 $a$ 和 $b$ 是 C++ 标准库数据结构时，上述代码在常数时间内完成。
 
-#### Lowest common ancestors
+#### 最近公共祖先
 
-There is also an offline algorithm for processing a set of lowest common ancestor queries[^2]. The algorithm is based on the union-find data structure (see Chapter 15.2), and the benefit of the algorithm is that it is easier to implement than the algorithms discussed earlier in this chapter.
+对于处理一组最近公共祖先查询，也存在一种离线算法[^2]。该算法基于并查集数据结构（见第 15.2 章），其优点是比本章前面讨论的算法更易于实现。
 
-The algorithm is given as input a set of pairs of nodes, and it determines for each such pair the lowest common ancestor of the nodes. The algorithm performs a depth-first tree traversal and maintains disjoint sets of nodes. Initially, each node belongs to a separate set. For each set, we also store the highest node in the tree that belongs to the set.
+该算法的输入是一组结点对，并针对每一对确定这两个结点的最近公共祖先。该算法执行深度优先树遍历，并维护不相交的结点集合。初始时，每个结点属于一个单独的集合。对于每个集合，我们还存储属于该集合的树中最高结点。
 
-When the algorithm visits a node $x$, it goes through all nodes $y$ such that the lowest common ancestor of $x$ and $y$ has to be found. If $y$ has already been visited, the algorithm reports that the lowest common ancestor of $x$ and $y$ is the highest node in the set of $y$. Then, after processing node $x$, the algorithm joins the sets of $x$ and its parent.
+当算法访问结点 $x$ 时，它会遍历所有需要查找 $x$ 与 $y$ 最近公共祖先的结点 $y$。如果 $y$ 已经被访问过，算法就报告 $x$ 与 $y$ 的最近公共祖先是 $y$ 所在集合中的最高结点。然后，在处理完结点 $x$ 之后，算法将 $x$ 及其父结点的集合合并。
 
-For example, suppose that we want to find the lowest common ancestors of node pairs $(5,8)$ and $(2,7)$ in the following tree:
+例如，假设我们想要在下面这棵树中查找结点对 $(5,8)$ 和 $(2,7)$ 的最近公共祖先：
 
 ![](assets/images/ch18-fig22.svg)
 
-In the following trees, gray nodes denote visited nodes and dashed groups of nodes belong to the same set. When the algorithm visits node 8, it notices that node 5 has been visited and the highest node in its set is 2. Thus, the lowest common ancestor of nodes 5 and 8 is 2:
+在下面的树中，灰色结点表示已访问的结点，虚线分组表示属于同一集合的结点。当算法访问结点 8 时，它注意到结点 5 已被访问，且其所在集合中的最高结点是 2。因此，结点 5 和 8 的最近公共祖先是 2：
 
 ![](assets/images/ch18-fig23.svg)
 
-Later, when visiting node 7, the algorithm determines that the lowest common ancestor of nodes 2 and 7 is 1:
+后来，当访问结点 7 时，算法确定结点 2 和 7 的最近公共祖先是 1：
 
 ![](assets/images/ch18-fig24.svg)
 
-[^1]: This lowest common ancestor algorithm was presented in [7]. This technique is sometimes called the **Euler tour technique** [74].
+[^1]: 这种最近公共祖先算法在 [7] 中提出。这种技巧有时被称为 **Euler tour technique**（欧拉遍历技巧）[74]。
 
-[^2]: This algorithm was published by R. E. Tarjan in 1979 [73].
+[^2]: 该算法由 R. E. Tarjan 于 1979 年发表 [73]。

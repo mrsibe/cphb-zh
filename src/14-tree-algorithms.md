@@ -1,28 +1,28 @@
-# Tree algorithms
+# 树算法
 
-A **tree** is a connected, acyclic graph that consists of $n$ nodes and $n-1$ edges. Removing any edge from a tree divides it into two components, and adding any edge to a tree creates a cycle. Moreover, there is always a unique path between any two nodes of a tree.
+**树**是一个连通、无环的图，由 $n$ 个结点和 $n-1$ 条边组成。从树中删去任意一条边都会把它分成两个连通分量，向树中加入任意一条边都会产生一个环。此外，树中任意两个结点之间总存在唯一一条路径。
 
-For example, the following tree consists of 8 nodes and 7 edges:
+例如，下面这棵树由 8 个结点和 7 条边组成：
 
 ![](assets/images/ch14-fig01.svg)
 
-The **leaves** of a tree are the nodes with degree 1, i.e., with only one neighbor. For example, the leaves of the above tree are nodes 3, 5, 7 and 8.
+树的**叶子**是度为 1 的结点，即只有一个邻居的结点。例如，上面这棵树的叶子是结点 3、5、7 和 8。
 
-In a **rooted** tree, one of the nodes is appointed the **root** of the tree, and all other nodes are placed underneath the root. For example, in the following tree, node 1 is the root node.
+在一棵**有根**树中，指定其中一个结点作为树的**根**，所有其他结点都置于根之下。例如，在下面这棵树中，结点 1 是根结点。
 
 ![](assets/images/ch14-fig02.svg)
 
-In a rooted tree, the **children** of a node are its lower neighbors, and the **parent** of a node is its upper neighbor. Each node has exactly one parent, except for the root that does not have a parent. For example, in the above tree, the children of node 2 are nodes 5 and 6, and its parent is node 1.
+在有根树中，一个结点的**子结点**是它下方的邻居，而一个结点的**父结点**是它上方的邻居。每个结点恰好有一个父结点，根结点除外，它没有父结点。例如，在上面这棵树中，结点 2 的子结点是结点 5 和 6，它的父结点是结点 1。
 
-The structure of a rooted tree is *recursive*: each node of the tree acts as the root of a **subtree** that contains the node itself and all nodes that are in the subtrees of its children. For example, in the above tree, the subtree of node 2 consists of nodes 2, 5, 6 and 8:
+有根树的结构是*递归*的：树中的每个结点都可作为一棵**子树**的根，该子树包含这个结点本身，以及它的所有子结点的子树中的全部结点。例如，在上面这棵树中，结点 2 的子树由结点 2、5、6 和 8 组成：
 
 ![](assets/images/ch14-fig03.svg)
 
-## Tree traversal
+## 树的遍历
 
-General graph traversal algorithms can be used to traverse the nodes of a tree. However, the traversal of a tree is easier to implement than that of a general graph, because there are no cycles in the tree and it is not possible to reach a node from multiple directions.
+通用的图遍历算法可以用来遍历树中的结点。然而，树的遍历比一般图的遍历更易于实现，因为树中没有环，无法从多个方向到达同一个结点。
 
-The typical way to traverse a tree is to start a depth-first search at an arbitrary node. The following recursive function can be used:
+遍历树的典型做法是从任意一个结点开始进行深度优先搜索。可以使用下面这个递归函数：
 
 ```cpp
 void dfs(int s, int e) {
@@ -33,21 +33,21 @@ void dfs(int s, int e) {
 }
 ```
 
-The function is given two parameters: the current node $s$ and the previous node $e$. The purpose of the parameter $e$ is to make sure that the search only moves to nodes that have not been visited yet.
+该函数接受两个参数：当前结点 $s$ 和前一个结点 $e$。参数 $e$ 的作用是确保搜索只移动到尚未访问过的结点。
 
-The following function call starts the search at node $x$:
+下面这个函数调用从结点 $x$ 开始搜索：
 
 ```cpp
 dfs(x, 0);
 ```
 
-In the first call $e=0$, because there is no previous node, and it is allowed to proceed to any direction in the tree.
+在第一次调用中 $e=0$，因为不存在前一个结点，允许在树中沿任意方向前进。
 
-#### Dynamic programming
+#### 动态规划
 
-Dynamic programming can be used to calculate some information during a tree traversal. Using dynamic programming, we can, for example, calculate in $O(n)$ time for each node of a rooted tree the number of nodes in its subtree or the length of the longest path from the node to a leaf.
+动态规划可以在树的遍历过程中计算一些信息。利用动态规划，我们可以例如在 $O(n)$ 时间内，为有根树的每个结点计算其子树中的结点数，或者从该结点到某个叶子的最长路径的长度。
 
-As an example, let us calculate for each node $s$ a value $\texttt{count}[s]$: the number of nodes in its subtree. The subtree contains the node itself and all nodes in the subtrees of its children, so we can calculate the number of nodes recursively using the following code:
+举一个例子，我们来为每个结点 $s$ 计算一个值 $\texttt{count}[s]$：它的子树中的结点数。子树包含结点本身以及它的所有子结点的子树中的全部结点，因此我们可以用下面的代码递归地计算结点数：
 
 ```cpp
 void dfs(int s, int e) {
@@ -60,121 +60,121 @@ void dfs(int s, int e) {
 }
 ```
 
-## Diameter
+## 直径
 
-The **diameter** of a tree is the maximum length of a path between two nodes. For example, consider the following tree:
+树的**直径**是两个结点之间路径的最大长度。例如，考虑下面这棵树：
 
 ![](assets/images/ch14-fig04.svg)
 
-The diameter of this tree is 4, which corresponds to the following path:
+这棵树的直径是 4，对应于下面这条路径：
 
 ![](assets/images/ch14-fig05.svg)
 
-Note that there may be several maximum-length paths. In the above path, we could replace node 6 with node 5 to obtain another path with length 4.
+注意，可能存在若干条长度最大的路径。在上面的路径中，我们可以把结点 6 换成结点 5，从而得到另一条长度为 4 的路径。
 
-Next we will discuss two $O(n)$ time algorithms for calculating the diameter of a tree. The first algorithm is based on dynamic programming, and the second algorithm uses two depth-first searches.
+接下来我们讨论两种在 $O(n)$ 时间内计算树直径的算法。第一种算法基于动态规划，第二种算法使用两次深度优先搜索。
 
-#### Algorithm 1
+#### 算法 1
 
-A general way to approach many tree problems is to first root the tree arbitrarily. After this, we can try to solve the problem separately for each subtree. Our first algorithm for calculating the diameter is based on this idea.
+处理许多树问题的通用方法是先任意地为树选定根。在此之后，我们可以尝试对每一棵子树分别求解。我们计算直径的第一种算法就基于这一思路。
 
-An important observation is that every path in a rooted tree has a *highest point*: the highest node that belongs to the path. Thus, we can calculate for each node the length of the longest path whose highest point is the node. One of those paths corresponds to the diameter of the tree.
+一个重要的观察是：有根树中的每条路径都有一个*最高点*——属于该路径的最高的结点。因此，我们可以为每个结点计算以其为最高点的最长路径的长度。这些路径中的某一条就对应于树的直径。
 
-For example, in the following tree, node 1 is the highest point on the path that corresponds to the diameter:
+例如，在下面这棵树中，结点 1 就是对应于直径的那条路径上的最高点：
 
 ![](assets/images/ch14-fig06.svg)
 
-We calculate for each node $x$ two values:
+我们为每个结点 $x$ 计算两个值：
 
-- $\texttt{toLeaf}(x)$: the maximum length of a path from $x$ to any leaf
+- $\texttt{toLeaf}(x)$：从 $x$ 到任意叶子的路径的最大长度
 
-- $\texttt{maxLength}(x)$: the maximum length of a path whose highest point is $x$
+- $\texttt{maxLength}(x)$：以 $x$ 为最高点的路径的最大长度
 
-For example, in the above tree, $\texttt{toLeaf}(1)=2$, because there is a path $1 \rightarrow 2 \rightarrow 6$, and $\texttt{maxLength}(1)=4$, because there is a path $6 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 7$. In this case, $\texttt{maxLength}(1)$ equals the diameter.
+例如，在上面这棵树中，$\texttt{toLeaf}(1)=2$，因为存在路径 $1 \rightarrow 2 \rightarrow 6$；而 $\texttt{maxLength}(1)=4$，因为存在路径 $6 \rightarrow 2 \rightarrow 1 \rightarrow 4 \rightarrow 7$。在这种情况下，$\texttt{maxLength}(1)$ 就等于直径。
 
-Dynamic programming can be used to calculate the above values for all nodes in $O(n)$ time. First, to calculate $\texttt{toLeaf}(x)$, we go through the children of $x$, choose a child $c$ with maximum $\texttt{toLeaf}(c)$ and add one to this value. Then, to calculate $\texttt{maxLength}(x)$, we choose two distinct children $a$ and $b$ such that the sum $\texttt{toLeaf}(a)+\texttt{toLeaf}(b)$ is maximum and add two to this sum.
+动态规划可以在 $O(n)$ 时间内为所有结点计算上述值。首先，为了计算 $\texttt{toLeaf}(x)$，我们遍历 $x$ 的子结点，选择一个 $\texttt{toLeaf}(c)$ 最大的子结点 $c$，并把这个值加一。然后，为了计算 $\texttt{maxLength}(x)$，我们选择两个不同的子结点 $a$ 和 $b$，使得和 $\texttt{toLeaf}(a)+\texttt{toLeaf}(b)$ 最大，并把这个和加二。
 
-#### Algorithm 2
+#### 算法 2
 
-Another efficient way to calculate the diameter of a tree is based on two depth-first searches. First, we choose an arbitrary node $a$ in the tree and find the farthest node $b$ from $a$. Then, we find the farthest node $c$ from $b$. The diameter of the tree is the distance between $b$ and $c$.
+计算树直径的另一种高效方法基于两次深度优先搜索。首先，我们在树中任选一个结点 $a$，找到距 $a$ 最远的结点 $b$。然后，找到距 $b$ 最远的结点 $c$。树的直径就是 $b$ 与 $c$ 之间的距离。
 
-In the following graph, $a$, $b$ and $c$ could be:
+在下面这个图中，$a$、$b$ 和 $c$ 可以是：
 
 ![](assets/images/ch14-fig07.svg)
 
-This is an elegant method, but why does it work?
+这是一个优雅的方法，但它为什么成立呢？
 
-It helps to draw the tree differently so that the path that corresponds to the diameter is horizontal, and all other nodes hang from it:
+把树以另一种方式画出来会有所帮助：让对应于直径的那条路径呈水平方向，所有其他结点都从它上面悬挂下来：
 
 ![](assets/images/ch14-fig08.svg)
 
-Node $x$ indicates the place where the path from node $a$ joins the path that corresponds to the diameter. The farthest node from $a$ is node $b$, node $c$ or some other node that is at least as far from node $x$. Thus, this node is always a valid choice for an endpoint of a path that corresponds to the diameter.
+结点 $x$ 标示出从结点 $a$ 出发的路径与对应于直径的那条路径相接的位置。距 $a$ 最远的结点是结点 $b$、结点 $c$，或者是某个距结点 $x$ 至少同样远的其他结点。因此，这个结点总是可以作为对应于直径的路径端点的一个有效选择。
 
-## All longest paths
+## 全部最长路径
 
-Our next problem is to calculate for every node in the tree the maximum length of a path that begins at the node. This can be seen as a generalization of the tree diameter problem, because the largest of those lengths equals the diameter of the tree. Also this problem can be solved in $O(n)$ time.
+我们的下一个问题是，为树中的每个结点计算从该结点出发的路径的最大长度。这可以看作树直径问题的一个推广，因为这些长度中最大的那个就等于树的直径。这个问题同样可以在 $O(n)$ 时间内解决。
 
-As an example, consider the following tree:
+举一个例子，考虑下面这棵树：
 
 ![](assets/images/ch14-fig09.svg)
 
-Let $\texttt{maxLength}(x)$ denote the maximum length of a path that begins at node $x$. For example, in the above tree, $\texttt{maxLength}(4)=3$, because there is a path $4 \rightarrow 1 \rightarrow 2 \rightarrow 6$. Here is a complete table of the values:
+令 $\texttt{maxLength}(x)$ 表示从结点 $x$ 出发的路径的最大长度。例如，在上面这棵树中，$\texttt{maxLength}(4)=3$，因为存在路径 $4 \rightarrow 1 \rightarrow 2 \rightarrow 6$。下面是这些值的完整表格：
 
 |                         |     |     |     |     |     |     |     |
 |:------------------------|:----|:----|:----|:----|:----|:----|:----|
-| node $x$                | 1   | 2   | 3   | 4   | 5   | 6   |     |
+| 结点 $x$                | 1   | 2   | 3   | 4   | 5   | 6   |     |
 | $\texttt{maxLength}(x)$ | 2   | 2   | 3   | 3   | 3   | 3   |     |
 
-Also in this problem, a good starting point for solving the problem is to root the tree arbitrarily:
+同样在这个问题中，求解的一个良好起点是任意地为树选定根：
 
 ![](assets/images/ch14-fig10.svg)
 
-The first part of the problem is to calculate for every node $x$ the maximum length of a path that goes through a child of $x$. For example, the longest path from node 1 goes through its child 2:
+问题的第一部分是，为每个结点 $x$ 计算经过 $x$ 的某个子结点的路径的最大长度。例如，从结点 1 出发的最长路径经过它的子结点 2：
 
 ![](assets/images/ch14-fig11.svg)
 
-This part is easy to solve in $O(n)$ time, because we can use dynamic programming as we have done previously.
+这一部分很容易在 $O(n)$ 时间内解决，因为我们可以像前面那样使用动态规划。
 
-Then, the second part of the problem is to calculate for every node $x$ the maximum length of a path through its parent $p$. For example, the longest path from node 3 goes through its parent 1:
+接着，问题的第二部分是，为每个结点 $x$ 计算经过其父结点 $p$ 的路径的最大长度。例如，从结点 3 出发的最长路径经过它的父结点 1：
 
 ![](assets/images/ch14-fig12.svg)
 
-At first glance, it seems that we should choose the longest path from $p$. However, this *does not* always work, because the longest path from $p$ may go through $x$. Here is an example of this situation:
+乍一看，似乎我们应该选择从 $p$ 出发的最长路径。然而，这*并不*总是可行，因为从 $p$ 出发的最长路径可能经过 $x$。下面是这种情况的一个例子：
 
 ![](assets/images/ch14-fig13.svg)
 
-Still, we can solve the second part in $O(n)$ time by storing *two* maximum lengths for each node $x$:
+即便如此，我们仍然可以在 $O(n)$ 时间内解决第二部分，方法是：为每个结点 $x$ 存储*两个*最大长度：
 
-- $\texttt{maxLength}_1(x)$: the maximum length of a path from $x$
+- $\texttt{maxLength}_1(x)$：从 $x$ 出发的路径的最大长度
 
-- $\texttt{maxLength}_2(x)$ the maximum length of a path from $x$ in another direction than the first path
+- $\texttt{maxLength}_2(x)$：从 $x$ 出发、方向不同于第一条路径的另一条路径的最大长度
 
-For example, in the above graph, $\texttt{maxLength}_1(1)=2$ using the path $1 \rightarrow 2 \rightarrow 5$, and $\texttt{maxLength}_2(1)=1$ using the path $1 \rightarrow 3$.
+例如，在上面这个图中，$\texttt{maxLength}_1(1)=2$，对应路径 $1 \rightarrow 2 \rightarrow 5$；而 $\texttt{maxLength}_2(1)=1$，对应路径 $1 \rightarrow 3$。
 
-Finally, if the path that corresponds to $\texttt{maxLength}_1(p)$ goes through $x$, we conclude that the maximum length is $\texttt{maxLength}_2(p)+1$, and otherwise the maximum length is $\texttt{maxLength}_1(p)+1$.
+最后，如果对应于 $\texttt{maxLength}_1(p)$ 的路径经过 $x$，我们就得出最大长度为 $\texttt{maxLength}_2(p)+1$；否则最大长度为 $\texttt{maxLength}_1(p)+1$。
 
-## Binary trees
+## 二叉树
 
-A **binary tree** is a rooted tree where each node has a left and right subtree. It is possible that a subtree of a node is empty. Thus, every node in a binary tree has zero, one or two children.
+**二叉树**是一种有根树，其中每个结点都有一棵左子树和一棵右子树。一个结点的子树可能为空。因此，二叉树中的每个结点有零个、一个或两个子结点。
 
-For example, the following tree is a binary tree:
+例如，下面这棵树就是一棵二叉树：
 
 ![](assets/images/ch14-fig14.svg)
 
-The nodes of a binary tree have three natural orderings that correspond to different ways to recursively traverse the tree:
+二叉树的结点有三种自然的排列顺序，对应于递归遍历树的不同方式：
 
-- **pre-order**: first process the root, then traverse the left subtree, then traverse the right subtree
+- **前序**：先处理根，然后遍历左子树，再遍历右子树
 
-- **in-order**: first traverse the left subtree, then process the root, then traverse the right subtree
+- **中序**：先遍历左子树，然后处理根，再遍历右子树
 
-- **post-order**: first traverse the left subtree, then traverse the right subtree, then process the root
+- **后序**：先遍历左子树，然后遍历右子树，再处理根
 
-For the above tree, the nodes in pre-order are $[1,2,4,5,6,3,7]$, in in-order $[4,2,6,5,1,3,7]$ and in post-order $[4,6,5,2,7,3,1]$.
+对于上面这棵树，前序的结点序列是 $[1,2,4,5,6,3,7]$，中序是 $[4,2,6,5,1,3,7]$，后序是 $[4,6,5,2,7,3,1]$。
 
-If we know the pre-order and in-order of a tree, we can reconstruct the exact structure of the tree. For example, the above tree is the only possible tree with pre-order $[1,2,4,5,6,3,7]$ and in-order $[4,2,6,5,1,3,7]$. In a similar way, the post-order and in-order also determine the structure of a tree.
+如果我们知道一棵树的前序和中序，就能重建这棵树的确切结构。例如，上面这棵树是唯一一棵前序为 $[1,2,4,5,6,3,7]$、中序为 $[4,2,6,5,1,3,7]$ 的树。类似地，后序和中序也能确定一棵树的结构。
 
-However, the situation is different if we only know the pre-order and post-order of a tree. In this case, there may be more than one tree that match the orderings. For example, in both of the trees
+然而，如果我们只知道一棵树的前序和后序，情况就不同了。在这种情况下，可能有多棵树的排列顺序与之相符。例如，在下面两棵树中
 
 ![](assets/images/ch14-fig15.svg)
 
-the pre-order is $[1,2]$ and the post-order is $[2,1]$, but the structures of the trees are different.
+前序都是 $[1,2]$，后序都是 $[2,1]$，但两棵树的结构却不同。

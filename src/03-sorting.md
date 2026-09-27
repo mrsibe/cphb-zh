@@ -1,30 +1,30 @@
-# Sorting
+# 排序
 
-**Sorting** is a fundamental algorithm design problem. Many efficient algorithms use sorting as a subroutine, because it is often easier to process data if the elements are in a sorted order.
+**排序**是一个基本的算法设计问题。许多高效的算法都把排序作为子过程使用，因为当元素处于有序状态时，数据往往更容易处理。
 
-For example, the problem "does an array contain two equal elements?" is easy to solve using sorting. If the array contains two equal elements, they will be next to each other after sorting, so it is easy to find them. Also, the problem "what is the most frequent element in an array?" can be solved similarly.
+例如，「一个数组中是否包含两个相等的元素？」这个问题用排序就能轻松解决。如果数组中存在两个相等的元素，那么排序后它们会相邻，因此很容易找到它们。同样，「数组中出现次数最多的元素是什么？」也可以用类似方法解决。
 
-There are many algorithms for sorting, and they are also good examples of how to apply different algorithm design techniques. The efficient general sorting algorithms work in $O(n \log n)$ time, and many algorithms that use sorting as a subroutine also have this time complexity.
+排序有许多算法，它们也是应用不同算法设计技巧的很好示例。高效的一般排序算法在 $O(n \log n)$ 时间内工作，许多把排序作为子过程使用的算法也具有这个时间复杂度。
 
-## Sorting theory
+## 排序理论
 
-The basic problem in sorting is as follows:
+排序中的基本问题如下：
 
-Given an array that contains $n$ elements, your task is to sort the elements in increasing order.
+给定一个包含 $n$ 个元素的数组，你的任务是把这些元素按递增顺序排序。
 
-For example, the array
+例如，数组
 
 ![](assets/images/ch03-fig01.svg)
 
-will be as follows after sorting:
+排序后将如下所示：
 
 ![](assets/images/ch03-fig02.svg)
 
-#### $O(n^2)$ algorithms
+#### $O(n^2)$ 算法
 
-Simple algorithms for sorting an array work in $O(n^2)$ time. Such algorithms are short and usually consist of two nested loops. A famous $O(n^2)$ time sorting algorithm is **bubble sort** where the elements "bubble" in the array according to their values.
+对数组进行排序的简单算法在 $O(n^2)$ 时间内工作。这类算法很短，通常由两个嵌套循环组成。一个著名的 $O(n^2)$ 时间排序算法是**冒泡排序**，其中元素根据其值在数组中「冒泡」。
 
-Bubble sort consists of $n$ rounds. On each round, the algorithm iterates through the elements of the array. Whenever two consecutive elements are found that are not in correct order, the algorithm swaps them. The algorithm can be implemented as follows:
+冒泡排序由 $n$ 轮组成。每一轮中，算法遍历数组的元素。每当发现两个相邻元素顺序不正确时，算法就交换它们。该算法可实现如下：
 
 ```cpp
 for (int i = 0; i < n; i++) {
@@ -36,13 +36,13 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
-After the first round of the algorithm, the largest element will be in the correct position, and in general, after $k$ rounds, the $k$ largest elements will be in the correct positions. Thus, after $n$ rounds, the whole array will be sorted.
+在算法的第一轮之后，最大的元素将处于正确的位置；一般来说，在第 $k$ 轮之后，最大的 $k$ 个元素都将处于正确的位置。因此，经过 $n$ 轮之后，整个数组就被排好序了。
 
-For example, in the array
+例如，在数组
 
 ![](assets/images/ch03-fig03.svg)
 
-the first round of bubble sort swaps elements as follows:
+中，冒泡排序的第一轮按如下方式交换元素：
 
 ![](assets/images/ch03-fig04.svg)
 
@@ -52,102 +52,102 @@ the first round of bubble sort swaps elements as follows:
 
 ![](assets/images/ch03-fig07.svg)
 
-#### Inversions
+#### 逆序对
 
-Bubble sort is an example of a sorting algorithm that always swaps *consecutive* elements in the array. It turns out that the time complexity of such an algorithm is *always* at least $O(n^2)$, because in the worst case, $O(n^2)$ swaps are required for sorting the array.
+冒泡排序是一类总是交换数组中*相邻*元素的排序算法的例子。事实证明，这类算法的时间复杂度*总是*至少为 $O(n^2)$，因为在最坏情况下，需要对数组进行 $O(n^2)$ 次交换才能完成排序。
 
-A useful concept when analyzing sorting algorithms is an **inversion**: a pair of array elements $(\texttt{array}[a],\texttt{array}[b])$ such that $a<b$ and $\texttt{array}[a]>\texttt{array}[b]$, i.e., the elements are in the wrong order. For example, the array
+分析排序算法时一个有用的概念是**逆序对**：一对数组元素 $(\texttt{array}[a],\texttt{array}[b])$，满足 $a<b$ 且 $\texttt{array}[a]>\texttt{array}[b]$，即这两个元素的顺序是错的。例如，数组
 
 ![](assets/images/ch03-fig08.svg)
 
-has three inversions: $(6,3)$, $(6,5)$ and $(9,8)$. The number of inversions indicates how much work is needed to sort the array. An array is completely sorted when there are no inversions. On the other hand, if the array elements are in the reverse order, the number of inversions is the largest possible: $$1+2+\cdots+(n-1)=\frac{n(n-1)}{2} = O(n^2)$$
+有三个逆序对：$(6,3)$、$(6,5)$ 和 $(9,8)$。逆序对的数量表示对数组排序需要多少工作量。当没有逆序对时，数组完全有序。另一方面，如果数组元素按相反顺序排列，逆序对的数量达到最大可能值：$$1+2+\cdots+(n-1)=\frac{n(n-1)}{2} = O(n^2)$$
 
-Swapping a pair of consecutive elements that are in the wrong order removes exactly one inversion from the array. Hence, if a sorting algorithm can only swap consecutive elements, each swap removes at most one inversion, and the time complexity of the algorithm is at least $O(n^2)$.
+交换一对顺序错误的相邻元素恰好能消除数组中的一个逆序对。因此，如果一种排序算法只能交换相邻元素，那么每次交换至多消除一个逆序对，该算法的时间复杂度至少为 $O(n^2)$。
 
-#### $O(n \log n)$ algorithms
+#### $O(n \log n)$ 算法
 
-It is possible to sort an array efficiently in $O(n \log n)$ time using algorithms that are not limited to swapping consecutive elements. One such algorithm is **merge sort**[^1], which is based on recursion.
+使用不局限于交换相邻元素的算法，可以在 $O(n \log n)$ 时间内高效地对数组排序。其中一个算法是**归并排序**[^1]，它基于递归。
 
-Merge sort sorts a subarray `array`$[a \ldots b]$ as follows:
+归并排序对子数组 `array`$[a \ldots b]$ 排序的过程如下：
 
-1.  If $a=b$, do not do anything, because the subarray is already sorted.
+1.  如果 $a=b$，则什么都不做，因为该子数组已经有序。
 
-2.  Calculate the position of the middle element: $k=\lfloor (a+b)/2 \rfloor$.
+2.  计算中间元素的位置：$k=\lfloor (a+b)/2 \rfloor$。
 
-3.  Recursively sort the subarray `array`$[a \ldots k]$.
+3.  递归地对子数组 `array`$[a \ldots k]$ 排序。
 
-4.  Recursively sort the subarray `array`$[k+1 \ldots b]$.
+4.  递归地对子数组 `array`$[k+1 \ldots b]$ 排序。
 
-5.  *Merge* the sorted subarrays `array`$[a \ldots k]$ and `array`$[k+1 \ldots b]$ into a sorted subarray `array`$[a \ldots b]$.
+5.  把有序子数组 `array`$[a \ldots k]$ 和 `array`$[k+1 \ldots b]$ *归并*为有序子数组 `array`$[a \ldots b]$。
 
-Merge sort is an efficient algorithm, because it halves the size of the subarray at each step. The recursion consists of $O(\log n)$ levels, and processing each level takes $O(n)$ time. Merging the subarrays `array`$[a \ldots k]$ and `array`$[k+1 \ldots b]$ is possible in linear time, because they are already sorted.
+归并排序是一种高效的算法，因为它在每一步都把子数组的大小减半。递归由 $O(\log n)$ 层组成，而处理每一层需要 $O(n)$ 时间。把子数组 `array`$[a \ldots k]$ 和 `array`$[k+1 \ldots b]$ 归并可以在线性时间内完成，因为它们已经有序。
 
-For example, consider sorting the following array:
+例如，考虑对以下数组排序：
 
 ![](assets/images/ch03-fig09.svg)
 
-The array will be divided into two subarrays as follows:
+该数组将按如下方式划分为两个子数组：
 
 ![](assets/images/ch03-fig10.svg)
 
-Then, the subarrays will be sorted recursively as follows:
+然后，这两个子数组将被递归地排序如下：
 
 ![](assets/images/ch03-fig11.svg)
 
-Finally, the algorithm merges the sorted subarrays and creates the final sorted array:
+最后，算法归并这两个有序子数组，得到最终的有序数组：
 
 ![](assets/images/ch03-fig12.svg)
 
-#### Sorting lower bound
+#### 排序下界
 
-Is it possible to sort an array faster than in $O(n \log n)$ time? It turns out that this is *not* possible when we restrict ourselves to sorting algorithms that are based on comparing array elements.
+能否比 $O(n \log n)$ 时间更快地对数组排序？事实证明，当把范围限制在基于比较数组元素的排序算法时，这是*不*可能的。
 
-The lower bound for the time complexity can be proved by considering sorting as a process where each comparison of two elements gives more information about the contents of the array. The process creates the following tree:
+时间复杂度的下界可以通过把排序视为一个过程来证明：其中每比较两个元素，都会给出关于数组内容的更多信息。这个过程会生成如下的树：
 
 ![](assets/images/ch03-fig13.svg)
 
-Here "$x<y?$" means that some elements $x$ and $y$ are compared. If $x<y$, the process continues to the left, and otherwise to the right. The results of the process are the possible ways to sort the array, a total of $n!$ ways. For this reason, the height of the tree must be at least $$\log_2(n!) = \log_2(1)+\log_2(2)+\cdots+\log_2(n).$$ We get a lower bound for this sum by choosing the last $n/2$ elements and changing the value of each element to $\log_2(n/2)$. This yields an estimate $$\log_2(n!) \ge (n/2) \cdot \log_2(n/2),$$ so the height of the tree and the minimum possible number of steps in a sorting algorithm in the worst case is at least $n \log n$.
+这里的 "$x<y?$" 表示比较某个元素 $x$ 和 $y$。如果 $x<y$，过程继续向左走，否则向右走。过程的结果是数组所有可能的排序方式，共有 $n!$ 种。因此，这棵树的高度至少为 $$\log_2(n!) = \log_2(1)+\log_2(2)+\cdots+\log_2(n).$$ 我们通过选取最后的 $n/2$ 个元素并把每个元素的值改为 $\log_2(n/2)$，可以得到这个和的一个下界。由此得到一个估计 $$\log_2(n!) \ge (n/2) \cdot \log_2(n/2),$$ 所以树的高度，也就是排序算法在最坏情况下所需的最小步数，至少为 $n \log n$。
 
-#### Counting sort
+#### 计数排序
 
-The lower bound $n \log n$ does not apply to algorithms that do not compare array elements but use some other information. An example of such an algorithm is **counting sort** that sorts an array in $O(n)$ time assuming that every element in the array is an integer between $0 \ldots c$ and $c=O(n)$.
+下界 $n \log n$ 不适用于那些不比较数组元素、而是使用其他信息的算法。这类算法的一个例子是**计数排序**，在假设数组中每个元素都是 $0 \ldots c$ 之间的整数且 $c=O(n)$ 的前提下，它能在 $O(n)$ 时间内对数组排序。
 
-The algorithm creates a *bookkeeping* array, whose indices are elements of the original array. The algorithm iterates through the original array and calculates how many times each element appears in the array.
+该算法创建一个*簿记*数组，其下标是原数组的元素。算法遍历原数组，统计每个元素在数组中出现的次数。
 
-For example, the array
+例如，数组
 
 ![](assets/images/ch03-fig14.svg)
 
-corresponds to the following bookkeeping array:
+对应如下的簿记数组：
 
 ![](assets/images/ch03-fig15.svg)
 
-For example, the value at position 3 in the bookkeeping array is 2, because the element 3 appears 2 times in the original array.
+例如，簿记数组中位置 3 处的值是 2，因为元素 3 在原数组中出现了 2 次。
 
-Construction of the bookkeeping array takes $O(n)$ time. After this, the sorted array can be created in $O(n)$ time because the number of occurrences of each element can be retrieved from the bookkeeping array. Thus, the total time complexity of counting sort is $O(n)$.
+构造簿记数组需要 $O(n)$ 时间。此后，可以在 $O(n)$ 时间内创建有序数组，因为每个元素出现的次数都可以从簿记数组中查得。因此，计数排序的总时间复杂度为 $O(n)$。
 
-Counting sort is a very efficient algorithm but it can only be used when the constant $c$ is small enough, so that the array elements can be used as indices in the bookkeeping array.
+计数排序是一种非常高效的算法，但它只能在常数 $c$ 足够小时使用，从而数组元素可以作为簿记数组的下标。
 
-## Sorting in C++
+## C++ 中的排序
 
-It is almost never a good idea to use a home-made sorting algorithm in a contest, because there are good implementations available in programming languages. For example, the C++ standard library contains the function `sort` that can be easily used for sorting arrays and other data structures.
+在比赛中几乎永远都不应该使用自己手写的排序算法，因为编程语言中已有很好的实现。例如，C++ 标准库中包含函数 `sort`，可以方便地用于对数组和其他数据结构排序。
 
-There are many benefits in using a library function. First, it saves time because there is no need to implement the function. Second, the library implementation is certainly correct and efficient: it is not probable that a home-made sorting function would be better.
+使用库函数有许多好处。首先，它节省时间，因为无需自己实现该函数。其次，库的实现一定是正确且高效的：自己手写的排序函数不太可能更好。
 
-In this section we will see how to use the C++ `sort` function. The following code sorts a vector in increasing order:
+本节中我们将了解如何使用 C++ 的 `sort` 函数。以下代码把一个 vector 按递增顺序排序：
 
 ```cpp
 vector<int> v = {4,2,5,3,5,8,3};
 sort(v.begin(),v.end());
 ```
 
-After the sorting, the contents of the vector will be $[2,3,3,4,5,5,8]$. The default sorting order is increasing, but a reverse order is possible as follows:
+排序之后，vector 的内容将是 $[2,3,3,4,5,5,8]$。默认的排序顺序是递增，但也可以按相反顺序排序，如下所示：
 
 ```cpp
 sort(v.rbegin(),v.rend());
 ```
 
-An ordinary array can be sorted as follows:
+普通数组可以按如下方式排序：
 
 ```cpp
 int n = 7; // array size
@@ -155,22 +155,22 @@ int a[] = {4,2,5,3,5,8,3};
 sort(a,a+n);
 ```
 
-The following code sorts the string `s`:
+以下代码对字符串 `s` 排序：
 
 ```cpp
 string s = "monkey";
 sort(s.begin(), s.end());
 ```
 
-Sorting a string means that the characters of the string are sorted. For example, the string "monkey" becomes "ekmnoy".
+对字符串排序意味着把字符串中的字符排序。例如，字符串 "monkey" 变成 "ekmnoy"。
 
-#### Comparison operators
+#### 比较运算符
 
-The function `sort` requires that a **comparison operator** is defined for the data type of the elements to be sorted. When sorting, this operator will be used whenever it is necessary to find out the order of two elements.
+函数 `sort` 要求为待排序元素的类型定义一个**比较运算符**。排序时，每当需要判断两个元素的先后顺序，就会使用这个运算符。
 
-Most C++ data types have a built-in comparison operator, and elements of those types can be sorted automatically. For example, numbers are sorted according to their values and strings are sorted in alphabetical order.
+大多数 C++ 数据类型都有内置的比较运算符，这些类型的元素可以自动排序。例如，数字按其值排序，字符串按字母顺序排序。
 
-Pairs (`pair`) are sorted primarily according to their first elements (`first`). However, if the first elements of two pairs are equal, they are sorted according to their second elements (`second`):
+对（`pair`）主要按其第一个元素（`first`）排序。但是，如果两个对的第一个元素相等，则按其第二个元素（`second`）排序：
 
 ```cpp
 vector<pair<int,int>> v;
@@ -180,9 +180,9 @@ v.push_back({1,2});
 sort(v.begin(), v.end());
 ```
 
-After this, the order of the pairs is $(1,2)$, $(1,5)$ and $(2,3)$.
+此后，这些对的顺序为 $(1,2)$、$(1,5)$ 和 $(2,3)$。
 
-In a similar way, tuples (`tuple`) are sorted primarily by the first element, secondarily by the second element, etc.[^2]:
+类似地，元组（`tuple`）首先按第一个元素排序，其次按第二个元素排序，依此类推[^2]：
 
 ```cpp
 vector<tuple<int,int,int>> v;
@@ -192,13 +192,13 @@ v.push_back({2,1,3});
 sort(v.begin(), v.end());
 ```
 
-After this, the order of the tuples is $(1,5,3)$, $(2,1,3)$ and $(2,1,4)$.
+此后，这些元组的顺序为 $(1,5,3)$、$(2,1,3)$ 和 $(2,1,4)$。
 
-#### User-defined structs
+#### 用户自定义结构体
 
-User-defined structs do not have a comparison operator automatically. The operator should be defined inside the struct as a function `operator<`, whose parameter is another element of the same type. The operator should return `true` if the element is smaller than the parameter, and `false` otherwise.
+用户自定义结构体不会自动拥有比较运算符。该运算符应在结构体内部定义为一个函数 `operator<`，其参数是同一类型的另一个元素。如果该元素小于参数，运算符应返回 `true`，否则返回 `false`。
 
-For example, the following struct `P` contains the x and y coordinates of a point. The comparison operator is defined so that the points are sorted primarily by the x coordinate and secondarily by the y coordinate.
+例如，以下结构体 `P` 包含一个点的 x 和 y 坐标。比较运算符定义为：点首先按 x 坐标排序，其次按 y 坐标排序。
 
 ```cpp
 struct P {
@@ -210,9 +210,9 @@ struct P {
 };
 ```
 
-#### Comparison functions
+#### 比较函数
 
-It is also possible to give an external **comparison function** to the `sort` function as a callback function. For example, the following comparison function `comp` sorts strings primarily by length and secondarily by alphabetical order:
+也可以给 `sort` 函数传入一个外部的**比较函数**作为回调函数。例如，以下比较函数 `comp` 首先按长度排序字符串，其次按字母顺序排序：
 
 ```cpp
 bool comp(string a, string b) {
@@ -221,15 +221,15 @@ bool comp(string a, string b) {
 }
 ```
 
-Now a vector of strings can be sorted as follows:
+现在可以按如下方式对字符串 vector 排序：
 
 ```cpp
 sort(v.begin(), v.end(), comp);
 ```
 
-## Binary search
+## 二分查找
 
-A general method for searching for an element in an array is to use a `for` loop that iterates through the elements of the array. For example, the following code searches for an element $x$ in an array:
+在数组中查找一个元素的一般方法是使用 `for` 循环遍历数组的元素。例如，以下代码在数组中查找元素 $x$：
 
 ```cpp
 for (int i = 0; i < n; i++) {
@@ -239,17 +239,17 @@ for (int i = 0; i < n; i++) {
 }
 ```
 
-The time complexity of this approach is $O(n)$, because in the worst case, it is necessary to check all elements of the array. If the order of the elements is arbitrary, this is also the best possible approach, because there is no additional information available where in the array we should search for the element $x$.
+这种方法的时间复杂度是 $O(n)$，因为在最坏情况下需要检查数组的所有元素。如果元素的顺序是任意的，这也是最好的做法，因为没有任何额外信息告诉我们应当从数组的哪个位置开始查找元素 $x$。
 
-However, if the array is *sorted*, the situation is different. In this case it is possible to perform the search much faster, because the order of the elements in the array guides the search. The following **binary search** algorithm efficiently searches for an element in a sorted array in $O(\log n)$ time.
+然而，如果数组是*有序*的，情况就不同了。此时可以快得多地完成查找，因为数组中元素的顺序可以引导查找过程。以下**二分查找**算法能在 $O(\log n)$ 时间内高效地在有序数组中查找元素。
 
-#### Method 1
+#### 方法 1
 
-The usual way to implement binary search resembles looking for a word in a dictionary. The search maintains an active region in the array, which initially contains all array elements. Then, a number of steps is performed, each of which halves the size of the region.
+实现二分查找的常见方式类似于在词典中查一个单词。查找过程在数组中维护一个活动区域，初始时包含数组的所有元素。然后执行若干步，每一步都把该区域的大小减半。
 
-At each step, the search checks the middle element of the active region. If the middle element is the target element, the search terminates. Otherwise, the search recursively continues to the left or right half of the region, depending on the value of the middle element.
+在每一步中，查找过程检查活动区域的中间元素。如果中间元素就是目标元素，则查找终止。否则，根据中间元素的值，查找递归地继续到该区域的左半部分或右半部分。
 
-The above idea can be implemented as follows:
+上述想法可实现如下：
 
 ```cpp
 int a = 0, b = n-1;
@@ -263,15 +263,15 @@ while (a <= b) {
 }
 ```
 
-In this implementation, the active region is $a \ldots b$, and initially the region is $0 \ldots n-1$. The algorithm halves the size of the region at each step, so the time complexity is $O(\log n)$.
+在这个实现中，活动区域是 $a \ldots b$，初始时该区域为 $0 \ldots n-1$。算法在每一步把该区域的大小减半，因此时间复杂度为 $O(\log n)$。
 
-#### Method 2
+#### 方法 2
 
-An alternative method to implement binary search is based on an efficient way to iterate through the elements of the array. The idea is to make jumps and slow the speed when we get closer to the target element.
+实现二分查找的另一种方法基于一种遍历数组元素的高效方式。其思想是在接近目标元素时进行跳跃并降低速度。
 
-The search goes through the array from left to right, and the initial jump length is $n/2$. At each step, the jump length will be halved: first $n/4$, then $n/8$, $n/16$, etc., until finally the length is 1. After the jumps, either the target element has been found or we know that it does not appear in the array.
+查找过程从左到右遍历数组，初始跳跃长度为 $n/2$。在每一步中，跳跃长度都会减半：先是 $n/4$，然后是 $n/8$、$n/16$，等等，直到最后长度为 1。跳跃结束后，要么已找到目标元素，要么我们知道它不在数组中。
 
-The following code implements the above idea:
+以下代码实现了上述想法：
 
 ```cpp
 int k = 0;
@@ -283,19 +283,19 @@ if (array[k] == x) {
 }
 ```
 
-During the search, the variable $b$ contains the current jump length. The time complexity of the algorithm is $O(\log n)$, because the code in the `while` loop is performed at most twice for each jump length.
+查找过程中，变量 $b$ 包含当前的跳跃长度。该算法的时间复杂度为 $O(\log n)$，因为对于每个跳跃长度，`while` 循环中的代码最多执行两次。
 
-#### C++ functions
+#### C++ 函数
 
-The C++ standard library contains the following functions that are based on binary search and work in logarithmic time:
+C++ 标准库中包含以下基于二分查找、在对数时间内工作的函数：
 
-- `lower_bound` returns a pointer to the first array element whose value is at least $x$.
+- `lower_bound` 返回指向第一个值至少为 $x$ 的数组元素的指针。
 
-- `upper_bound` returns a pointer to the first array element whose value is larger than $x$.
+- `upper_bound` 返回指向第一个值大于 $x$ 的数组元素的指针。
 
-- `equal_range` returns both above pointers.
+- `equal_range` 返回上述两个指针。
 
-The functions assume that the array is sorted. If there is no such element, the pointer points to the element after the last array element. For example, the following code finds out whether an array contains an element with value $x$:
+这些函数假定数组是有序的。如果不存在这样的元素，指针将指向数组最后一个元素之后的位置。例如，以下代码判断数组中是否包含值为 $x$ 的元素：
 
 ```cpp
 auto k = lower_bound(array,array+n,x)-array;
@@ -304,7 +304,7 @@ if (k < n && array[k] == x) {
 }
 ```
 
-Then, the following code counts the number of elements whose value is $x$:
+然后，以下代码统计值为 $x$ 的元素个数：
 
 ```cpp
 auto a = lower_bound(array, array+n, x);
@@ -312,22 +312,22 @@ auto b = upper_bound(array, array+n, x);
 cout << b-a << "\n";
 ```
 
-Using `equal_range`, the code becomes shorter:
+使用 `equal_range`，代码变得更短：
 
 ```cpp
 auto r = equal_range(array, array+n, x);
 cout << r.second-r.first << "\n";
 ```
 
-#### Finding the smallest solution
+#### 寻找最小解
 
-An important use for binary search is to find the position where the value of a *function* changes. Suppose that we wish to find the smallest value $k$ that is a valid solution for a problem. We are given a function $\texttt{ok}(x)$ that returns `true` if $x$ is a valid solution and `false` otherwise. In addition, we know that $\texttt{ok}(x)$ is `false` when $x<k$ and `true` when $x \ge k$. The situation looks as follows:
+二分查找的一个重要用途是找出*函数*值发生变化的转折位置。假设我们希望找出某个问题的最小可行解 $k$。给定一个函数 $\texttt{ok}(x)$，当 $x$ 是可行解时返回 `true`，否则返回 `false`。此外，我们知道当 $x<k$ 时 $\texttt{ok}(x)$ 为 `false`，当 $x \ge k$ 时为 `true`。情形如下：
 
 |              $x$ |       0 |       1 | $\cdots$ |   $k-1$ |    $k$ |  $k+1$ | $\cdots$ |     |
 |-----------------:|--------:|--------:|---------:|--------:|-------:|-------:|---------:|----:|
 | $\texttt{ok}(x)$ | `false` | `false` | $\cdots$ | `false` | `true` | `true` | $\cdots$ |     |
 
-Now, the value of $k$ can be found using binary search:
+现在，$k$ 的值可以用二分查找找出：
 
 ```cpp
 int x = -1;
@@ -337,19 +337,19 @@ for (int b = z; b >= 1; b /= 2) {
 int k = x+1;
 ```
 
-The search finds the largest value of $x$ for which $\texttt{ok}(x)$ is `false`. Thus, the next value $k=x+1$ is the smallest possible value for which $\texttt{ok}(k)$ is `true`. The initial jump length $z$ has to be large enough, for example some value for which we know beforehand that $\texttt{ok}(z)$ is `true`.
+该查找过程找出使 $\texttt{ok}(x)$ 为 `false` 的最大 $x$ 值。因此，下一个值 $k=x+1$ 就是使 $\texttt{ok}(k)$ 为 `true` 的最小可能值。初始跳跃长度 $z$ 必须足够大，例如取某个我们事先就知道 $\texttt{ok}(z)$ 为 `true` 的值。
 
-The algorithm calls the function `ok` $O(\log z)$ times, so the total time complexity depends on the function `ok`. For example, if the function works in $O(n)$ time, the total time complexity is $O(n \log z)$.
+该算法调用函数 `ok` 共 $O(\log z)$ 次，所以总时间复杂度取决于函数 `ok`。例如，如果该函数在 $O(n)$ 时间内工作，则总时间复杂度为 $O(n \log z)$。
 
-#### Finding the maximum value
+#### 寻找最大值
 
-Binary search can also be used to find the maximum value for a function that is first increasing and then decreasing. Our task is to find a position $k$ such that
+二分查找也可以用来求一个先增后减的函数的最大值。我们的任务是找出一个位置 $k$，使得
 
-- $f(x)<f(x+1)$ when $x<k$, and
+- 当 $x<k$ 时 $f(x)<f(x+1)$，并且
 
-- $f(x)>f(x+1)$ when $x \ge k$.
+- 当 $x \ge k$ 时 $f(x)>f(x+1)$。
 
-The idea is to use binary search for finding the largest value of $x$ for which $f(x)<f(x+1)$. This implies that $k=x+1$ because $f(x+1)>f(x+2)$. The following code implements the search:
+其思路是用二分查找找出使 $f(x)<f(x+1)$ 的最大 $x$ 值。这蕴含 $k=x+1$，因为 $f(x+1)>f(x+2)$。以下代码实现了该查找：
 
 ```cpp
 int x = -1;
@@ -359,8 +359,8 @@ for (int b = z; b >= 1; b /= 2) {
 int k = x+1;
 ```
 
-Note that unlike in the ordinary binary search, here it is not allowed that consecutive values of the function are equal. In this case it would not be possible to know how to continue the search.
+注意，与普通的二分查找不同，这里不允许函数的相邻取值相等。若出现这种情况，就无法判断应如何继续查找。
 
-[^1]: According to [51], merge sort was invented by J. von Neumann in 1945.
+[^1]: 根据 [51]，归并排序由 J. von Neumann 于 1945 年发明。
 
-[^2]: Note that in some older compilers, the function `make_tuple` has to be used to create a tuple instead of braces (for example, `make_tuple(2,1,4)` instead of `{2,1,4}`).
+[^2]: 注意，在一些较旧的编译器中，必须使用函数 `make_tuple` 来创建元组，而不能用花括号（例如用 `make_tuple(2,1,4)` 而不是 `{2,1,4}`）。

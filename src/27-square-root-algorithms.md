@@ -1,80 +1,80 @@
-# Square root algorithms
+# 平方根算法
 
-A **square root algorithm** is an algorithm that has a square root in its time complexity. A square root can be seen as a "poor man's logarithm": the complexity $O(\sqrt n)$ is better than $O(n)$ but worse than $O(\log n)$. In any case, many square root algorithms are fast and usable in practice.
+**平方根算法**是指时间复杂度中含有平方根的算法。平方根可以看作是一种“平民版的对数”：复杂度 $O(\sqrt n)$ 优于 $O(n)$，但劣于 $O(\log n)$。无论如何，许多平方根算法在实践中都很快且实用。
 
-As an example, consider the problem of creating a data structure that supports two operations on an array: modifying an element at a given position and calculating the sum of elements in the given range. We have previously solved the problem using binary indexed and segment trees, that support both operations in $O(\log n)$ time. However, now we will solve the problem in another way using a square root structure that allows us to modify elements in $O(1)$ time and calculate sums in $O(\sqrt n)$ time.
+举一个例子，考虑如下问题：设计一个数据结构，在一个数组上支持两种操作，即修改某个给定位置的元素，以及计算给定区间内元素之和。我们此前已经用树状数组和线段树解决过这个问题，二者都能在 $O(\log n)$ 时间内完成这两种操作。不过，现在我们用另一种方式来解决它，即使用一种平方根结构，它允许我们在 $O(1)$ 时间内修改元素，并在 $O(\sqrt n)$ 时间内计算区间和。
 
-The idea is to divide the array into *blocks* of size $\sqrt n$ so that each block contains the sum of elements inside the block. For example, an array of 16 elements will be divided into blocks of 4 elements as follows:
+其思路是把数组分成大小为 $\sqrt n$ 的*块*，每个块记录块内元素之和。例如，一个含 16 个元素的数组将被分成每块 4 个元素的若干块，如下所示：
 
 ![](assets/images/ch27-fig01.svg)
 
-In this structure, it is easy to modify array elements, because it is only needed to update the sum of a single block after each modification, which can be done in $O(1)$ time. For example, the following picture shows how the value of an element and the sum of the corresponding block change:
+在这种结构中，修改数组元素很容易，因为每次修改后只需更新单个块的和，这可以在 $O(1)$ 时间内完成。例如，下图展示了某个元素的值以及相应块的和如何变化：
 
 ![](assets/images/ch27-fig02.svg)
 
-Then, to calculate the sum of elements in a range, we divide the range into three parts such that the sum consists of values of single elements and sums of blocks between them:
+接下来，为了计算一个区间内元素之和，我们把这个区间分成三部分，使得其和由若干单个元素的值以及它们之间若干个块的和组成：
 
 ![](assets/images/ch27-fig03.svg)
 
-Since the number of single elements is $O(\sqrt n)$ and the number of blocks is also $O(\sqrt n)$, the sum query takes $O(\sqrt n)$ time. The purpose of the block size $\sqrt n$ is that it *balances* two things: the array is divided into $\sqrt n$ blocks, each of which contains $\sqrt n$ elements.
+由于单个元素的个数是 $O(\sqrt n)$，块的个数也是 $O(\sqrt n)$，因此区间求和查询需 $O(\sqrt n)$ 时间。块大小取 $\sqrt n$ 的目的是*平衡*两件事：数组被分成 $\sqrt n$ 个块，每个块包含 $\sqrt n$ 个元素。
 
-In practice, it is not necessary to use the exact value of $\sqrt n$ as a parameter, and instead we may use parameters $k$ and $n/k$ where $k$ is different from $\sqrt n$. The optimal parameter depends on the problem and input. For example, if an algorithm often goes through the blocks but rarely inspects single elements inside the blocks, it may be a good idea to divide the array into $k < \sqrt n$ blocks, each of which contains $n/k > \sqrt n$ elements.
+在实践中，并不需要使用 $\sqrt n$ 的精确值作为参数，我们也可以改用参数 $k$ 和 $n/k$，其中 $k$ 不等于 $\sqrt n$。最优参数取决于具体问题和输入。例如，如果一个算法频繁地遍历各个块，却很少检查块内的单个元素，那么把数组分成 $k < \sqrt n$ 个块、每块包含 $n/k > \sqrt n$ 个元素可能是个好主意。
 
-## Combining algorithms
+## 组合算法
 
-In this section we discuss two square root algorithms that are based on combining two algorithms into one algorithm. In both cases, we could use either of the algorithms without the other and solve the problem in $O(n^2)$ time. However, by combining the algorithms, the running time is only $O(n \sqrt n)$.
+本节我们讨论两种平方根算法，它们都基于把两个算法组合成一个算法。在这两种情况中，我们都可以只使用其中一个算法而不使用另一个来解决 $O(n^2)$ 时间内的问题。然而，通过组合这两个算法，运行时间仅为 $O(n \sqrt n)$。
 
-#### Case processing
+#### 逐例处理
 
-Suppose that we are given a two-dimensional grid that contains $n$ cells. Each cell is assigned a letter, and our task is to find two cells with the same letter whose distance is minimum, where the distance between cells $(x_1,y_1)$ and $(x_2,y_2)$ is $|x_1-x_2|+|y_1-y_2|$. For example, consider the following grid:
+假设给定一个包含 $n$ 个格子的二维网格。每个格子上写有一个字母，我们的任务是找出两个含有相同字母且距离最小的格子，其中格子 $(x_1,y_1)$ 与 $(x_2,y_2)$ 之间的距离为 $|x_1-x_2|+|y_1-y_2|$。例如，考虑下面的网格：
 
 ![](assets/images/ch27-fig04.svg)
 
-In this case, the minimum distance is 2 between the two 'E' letters.
+在这个例子中，最小距离为 2，出现在两个字母 'E' 之间。
 
-We can solve the problem by considering each letter separately. Using this approach, the new problem is to calculate the minimum distance between two cells with a *fixed* letter $c$. We focus on two algorithms for this:
+我们可以逐个字母地考虑来解决这个问题。采用这种方法，新问题就变成了计算含有*固定*字母 $c$ 的两个格子之间的最小距离。我们聚焦于两种算法：
 
-*Algorithm 1:* Go through all pairs of cells with letter $c$, and calculate the minimum distance between such cells. This will take $O(k^2)$ time where $k$ is the number of cells with letter $c$.
+*算法 1：* 遍历所有含有字母 $c$ 的格子对，并计算这些格子之间的最小距离。这需要 $O(k^2)$ 时间，其中 $k$ 是含有字母 $c$ 的格子数。
 
-*Algorithm 2:* Perform a breadth-first search that simultaneously starts at each cell with letter $c$. The minimum distance between two cells with letter $c$ will be calculated in $O(n)$ time.
+*算法 2：* 执行一次广度优先搜索，同时从每个含有字母 $c$ 的格子出发。含有字母 $c$ 的两个格子之间的最小距离将在 $O(n)$ 时间内算出。
 
-One way to solve the problem is to choose either of the algorithms and use it for all letters. If we use Algorithm 1, the running time is $O(n^2)$, because all cells may contain the same letter, and in this case $k=n$. Also if we use Algorithm 2, the running time is $O(n^2)$, because all cells may have different letters, and in this case $n$ searches are needed.
+解决问题的一种方法是任选其中一个算法并把它用于所有字母。如果使用算法 1，运行时间是 $O(n^2)$，因为所有格子可能都含有同一个字母，此时 $k=n$。同样，如果使用算法 2，运行时间也是 $O(n^2)$，因为所有格子可能含有互不相同的字母，此时需要进行 $n$ 次搜索。
 
-However, we can *combine* the two algorithms and use different algorithms for different letters depending on how many times each letter appears in the grid. Assume that a letter $c$ appears $k$ times. If $k \le \sqrt n$, we use Algorithm 1, and if $k > \sqrt n$, we use Algorithm 2. It turns out that by doing this, the total running time of the algorithm is only $O(n \sqrt n)$.
+然而，我们可以*组合*这两个算法，根据每个字母在网格中出现的次数多少，对不同的字母使用不同的算法。假设字母 $c$ 出现 $k$ 次。如果 $k \le \sqrt n$，我们使用算法 1，如果 $k > \sqrt n$，我们使用算法 2。事实证明，这样做之后，算法的总运行时间仅为 $O(n \sqrt n)$。
 
-First, suppose that we use Algorithm 1 for a letter $c$. Since $c$ appears at most $\sqrt n$ times in the grid, we compare each cell with letter $c$ $O(\sqrt n)$ times with other cells. Thus, the time used for processing all such cells is $O(n \sqrt n)$. Then, suppose that we use Algorithm 2 for a letter $c$. There are at most $\sqrt n$ such letters, so processing those letters also takes $O(n \sqrt n)$ time.
+首先，假设我们对字母 $c$ 使用算法 1。由于 $c$ 在网格中最多出现 $\sqrt n$ 次，我们把每个含有字母 $c$ 的格子与其他格子比较 $O(\sqrt n)$ 次。因此，处理所有这类格子所花的时间为 $O(n \sqrt n)$。接着，假设我们对字母 $c$ 使用算法 2。这样的字母至多有 $\sqrt n$ 个，所以处理这些字母同样花费 $O(n \sqrt n)$ 时间。
 
-#### Batch processing
+#### 分批处理
 
-Our next problem also deals with a two-dimensional grid that contains $n$ cells. Initially, each cell except one is white. We perform $n-1$ operations, each of which first calculates the minimum distance from a given white cell to a black cell, and then paints the white cell black.
+我们的下一个问题同样涉及一个包含 $n$ 个格子的二维网格。初始时，除一个格子外其余格子都是白色的。我们执行 $n-1$ 次操作，每次操作先计算某个给定白格到黑格的最小距离，然后把这个白格涂成黑色。
 
-For example, consider the following operation:
+例如，考虑下面的操作：
 
 ![](assets/images/ch27-fig05.svg)
 
-First, we calculate the minimum distance from the white cell marked with \* to a black cell. The minimum distance is 2, because we can move two steps left to a black cell. Then, we paint the white cell black:
+首先，我们计算标有 \* 的白格到黑格的最小距离。最小距离为 2，因为我们可以向左移动两步到达一个黑格。然后，我们把这个白格涂成黑色：
 
 ![](assets/images/ch27-fig06.svg)
 
-Consider the following two algorithms:
+考虑下面两种算法：
 
-*Algorithm 1:* Use breadth-first search to calculate for each white cell the distance to the nearest black cell. This takes $O(n)$ time, and after the search, we can find the minimum distance from any white cell to a black cell in $O(1)$ time.
+*算法 1：* 使用广度优先搜索为每个白格计算到最近黑格的距离。这需要 $O(n)$ 时间，搜索之后，我们能在 $O(1)$ 时间内求出任意白格到黑格的最小距离。
 
-*Algorithm 2:* Maintain a list of cells that have been painted black, go through this list at each operation and then add a new cell to the list. An operation takes $O(k)$ time where $k$ is the length of the list.
+*算法 2：* 维护一个已被涂成黑色的格子列表，在每次操作时遍历这个列表，然后把新格子加入列表。一次操作需 $O(k)$ 时间，其中 $k$ 是列表的长度。
 
-We combine the above algorithms by dividing the operations into $O(\sqrt n)$ *batches*, each of which consists of $O(\sqrt n)$ operations. At the beginning of each batch, we perform Algorithm 1. Then, we use Algorithm 2 to process the operations in the batch. We clear the list of Algorithm 2 between the batches. At each operation, the minimum distance to a black cell is either the distance calculated by Algorithm 1 or the distance calculated by Algorithm 2.
+我们把上述算法组合起来，把操作分成 $O(\sqrt n)$ 个*批次*，每批包含 $O(\sqrt n)$ 次操作。在每一批开始时，我们执行算法 1。然后，我们用算法 2 处理这一批中的操作。在批次之间，我们清空算法 2 用的列表。每次操作中，到黑格的最小距离要么是算法 1 算出的距离，要么是算法 2 算出的距离。
 
-The resulting algorithm works in $O(n \sqrt n)$ time. First, Algorithm 1 is performed $O(\sqrt n)$ times, and each search works in $O(n)$ time. Second, when using Algorithm 2 in a batch, the list contains $O(\sqrt n)$ cells (because we clear the list between the batches) and each operation takes $O(\sqrt n)$ time.
+由此得到的算法运行时间为 $O(n \sqrt n)$。首先，算法 1 被执行 $O(\sqrt n)$ 次，每次搜索耗时 $O(n)$。其次，在某批中使用算法 2 时，列表包含 $O(\sqrt n)$ 个格子（因为我们在批次之间清空列表），每次操作耗时 $O(\sqrt n)$。
 
-## Integer partitions
+## 整数拆分
 
-Some square root algorithms are based on the following observation: if a positive integer $n$ is represented as a sum of positive integers, such a sum always contains at most $O(\sqrt n)$ *distinct* numbers. The reason for this is that to construct a sum that contains a maximum number of distinct numbers, we should choose *small* numbers. If we choose the numbers $1,2,\ldots,k$, the resulting sum is $$\frac{k(k+1)}{2}.$$ Thus, the maximum amount of distinct numbers is $k = O(\sqrt n)$. Next we will discuss two problems that can be solved efficiently using this observation.
+有些平方根算法基于如下观察：若把正整数 $n$ 表示为若干正整数之和，那么这个和中总是至多包含 $O(\sqrt n)$ 个*互不相同*的数。原因在于，要构造一个包含尽可能多不同数的和，我们应当选择*小*数。若选择数 $1,2,\ldots,k$，得到的和为 $$\frac{k(k+1)}{2}.$$ 因此，不同数的最大个数是 $k = O(\sqrt n)$。接下来我们将讨论两个可以借助这一观察高效解决的问题。
 
-#### Knapsack
+#### 背包
 
-Suppose that we are given a list of integer weights whose sum is $n$. Our task is to find out all sums that can be formed using a subset of the weights. For example, if the weights are $\{1,3,3\}$, the possible sums are as follows:
+假设给定一个整数权值列表，其和为 $n$。我们的任务是找出用这些权值的一个子集所能组成的所有和。例如，若权值为 $\{1,3,3\}$，则可能的和如下：
 
-- $0$ (empty set)
+- $0$（空集）
 
 - $1$
 
@@ -86,15 +86,15 @@ Suppose that we are given a list of integer weights whose sum is $n$. Our task i
 
 - $1+3+3=7$
 
-Using the standard knapsack approach (see Chapter 7.4), the problem can be solved as follows: we define a function $\texttt{possible}(x,k)$ whose value is 1 if the sum $x$ can be formed using the first $k$ weights, and 0 otherwise. Since the sum of the weights is $n$, there are at most $n$ weights and all values of the function can be calculated in $O(n^2)$ time using dynamic programming.
+使用标准的背包方法（见第 7.4 节），这个问题可以这样解决：我们定义一个函数 $\texttt{possible}(x,k)$，当和 $x$ 能用前 $k$ 个权值组成时其值为 1，否则为 0。由于权值之和为 $n$，至多有 $n$ 个权值，且可以用动态规划在 $O(n^2)$ 时间内算出该函数的所有值。
 
-However, we can make the algorithm more efficient by using the fact that there are at most $O(\sqrt n)$ *distinct* weights. Thus, we can process the weights in groups that consists of similar weights. We can process each group in $O(n)$ time, which yields an $O(n \sqrt n)$ time algorithm.
+然而，我们可以利用至多有 $O(\sqrt n)$ 个*互不相同*的权值这一事实，使算法更高效。于是，我们可以把权值按组处理，每一组由相似的权值组成。每组可以在 $O(n)$ 时间内处理，从而得到 $O(n \sqrt n)$ 时间的算法。
 
-The idea is to use an array that records the sums of weights that can be formed using the groups processed so far. The array contains $n$ elements: element $k$ is 1 if the sum $k$ can be formed and 0 otherwise. To process a group of weights, we scan the array from left to right and record the new sums of weights that can be formed using this group and the previous groups.
+其思路是使用一个数组，记录用目前处理过的各组权值所能组成的和。该数组包含 $n$ 个元素：若和 $k$ 能组成，则元素 $k$ 为 1，否则为 0。要处理一组权值，我们从左到右扫描这个数组，记录用这一组权值和此前各组权值所能组成的新和。
 
-#### String construction
+#### 字符串构造
 
-Given a string `s` of length $n$ and a set of strings $D$ whose total length is $m$, consider the problem of counting the number of ways `s` can be formed as a concatenation of strings in $D$. For example, if $\texttt{s}=\texttt{ABAB}$ and $D=\{\texttt{A},\texttt{B},\texttt{AB}\}$, there are 4 ways:
+给定一个长度为 $n$ 的字符串 `s` 以及一个字符串集合 $D$，其中字符串的总长度为 $m$，考虑这样一个问题：统计 `s` 能作为 $D$ 中字符串的拼接方式构造出来的方案数。例如，若 $\texttt{s}=\texttt{ABAB}$ 且 $D=\{\texttt{A},\texttt{B},\texttt{AB}\}$，则有 4 种方式：
 
 - $\texttt{A}+\texttt{B}+\texttt{A}+\texttt{B}$
 
@@ -104,42 +104,42 @@ Given a string `s` of length $n$ and a set of strings $D$ whose total length is 
 
 - $\texttt{AB}+\texttt{AB}$
 
-We can solve the problem using dynamic programming: Let $\texttt{count}(k)$ denote the number of ways to construct the prefix $\texttt{s}[0 \ldots k]$ using the strings in $D$. Now $\texttt{count}(n-1)$ gives the answer to the problem, and we can solve the problem in $O(n^2)$ time using a trie structure.
+我们可以用动态规划解决这个问题：设 $\texttt{count}(k)$ 表示用 $D$ 中的字符串构造前缀 $\texttt{s}[0 \ldots k]$ 的方案数。此时 $\texttt{count}(n-1)$ 就是问题的答案，我们可以借助 trie 结构在 $O(n^2)$ 时间内解决该问题。
 
-However, we can solve the problem more efficiently by using string hashing and the fact that there are at most $O(\sqrt m)$ distinct string lengths in $D$. First, we construct a set $H$ that contains all hash values of the strings in $D$. Then, when calculating a value of $\texttt{count}(k)$, we go through all values of $p$ such that there is a string of length $p$ in $D$, calculate the hash value of $\texttt{s}[k-p+1 \ldots k]$ and check if it belongs to $H$. Since there are at most $O(\sqrt m)$ distinct string lengths, this results in an algorithm whose running time is $O(n \sqrt m)$.
+然而，利用字符串哈希以及 $D$ 中至多有 $O(\sqrt m)$ 个互不相同的字符串长度这一事实，我们可以更高效地解决这个问题。首先，我们构造一个集合 $H$，它包含 $D$ 中所有字符串的哈希值。然后，在计算 $\texttt{count}(k)$ 的值时，我们遍历所有满足“$D$ 中存在长度为 $p$ 的字符串”的 $p$，计算 $\texttt{s}[k-p+1 \ldots k]$ 的哈希值，并检查它是否属于 $H$。由于至多有 $O(\sqrt m)$ 个互不相同的字符串长度，这便得到一个运行时间为 $O(n \sqrt m)$ 的算法。
 
-## Mo's algorithm
+## Mo 算法
 
-**Mo's algorithm**[^1] can be used in many problems that require processing range queries in a *static* array, i.e., the array values do not change between the queries. In each query, we are given a range $[a,b]$, and we should calculate a value based on the array elements between positions $a$ and $b$. Since the array is static, the queries can be processed in any order, and Mo's algorithm processes the queries in a special order which guarantees that the algorithm works efficiently.
+**Mo 算法**[^1]可用于许多需要在*静态*数组上处理区间查询的问题，即数组的值在查询之间不发生改变。每次查询给出一个区间 $[a,b]$，我们应当根据位置 $a$ 到 $b$ 之间的数组元素计算一个值。由于数组是静态的，查询可以按任意顺序处理，而 Mo 算法以某种特殊的顺序处理查询，从而保证算法高效运行。
 
-Mo's algorithm maintains an *active range* of the array, and the answer to a query concerning the active range is known at each moment. The algorithm processes the queries one by one, and always moves the endpoints of the active range by inserting and removing elements. The time complexity of the algorithm is $O(n \sqrt n f(n))$ where the array contains $n$ elements, there are $n$ queries and each insertion and removal of an element takes $O(f(n))$ time.
+Mo 算法维护数组的一个*活动区间*，并随时知道关于该活动区间的查询答案。该算法逐个处理查询，总是通过插入和删除元素来移动活动区间的端点。该算法的时间复杂度为 $O(n \sqrt n f(n))$，其中数组包含 $n$ 个元素，共有 $n$ 次查询，且每次插入和删除一个元素需 $O(f(n))$ 时间。
 
-The trick in Mo's algorithm is the order in which the queries are processed: The array is divided into blocks of $k=O(\sqrt n)$ elements, and a query $[a_1,b_1]$ is processed before a query $[a_2,b_2]$ if either
+Mo 算法的诀窍在于处理查询的顺序：数组被分成大小为 $k=O(\sqrt n)$ 个元素的若干块，查询 $[a_1,b_1]$ 先于查询 $[a_2,b_2]$ 被处理，当且仅当
 
-- $\lfloor a_1/k \rfloor < \lfloor a_2/k \rfloor$ or
+- $\lfloor a_1/k \rfloor < \lfloor a_2/k \rfloor$ 或
 
-- $\lfloor a_1/k \rfloor = \lfloor a_2/k \rfloor$ and $b_1 < b_2$.
+- $\lfloor a_1/k \rfloor = \lfloor a_2/k \rfloor$ 且 $b_1 < b_2$。
 
-Thus, all queries whose left endpoints are in a certain block are processed one after another sorted according to their right endpoints. Using this order, the algorithm only performs $O(n \sqrt n)$ operations, because the left endpoint moves $O(n)$ times $O(\sqrt n)$ steps, and the right endpoint moves $O(\sqrt n)$ times $O(n)$ steps. Thus, both endpoints move a total of $O(n \sqrt n)$ steps during the algorithm.
+因此，所有左端点位于某个块中的查询会按右端点排序后依次连续处理。采用这种顺序，该算法只需执行 $O(n \sqrt n)$ 次操作，因为左端点移动 $O(n)$ 次、每次 $O(\sqrt n)$ 步，右端点移动 $O(\sqrt n)$ 次、每次 $O(n)$ 步。因此，在算法过程中，两个端点总共移动 $O(n \sqrt n)$ 步。
 
-#### Example
+#### 例子
 
-As an example, consider a problem where we are given a set of queries, each of them corresponding to a range in an array, and our task is to calculate for each query the number of *distinct* elements in the range.
+作为一个例子，考虑这样一个问题：给定一组查询，每个查询对应数组中的一个区间，我们的任务是为每个查询计算该区间中*互不相同*的元素个数。
 
-In Mo's algorithm, the queries are always sorted in the same way, but it depends on the problem how the answer to the query is maintained. In this problem, we can maintain an array `count` where $\texttt{count}[x]$ indicates the number of times an element $x$ occurs in the active range.
+在 Mo 算法中，查询总是按相同方式排序，但如何维护查询答案则取决于具体问题。在这个问题中，我们可以维护一个数组 `count`，其中 $\texttt{count}[x]$ 表示元素 $x$ 在活动区间中出现的次数。
 
-When we move from one query to another query, the active range changes. For example, if the current range is
+当我们从一个查询移动到另一个查询时，活动区间发生了变化。例如，若当前区间是
 
 ![](assets/images/ch27-fig07.svg)
 
-and the next range is
+而下一个区间是
 
 ![](assets/images/ch27-fig08.svg)
 
-there will be three steps: the left endpoint moves one step to the right, and the right endpoint moves two steps to the right.
+则会有三步：左端点向右移动一步，右端点向右移动两步。
 
-After each step, the array `count` needs to be updated. After adding an element $x$, we increase the value of $\texttt{count}[x]$ by 1, and if $\texttt{count}[x]=1$ after this, we also increase the answer to the query by 1. Similarly, after removing an element $x$, we decrease the value of $\texttt{count}[x]$ by 1, and if $\texttt{count}[x]=0$ after this, we also decrease the answer to the query by 1.
+每一步之后，数组 `count` 都需要更新。加入元素 $x$ 之后，我们把 $\texttt{count}[x]$ 的值加 1，若此后 $\texttt{count}[x]=1$，我们同时把该查询的答案加 1。类似地，删除元素 $x$ 之后，我们把 $\texttt{count}[x]$ 的值减 1，若此后 $\texttt{count}[x]=0$，我们同时把该查询的答案减 1。
 
-In this problem, the time needed to perform each step is $O(1)$, so the total time complexity of the algorithm is $O(n \sqrt n)$.
+在这个问题中，执行每一步所需的时间为 $O(1)$，因此该算法的总时间复杂度为 $O(n \sqrt n)$。
 
-[^1]: According to [13], this algorithm is named after Mo Tao, a Chinese competitive programmer, but the technique has appeared earlier in the literature [48].
+[^1]: 根据 [13]，该算法以中国竞赛程序设计选手莫涛命名，但这一技术在更早的文献 [48] 中已经出现过。

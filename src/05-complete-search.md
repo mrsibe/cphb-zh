@@ -1,16 +1,16 @@
-# Complete search
+# 完全搜索
 
-**Complete search** is a general method that can be used to solve almost any algorithm problem. The idea is to generate all possible solutions to the problem using brute force, and then select the best solution or count the number of solutions, depending on the problem.
+**完全搜索**是一种通用的方法，几乎可以用来求解任何算法问题。其思路是用暴力枚举生成问题的所有可能解，然后根据具体问题选出最优解或统计解的个数。
 
-Complete search is a good technique if there is enough time to go through all the solutions, because the search is usually easy to implement and it always gives the correct answer. If complete search is too slow, other techniques, such as greedy algorithms or dynamic programming, may be needed.
+如果有足够的时间遍历所有解，完全搜索就是一种很好的技巧，因为这种搜索通常易于实现，而且总能给出正确答案。如果完全搜索太慢，则可能需要贪心算法或动态规划等其他技巧。
 
-## Generating subsets
+## 生成子集
 
-We first consider the problem of generating all subsets of a set of $n$ elements. For example, the subsets of $\{0,1,2\}$ are $\emptyset$, $\{0\}$, $\{1\}$, $\{2\}$, $\{0,1\}$, $\{0,2\}$, $\{1,2\}$ and $\{0,1,2\}$. There are two common methods to generate subsets: we can either perform a recursive search or exploit the bit representation of integers.
+我们首先考虑生成一个含 $n$ 个元素的集合的所有子集的问题。例如，$\{0,1,2\}$ 的子集为 $\emptyset$、$\{0\}$、$\{1\}$、$\{2\}$、$\{0,1\}$、$\{0,2\}$、$\{1,2\}$ 和 $\{0,1,2\}$。生成子集有两种常见方法：既可以执行递归搜索，也可以利用整数的二进制表示。
 
-#### Method 1
+#### 方法 1
 
-An elegant way to go through all subsets of a set is to use recursion. The following function `search` generates the subsets of the set $\{0,1,\ldots,n-1\}$. The function maintains a vector `subset` that will contain the elements of each subset. The search begins when the function is called with parameter 0.
+遍历一个集合的所有子集的一种优雅方式是使用递归。下面的函数 `search` 生成集合 $\{0,1,\ldots,n-1\}$ 的子集。该函数维护一个向量 `subset`，其中包含每个子集的元素。当以参数 0 调用该函数时，搜索开始。
 
 ```cpp
 void search(int k) {
@@ -25,19 +25,19 @@ void search(int k) {
 }
 ```
 
-When the function `search` is called with parameter $k$, it decides whether to include the element $k$ in the subset or not, and in both cases, then calls itself with parameter $k+1$ However, if $k=n$, the function notices that all elements have been processed and a subset has been generated.
+当以参数 $k$ 调用函数 `search` 时，它决定是否将元素 $k$ 包含在子集中，并在两种情况下都以参数 $k+1$ 调用自身。不过，如果 $k=n$，函数便注意到所有元素都已处理完毕，一个子集已经生成。
 
-The following tree illustrates the function calls when $n=3$. We can always choose either the left branch ($k$ is not included in the subset) or the right branch ($k$ is included in the subset).
+下面的树展示了 $n=3$ 时的函数调用情况。我们总是既可以选择左分支（$k$ 不包含在子集中），也可以选择右分支（$k$ 包含在子集中）。
 
 ![](assets/images/ch05-fig01.svg)
 
-#### Method 2
+#### 方法 2
 
-Another way to generate subsets is based on the bit representation of integers. Each subset of a set of $n$ elements can be represented as a sequence of $n$ bits, which corresponds to an integer between $0 \ldots 2^n-1$. The ones in the bit sequence indicate which elements are included in the subset.
+生成子集的另一种方法基于整数的二进制表示。含 $n$ 个元素的集合的每个子集都可以表示为一个 $n$ 位的比特序列，它对应 $0 \ldots 2^n-1$ 之间的一个整数。比特序列中为 1 的位表示哪些元素包含在子集中。
 
-The usual convention is that the last bit corresponds to element 0, the second last bit corresponds to element 1, and so on. For example, the bit representation of 25 is 11001, which corresponds to the subset $\{0,3,4\}$.
+通常的约定是最后一位对应元素 0，倒数第二位对应元素 1，依此类推。例如，25 的二进制表示是 11001，它对应子集 $\{0,3,4\}$。
 
-The following code goes through the subsets of a set of $n$ elements
+以下代码遍历含 $n$ 个元素的集合的所有子集
 
 ```cpp
 for (int b = 0; b < (1<<n); b++) {
@@ -45,7 +45,7 @@ for (int b = 0; b < (1<<n); b++) {
 }
 ```
 
-The following code shows how we can find the elements of a subset that corresponds to a bit sequence. When processing each subset, the code builds a vector that contains the elements in the subset.
+以下代码展示了如何求出一个比特序列所对应的子集的元素。在处理每个子集时，代码构建一个包含该子集中元素的向量。
 
 ```cpp
 for (int b = 0; b < (1<<n); b++) {
@@ -56,13 +56,13 @@ for (int b = 0; b < (1<<n); b++) {
 }
 ```
 
-## Generating permutations
+## 生成排列
 
-Next we consider the problem of generating all permutations of a set of $n$ elements. For example, the permutations of $\{0,1,2\}$ are $(0,1,2)$, $(0,2,1)$, $(1,0,2)$, $(1,2,0)$, $(2,0,1)$ and $(2,1,0)$. Again, there are two approaches: we can either use recursion or go through the permutations iteratively.
+接下来我们考虑生成一个含 $n$ 个元素的集合的所有排列的问题。例如，$\{0,1,2\}$ 的排列为 $(0,1,2)$、$(0,2,1)$、$(1,0,2)$、$(1,2,0)$、$(2,0,1)$ 和 $(2,1,0)$。同样有两种方法：既可以使用递归，也可以迭代地遍历排列。
 
-#### Method 1
+#### 方法 1
 
-Like subsets, permutations can be generated using recursion. The following function `search` goes through the permutations of the set $\{0,1,\ldots,n-1\}$. The function builds a vector `permutation` that contains the permutation, and the search begins when the function is called without parameters.
+与子集类似，排列也可以用递归生成。下面的函数 `search` 遍历集合 $\{0,1,\ldots,n-1\}$ 的所有排列。该函数构建一个包含排列的向量 `permutation`，当不带参数调用该函数时，搜索开始。
 
 ```cpp
 void search() {
@@ -81,11 +81,11 @@ void search() {
 }
 ```
 
-Each function call adds a new element to `permutation`. The array `chosen` indicates which elements are already included in the permutation. If the size of `permutation` equals the size of the set, a permutation has been generated.
+每次函数调用都会向 `permutation` 添加一个新元素。数组 `chosen` 表示哪些元素已经包含在排列中。如果 `permutation` 的大小等于集合的大小，就生成了一个排列。
 
-#### Method 2
+#### 方法 2
 
-Another method for generating permutations is to begin with the permutation $\{0,1,\ldots,n-1\}$ and repeatedly use a function that constructs the next permutation in increasing order. The C++ standard library contains the function `next_permutation` that can be used for this:
+生成排列的另一种方法是：从排列 $\{0,1,\ldots,n-1\}$ 开始，反复使用一个按递增顺序构造下一个排列的函数。C++ 标准库包含函数 `next_permutation`，可用于此目的：
 
 ```cpp
 vector<int> permutation;
@@ -97,23 +97,23 @@ do {
 } while (next_permutation(permutation.begin(),permutation.end()));
 ```
 
-## Backtracking
+## 回溯
 
-A **backtracking** algorithm begins with an empty solution and extends the solution step by step. The search recursively goes through all different ways how a solution can be constructed.
+**回溯**算法从一个空解开始，逐步扩展该解。搜索会递归地遍历构造一个解的所有不同方式。
 
-As an example, consider the problem of calculating the number of ways $n$ queens can be placed on an $n \times n$ chessboard so that no two queens attack each other. For example, when $n=4$, there are two possible solutions:
+举个例子，考虑计算在 $n \times n$ 的棋盘上放置 $n$ 个皇后、使得任意两个皇后都不互相攻击的方法数的问题。例如，当 $n=4$ 时，有两种可能的解：
 
 ![](assets/images/ch05-fig02.svg)
 
-The problem can be solved using backtracking by placing queens to the board row by row. More precisely, exactly one queen will be placed on each row so that no queen attacks any of the queens placed before. A solution has been found when all $n$ queens have been placed on the board.
+该问题可以用回溯法求解，逐行地在棋盘上放置皇后。更准确地说，每一行恰好放置一个皇后，使得该皇后不攻击任何之前放置的皇后。当 $n$ 个皇后都放到棋盘上时，就找到了一个解。
 
-For example, when $n=4$, some partial solutions generated by the backtracking algorithm are as follows:
+例如，当 $n=4$ 时，回溯算法生成的一些部分解如下：
 
 ![](assets/images/ch05-fig03.svg)
 
-At the bottom level, the three first configurations are illegal, because the queens attack each other. However, the fourth configuration is valid and it can be extended to a complete solution by placing two more queens to the board. There is only one way to place the two remaining queens.
+在最底层，前三种布局是非法的，因为皇后之间互相攻击。而第四种布局是合法的，可以通过再往棋盘上放置两个皇后将其扩展为一个完整解。放置剩余两个皇后只有一种方式。
 
-The algorithm can be implemented as follows:
+该算法可以实现如下：
 
 ```cpp
 void search(int y) {
@@ -130,105 +130,105 @@ void search(int y) {
 }
 ```
 
-The search begins by calling `search(0)`. The size of the board is $n \times n$, and the code calculates the number of solutions to `count`.
+搜索通过调用 `search(0)` 开始。棋盘的大小为 $n \times n$，代码将解的个数计算到 `count` 中。
 
-The code assumes that the rows and columns of the board are numbered from 0 to $n-1$. When the function `search` is called with parameter $y$, it places a queen on row $y$ and then calls itself with parameter $y+1$. Then, if $y=n$, a solution has been found and the variable `count` is increased by one.
+代码假设棋盘的行和列都从 0 到 $n-1$ 编号。当以参数 $y$ 调用函数 `search` 时，它在第 $y$ 行放置一个皇后，然后以参数 $y+1$ 调用自身。接着，如果 $y=n$，就找到了一个解，变量 `count` 增加一。
 
-The array `column` keeps track of columns that contain a queen, and the arrays `diag1` and `diag2` keep track of diagonals. It is not allowed to add another queen to a column or diagonal that already contains a queen. For example, the columns and diagonals of the $4 \times 4$ board are numbered as follows:
+数组 `column` 记录哪些列含有皇后，数组 `diag1` 和 `diag2` 记录对角线。不允许向已经含有皇后的列或对角线再添加皇后。例如，$4 \times 4$ 棋盘的列和对角线编号如下：
 
 ![](assets/images/ch05-fig04.svg)
 
-Let $q(n)$ denote the number of ways to place $n$ queens on an $n \times n$ chessboard. The above backtracking algorithm tells us that, for example, $q(8)=92$. When $n$ increases, the search quickly becomes slow, because the number of solutions increases exponentially. For example, calculating $q(16)=14772512$ using the above algorithm already takes about a minute on a modern computer[^1].
+设 $q(n)$ 表示在 $n \times n$ 棋盘上放置 $n$ 个皇后的方法数。上述回溯算法告诉我们，例如 $q(8)=92$。当 $n$ 增大时，搜索很快变慢，因为解的个数呈指数增长。例如，用上述算法计算 $q(16)=14772512$ 在一台现代计算机上已经需要约一分钟[^1]。
 
-## Pruning the search
+## 剪枝
 
-We can often optimize backtracking by pruning the search tree. The idea is to add "intelligence" to the algorithm so that it will notice as soon as possible if a partial solution cannot be extended to a complete solution. Such optimizations can have a tremendous effect on the efficiency of the search.
+我们常常可以通过对搜索树剪枝来优化回溯。其思路是给算法添加“智能”，让它一旦发现某个部分解无法扩展为完整解就尽快察觉。这类优化对搜索的效率可能产生巨大影响。
 
-Let us consider the problem of calculating the number of paths in an $n \times n$ grid from the upper-left corner to the lower-right corner such that the path visits each square exactly once. For example, in a $7 \times 7$ grid, there are 111712 such paths. One of the paths is as follows:
+让我们考虑这样一个问题：计算 $n \times n$ 网格中从左上角到右下角、且恰好访问每个方格一次的路径数。例如，在 $7 \times 7$ 的网格中有 111712 条这样的路径。其中一条路径如下：
 
 ![](assets/images/ch05-fig05.svg)
 
-We focus on the $7 \times 7$ case, because its level of difficulty is appropriate to our needs. We begin with a straightforward backtracking algorithm, and then optimize it step by step using observations of how the search can be pruned. After each optimization, we measure the running time of the algorithm and the number of recursive calls, so that we clearly see the effect of each optimization on the efficiency of the search.
+我们关注 $7 \times 7$ 的情形，因为它的难度正合适。我们从一个朴素回溯算法出发，然后根据对搜索如何剪枝的观察逐步优化它。每次优化后，我们测量算法的运行时间和递归调用次数，以便清楚地看到每次优化对搜索效率的影响。
 
-#### Basic algorithm
+#### 基础算法
 
-The first version of the algorithm does not contain any optimizations. We simply use backtracking to generate all possible paths from the upper-left corner to the lower-right corner and count the number of such paths.
+算法的第一个版本不含任何优化。我们只是用回溯生成从左上角到右下角的所有可能路径，并统计这样的路径数。
 
-- running time: 483 seconds
+- 运行时间：483 秒
 
-- number of recursive calls: 76 billion
+- 递归调用次数：760 亿
 
-#### Optimization 1
+#### 优化 1
 
-In any solution, we first move one step down or right. There are always two paths that are symmetric about the diagonal of the grid after the first step. For example, the following paths are symmetric:
+在任何解中，我们第一步要么向下要么向右。第一步之后，总存在两条关于网格对角线对称的路径。例如，下面的路径是对称的：
 
 |  |  |  |
 |:--:|:--:|:--:|
 | ![](assets/images/ch05-fig06.svg) |  | ![](assets/images/ch05-fig07.svg) |
 
-Hence, we can decide that we always first move one step down (or right), and finally multiply the number of solutions by two.
+因此，我们可以规定总是先向下（或向右）走一步，最后把解的个数乘以二。
 
-- running time: 244 seconds
+- 运行时间：244 秒
 
-- number of recursive calls: 38 billion
+- 递归调用次数：380 亿
 
-#### Optimization 2
+#### 优化 2
 
-If the path reaches the lower-right square before it has visited all other squares of the grid, it is clear that it will not be possible to complete the solution. An example of this is the following path:
+如果路径在访问完网格中所有其他方格之前就到达了右下角方格，那么显然无法再完成整个解。下面这条路径就是一个例子：
 
 ![](assets/images/ch05-fig08.svg)
 
-Using this observation, we can terminate the search immediately if we reach the lower-right square too early.
+利用这一观察，如果过早到达右下角方格，我们可以立即终止搜索。
 
-- running time: 119 seconds
+- 运行时间：119 秒
 
-- number of recursive calls: 20 billion
+- 递归调用次数：200 亿
 
-#### Optimization 3
+#### 优化 3
 
-If the path touches a wall and can turn either left or right, the grid splits into two parts that contain unvisited squares. For example, in the following situation, the path can turn either left or right:
+如果路径碰到墙壁且可以向左或向右转弯，网格就会分裂成两个含有未访问方格的部分。例如，在下面的情形中，路径既可以向左转也可以向右转：
 
 ![](assets/images/ch05-fig09.svg)
 
-In this case, we cannot visit all squares anymore, so we can terminate the search. This optimization is very useful:
+这种情况下，我们无法再访问所有方格，因此可以终止搜索。这一优化非常有用：
 
-- running time: 1.8 seconds
+- 运行时间：1.8 秒
 
-- number of recursive calls: 221 million
+- 递归调用次数：2.21 亿
 
-#### Optimization 4
+#### 优化 4
 
-The idea of Optimization 3 can be generalized: if the path cannot continue forward but can turn either left or right, the grid splits into two parts that both contain unvisited squares. For example, consider the following path:
+优化 3 的思路可以推广：如果路径无法继续向前，但可以向左或向右转弯，网格就会分裂成两个都含有未访问方格的部分。例如，考虑下面这条路径：
 
 ![](assets/images/ch05-fig10.svg)
 
-It is clear that we cannot visit all squares anymore, so we can terminate the search. After this optimization, the search is very efficient:
+显然我们无法再访问所有方格，因此可以终止搜索。经过这一优化后，搜索非常高效：
 
-- running time: 0.6 seconds
+- 运行时间：0.6 秒
 
-- number of recursive calls: 69 million
+- 递归调用次数：6900 万
 
-   
-Now is a good moment to stop optimizing the algorithm and see what we have achieved. The running time of the original algorithm was 483 seconds, and now after the optimizations, the running time is only 0.6 seconds. Thus, the algorithm became nearly 1000 times faster after the optimizations.
+  
+现在是停止优化算法、看看我们取得了什么成果的好时机。原始算法的运行时间是 483 秒，而经过优化后，运行时间只有 0.6 秒。因此，优化后算法快了近 1000 倍。
 
-This is a usual phenomenon in backtracking, because the search tree is usually large and even simple observations can effectively prune the search. Especially useful are optimizations that occur during the first steps of the algorithm, i.e., at the top of the search tree.
+这是回溯中常见的现象，因为搜索树通常很大，即使是一些简单的观察也能有效地剪枝。尤其是在算法最初几步（即搜索树顶部）发生的优化特别有用。
 
-## Meet in the middle
+## 折半搜索
 
-**Meet in the middle** is a technique where the search space is divided into two parts of about equal size. A separate search is performed for both of the parts, and finally the results of the searches are combined.
+**折半搜索（Meet in the middle）**是一种把搜索空间分成大小大致相等的两部分的技巧。对两部分分别进行搜索，最后把两次搜索的结果合并起来。
 
-The technique can be used if there is an efficient way to combine the results of the searches. In such a situation, the two searches may require less time than one large search. Typically, we can turn a factor of $2^n$ into a factor of $2^{n/2}$ using the meet in the middle technique.
+如果存在一种高效合并搜索结果的方式，就可以使用这一技巧。在这种情况下，两次搜索所需的时间可能比一次大规模搜索更少。通常，我们可以用折半搜索技巧把 $2^n$ 这一因子变成 $2^{n/2}$。
 
-As an example, consider a problem where we are given a list of $n$ numbers and a number $x$, and we want to find out if it is possible to choose some numbers from the list so that their sum is $x$. For example, given the list $[2,4,5,9]$ and $x=15$, we can choose the numbers $[2,4,9]$ to get $2+4+9=15$. However, if $x=10$ for the same list, it is not possible to form the sum.
+举个例子，考虑这样一个问题：给定一个含 $n$ 个数字的列表和一个数字 $x$，我们想知道能否从列表中选出若干数字，使它们的和为 $x$。例如，给定列表 $[2,4,5,9]$ 和 $x=15$，我们可以选择数字 $[2,4,9]$ 得到 $2+4+9=15$。然而，对于同一个列表，如果 $x=10$，则无法凑出这个和。
 
-A simple algorithm to the problem is to go through all subsets of the elements and check if the sum of any of the subsets is $x$. The running time of such an algorithm is $O(2^n)$, because there are $2^n$ subsets. However, using the meet in the middle technique, we can achieve a more efficient $O(2^{n/2})$ time algorithm[^2]. Note that $O(2^n)$ and $O(2^{n/2})$ are different complexities because $2^{n/2}$ equals $\sqrt{2^n}$.
+该问题的一个简单算法是遍历元素的所有子集，检查是否有某个子集的和为 $x$。这样算法的时间复杂度是 $O(2^n)$，因为有 $2^n$ 个子集。然而，使用折半搜索技巧，我们可以得到一个更高效的 $O(2^{n/2})$ 时间算法[^2]。注意 $O(2^n)$ 和 $O(2^{n/2})$ 是不同的复杂度，因为 $2^{n/2}$ 等于 $\sqrt{2^n}$。
 
-The idea is to divide the list into two lists $A$ and $B$ such that both lists contain about half of the numbers. The first search generates all subsets of $A$ and stores their sums to a list $S_A$. Correspondingly, the second search creates a list $S_B$ from $B$. After this, it suffices to check if it is possible to choose one element from $S_A$ and another element from $S_B$ such that their sum is $x$. This is possible exactly when there is a way to form the sum $x$ using the numbers of the original list.
+其思路是把列表分成两个列表 $A$ 和 $B$，使两个列表各含大约一半的数字。第一次搜索生成 $A$ 的所有子集，并把它们的和存入列表 $S_A$。相应地，第二次搜索从 $B$ 生成列表 $S_B$。在此之后，只需检查能否从 $S_A$ 中选一个元素、从 $S_B$ 中选另一个元素，使它们的和为 $x$。这恰好等价于存在一种用原列表中的数字凑出和 $x$ 的方式。
 
-For example, suppose that the list is $[2,4,5,9]$ and $x=15$. First, we divide the list into $A=[2,4]$ and $B=[5,9]$. After this, we create lists $S_A=[0,2,4,6]$ and $S_B=[0,5,9,14]$. In this case, the sum $x=15$ is possible to form, because $S_A$ contains the sum $6$, $S_B$ contains the sum $9$, and $6+9=15$. This corresponds to the solution $[2,4,9]$.
+例如，假设列表为 $[2,4,5,9]$，$x=15$。首先，我们把列表分成 $A=[2,4]$ 和 $B=[5,9]$。然后，我们创建列表 $S_A=[0,2,4,6]$ 和 $S_B=[0,5,9,14]$。本例中，和 $x=15$ 可以凑出，因为 $S_A$ 含有和 $6$，$S_B$ 含有和 $9$，而 $6+9=15$。这对应解 $[2,4,9]$。
 
-We can implement the algorithm so that its time complexity is $O(2^{n/2})$. First, we generate *sorted* lists $S_A$ and $S_B$, which can be done in $O(2^{n/2})$ time using a merge-like technique. After this, since the lists are sorted, we can check in $O(2^{n/2})$ time if the sum $x$ can be created from $S_A$ and $S_B$.
+我们可以这样实现该算法，使其时间复杂度为 $O(2^{n/2})$。首先，我们生成*有序*列表 $S_A$ 和 $S_B$，这可以用类似归并的技巧在 $O(2^{n/2})$ 时间内完成。此后，由于列表是有序的，我们可以在 $O(2^{n/2})$ 时间内检查能否由 $S_A$ 和 $S_B$ 凑出和 $x$。
 
-[^1]: There is no known way to efficiently calculate larger values of $q(n)$. The current record is $q(27)=234907967154122528$, calculated in 2016 [63].
+[^1]: 目前没有已知方法能够高效地计算更大的 $q(n)$ 值。当前的记录是 $q(27)=234907967154122528$，于 2016 年计算得出 [63]。
 
-[^2]: This idea was introduced in 1974 by E. Horowitz and S. Sahni [43].
+[^2]: 这一思想由 E. Horowitz 和 S. Sahni 于 1974 年提出 [43]。

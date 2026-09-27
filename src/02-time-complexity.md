@@ -1,18 +1,18 @@
-# Time complexity
+# 时间复杂度
 
-The efficiency of algorithms is important in competitive programming. Usually, it is easy to design an algorithm that solves the problem slowly, but the real challenge is to invent a fast algorithm. If the algorithm is too slow, it will get only partial points or no points at all.
+算法的效率在算法竞赛中非常重要。通常，设计一个能缓慢解决问题的算法很容易，但真正的挑战在于发明一个快速的算法。如果算法太慢，它只会得到部分分数，甚至一分不得。
 
-The **time complexity** of an algorithm estimates how much time the algorithm will use for some input. The idea is to represent the efficiency as a function whose parameter is the size of the input. By calculating the time complexity, we can find out whether the algorithm is fast enough without implementing it.
+一个算法的**时间复杂度**估计了该算法处理某个输入需要多少时间。其思路是把效率表示为一个函数，该函数的参数是输入规模。通过计算时间复杂度，我们无需实现算法就能判断它是否足够快。
 
-## Calculation rules
+## 计算规则
 
-The time complexity of an algorithm is denoted $O(\cdots)$ where the three dots represent some function. Usually, the variable $n$ denotes the input size. For example, if the input is an array of numbers, $n$ will be the size of the array, and if the input is a string, $n$ will be the length of the string.
+一个算法的时间复杂度记作 $O(\cdots)$，其中省略号代表某个函数。通常，变量 $n$ 表示输入规模。例如，如果输入是一个数字数组，那么 $n$ 就是数组的大小；如果输入是一个字符串，那么 $n$ 就是字符串的长度。
 
-#### Loops
+#### 循环
 
-A common reason why an algorithm is slow is that it contains many loops that go through the input. The more nested loops the algorithm contains, the slower it is. If there are $k$ nested loops, the time complexity is $O(n^k)$.
+算法缓慢的一个常见原因是它包含许多遍历输入的循环。算法包含的嵌套循环越多，它就越慢。如果有 $k$ 层嵌套循环，时间复杂度就是 $O(n^k)$。
 
-For example, the time complexity of the following code is $O(n)$:
+例如，以下代码的时间复杂度是 $O(n)$：
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -20,7 +20,7 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-And the time complexity of the following code is $O(n^2)$:
+而以下代码的时间复杂度是 $O(n^2)$：
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -30,9 +30,9 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-#### Order of magnitude
+#### 数量级
 
-A time complexity does not tell us the exact number of times the code inside a loop is executed, but it only shows the order of magnitude. In the following examples, the code inside the loop is executed $3n$, $n+5$ and $\lceil n/2 \rceil$ times, but the time complexity of each code is $O(n)$.
+时间复杂度并不告诉我们循环内部代码被执行的准确次数，而只表示数量级。在以下例子中，循环内部的代码分别执行了 $3n$、$n+5$ 和 $\lceil n/2 \rceil$ 次，但每段代码的时间复杂度都是 $O(n)$。
 
 ```cpp
 for (int i = 1; i <= 3*n; i++) {
@@ -52,7 +52,7 @@ for (int i = 1; i <= n; i += 2) {
 }
 ```
 
-As another example, the time complexity of the following code is $O(n^2)$:
+再举一例，以下代码的时间复杂度是 $O(n^2)$：
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -62,11 +62,11 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-#### Phases
+#### 阶段
 
-If the algorithm consists of consecutive phases, the total time complexity is the largest time complexity of a single phase. The reason for this is that the slowest phase is usually the bottleneck of the code.
+如果算法由连续的若干阶段组成，那么总的时间复杂度就是单个阶段中最大的那个时间复杂度。原因是，最慢的阶段通常就是代码的瓶颈。
 
-For example, the following code consists of three phases with time complexities $O(n)$, $O(n^2)$ and $O(n)$. Thus, the total time complexity is $O(n^2)$.
+例如，以下代码由三个阶段组成，其时间复杂度分别为 $O(n)$、$O(n^2)$ 和 $O(n)$。因此，总的时间复杂度是 $O(n^2)$。
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -82,11 +82,11 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-#### Several variables
+#### 多个变量
 
-Sometimes the time complexity depends on several factors. In this case, the time complexity formula contains several variables.
+有时时间复杂度取决于多个因素。这种情况下，时间复杂度的表达式中会包含多个变量。
 
-For example, the time complexity of the following code is $O(nm)$:
+例如，以下代码的时间复杂度是 $O(nm)$：
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -96,11 +96,11 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-#### Recursion
+#### 递归
 
-The time complexity of a recursive function depends on the number of times the function is called and the time complexity of a single call. The total time complexity is the product of these values.
+递归函数的时间复杂度取决于该函数被调用的次数以及单次调用的时间复杂度。总的时间复杂度是这两个值的乘积。
 
-For example, consider the following function:
+例如，考虑以下函数：
 
 ```cpp
 void f(int n) {
@@ -109,9 +109,9 @@ void f(int n) {
 }
 ```
 
-The call $\texttt{f}(n)$ causes $n$ function calls, and the time complexity of each call is $O(1)$. Thus, the total time complexity is $O(n)$.
+调用 $\texttt{f}(n)$ 会引发 $n$ 次函数调用，而每次调用的时间复杂度是 $O(1)$。因此，总的时间复杂度是 $O(n)$。
 
-As another example, consider the following function:
+再举一例，考虑以下函数：
 
 ```cpp
 void g(int n) {
@@ -121,9 +121,9 @@ void g(int n) {
 }
 ```
 
-In this case each function call generates two other calls, except for $n=1$. Let us see what happens when $g$ is called with parameter $n$. The following table shows the function calls produced by this single call:
+在这种情况下，除 $n=1$ 外，每次函数调用都会产生另外两次调用。让我们看看当以参数 $n$ 调用 $g$ 时会发生什么。下表展示了由这一次调用所产生的函数调用：
 
-| function call | number of calls |
+| 函数调用 | 调用次数 |
 |--------------:|----------------:|
 |        $g(n)$ |               1 |
 |      $g(n-1)$ |               2 |
@@ -131,90 +131,90 @@ In this case each function call generates two other calls, except for $n=1$. Let
 |      $\cdots$ |        $\cdots$ |
 |        $g(1)$ |       $2^{n-1}$ |
 
-Based on this, the time complexity is $$1+2+4+\cdots+2^{n-1} = 2^n-1 = O(2^n).$$
+据此，时间复杂度为 $$1+2+4+\cdots+2^{n-1} = 2^n-1 = O(2^n).$$
 
-## Complexity classes
+## 复杂度类
 
-The following list contains common time complexities of algorithms:
+以下列表列出了算法常见的时间复杂度：
 
 $O(1)$
 
-: The running time of a **constant-time** algorithm does not depend on the input size. A typical constant-time algorithm is a direct formula that calculates the answer.
+: **常数时间**算法的运行时间不依赖于输入规模。典型的常数时间算法是直接计算答案的公式。
 
 $O(\log n)$
 
-: A **logarithmic** algorithm often halves the input size at each step. The running time of such an algorithm is logarithmic, because $\log_2 n$ equals the number of times $n$ must be divided by 2 to get 1.
+: **对数**算法通常在每一步把输入规模减半。这类算法的运行时间是对数级的，因为 $\log_2 n$ 等于把 $n$ 反复除以 2 直到得到 1 所需的次数。
 
 $O(\sqrt n)$
 
-: A **square root algorithm** is slower than $O(\log n)$ but faster than $O(n)$. A special property of square roots is that $\sqrt n = n/\sqrt n$, so the square root $\sqrt n$ lies, in some sense, in the middle of the input.
+: **平方根算法**比 $O(\log n)$ 慢，但比 $O(n)$ 快。平方根的一个特殊性质是 $\sqrt n = n/\sqrt n$，因此在某种意义上，平方根 $\sqrt n$ 处在输入的中间位置。
 
 $O(n)$
 
-: A **linear** algorithm goes through the input a constant number of times. This is often the best possible time complexity, because it is usually necessary to access each input element at least once before reporting the answer.
+: **线性**算法以常数次数遍历输入。这通常是最优可能的时间复杂度，因为在给出答案之前，通常至少需要访问每个输入元素一次。
 
 $O(n \log n)$
 
-: This time complexity often indicates that the algorithm sorts the input, because the time complexity of efficient sorting algorithms is $O(n \log n)$. Another possibility is that the algorithm uses a data structure where each operation takes $O(\log n)$ time.
+: 这个时间复杂度通常表明算法对输入进行了排序，因为高效排序算法的时间复杂度就是 $O(n \log n)$。另一种可能的情况是算法使用了一个每次操作耗时 $O(\log n)$ 的数据结构。
 
 $O(n^2)$
 
-: A **quadratic** algorithm often contains two nested loops. It is possible to go through all pairs of the input elements in $O(n^2)$ time.
+: **平方**算法通常包含两重嵌套循环。可以在 $O(n^2)$ 时间内遍历输入元素的所有点对。
 
 $O(n^3)$
 
-: A **cubic** algorithm often contains three nested loops. It is possible to go through all triplets of the input elements in $O(n^3)$ time.
+: **立方**算法通常包含三重嵌套循环。可以在 $O(n^3)$ 时间内遍历输入元素的所有三元组。
 
 $O(2^n)$
 
-: This time complexity often indicates that the algorithm iterates through all subsets of the input elements. For example, the subsets of $\{1,2,3\}$ are $\emptyset$, $\{1\}$, $\{2\}$, $\{3\}$, $\{1,2\}$, $\{1,3\}$, $\{2,3\}$ and $\{1,2,3\}$.
+: 这个时间复杂度通常表明算法遍历了输入元素的所有子集。例如，$\{1,2,3\}$ 的子集有 $\emptyset$、$\{1\}$、$\{2\}$、$\{3\}$、$\{1,2\}$、$\{1,3\}$、$\{2,3\}$ 和 $\{1,2,3\}$。
 
 $O(n!)$
 
-: This time complexity often indicates that the algorithm iterates through all permutations of the input elements. For example, the permutations of $\{1,2,3\}$ are $(1,2,3)$, $(1,3,2)$, $(2,1,3)$, $(2,3,1)$, $(3,1,2)$ and $(3,2,1)$.
+: 这个时间复杂度通常表明算法遍历了输入元素的所有排列。例如，$\{1,2,3\}$ 的排列有 $(1,2,3)$、$(1,3,2)$、$(2,1,3)$、$(2,3,1)$、$(3,1,2)$ 和 $(3,2,1)$。
 
-An algorithm is **polynomial** if its time complexity is at most $O(n^k)$ where $k$ is a constant. All the above time complexities except $O(2^n)$ and $O(n!)$ are polynomial. In practice, the constant $k$ is usually small, and therefore a polynomial time complexity roughly means that the algorithm is *efficient*.
+如果一个算法的时间复杂度至多为 $O(n^k)$，其中 $k$ 是常数，那么该算法是**多项式**的。除 $O(2^n)$ 和 $O(n!)$ 外，上述所有时间复杂度都是多项式的。在实践中，常数 $k$ 通常很小，因此多项式时间复杂度大致意味着该算法是*高效的*。
 
-Most algorithms in this book are polynomial. Still, there are many important problems for which no polynomial algorithm is known, i.e., nobody knows how to solve them efficiently. **NP-hard** problems are an important set of problems, for which no polynomial algorithm is known[^1].
+本书中的大多数算法都是多项式的。尽管如此，仍有许多重要问题尚未找到多项式算法，也就是说，没有人知道如何高效地解决它们。**NP-hard** 问题是一类重要的问题，对于这些问题尚未找到多项式算法[^1]。
 
-## Estimating efficiency
+## 估算效率
 
-By calculating the time complexity of an algorithm, it is possible to check, before implementing the algorithm, that it is efficient enough for the problem. The starting point for estimations is the fact that a modern computer can perform some hundreds of millions of operations in a second.
+通过计算一个算法的时间复杂度，可以在实现该算法之前就检验它是否足够高效。估算的出发点是这样一个事实：现代计算机每秒可以执行数亿次操作。
 
-For example, assume that the time limit for a problem is one second and the input size is $n=10^5$. If the time complexity is $O(n^2)$, the algorithm will perform about $(10^5)^2=10^{10}$ operations. This should take at least some tens of seconds, so the algorithm seems to be too slow for solving the problem.
+例如，假设一道题的时间限制是一秒，输入规模为 $n=10^5$。如果时间复杂度是 $O(n^2)$，算法大约会执行 $(10^5)^2=10^{10}$ 次操作。这至少需要数十秒，因此对于解决该问题来说，这个算法似乎太慢了。
 
-On the other hand, given the input size, we can try to *guess* the required time complexity of the algorithm that solves the problem. The following table contains some useful estimates assuming a time limit of one second.
+另一方面，给定输入规模，我们可以尝试*猜测*解决该问题所需的时间复杂度。下表列出了一些有用的估算，假设时间限制为一秒。
 
-| input size   | required time complexity |
+| 输入规模     | 所需时间复杂度           |
 |:-------------|:-------------------------|
 | $n \le 10$   | $O(n!)$                  |
 | $n \le 20$   | $O(2^n)$                 |
 | $n \le 500$  | $O(n^3)$                 |
 | $n \le 5000$ | $O(n^2)$                 |
-| $n \le 10^6$ | $O(n \log n)$ or $O(n)$  |
-| $n$ is large | $O(1)$ or $O(\log n)$    |
+| $n \le 10^6$ | $O(n \log n)$ 或 $O(n)$  |
+| $n$ 很大     | $O(1)$ 或 $O(\log n)$    |
 
-For example, if the input size is $n=10^5$, it is probably expected that the time complexity of the algorithm is $O(n)$ or $O(n \log n)$. This information makes it easier to design the algorithm, because it rules out approaches that would yield an algorithm with a worse time complexity.
+例如，如果输入规模是 $n=10^5$，那么预期的算法时间复杂度很可能是 $O(n)$ 或 $O(n \log n)$。这一信息让设计算法变得更加容易，因为它排除了那些会导致时间复杂度更差的算法方案。
 
-Still, it is important to remember that a time complexity is only an estimate of efficiency, because it hides the *constant factors*. For example, an algorithm that runs in $O(n)$ time may perform $n/2$ or $5n$ operations. This has an important effect on the actual running time of the algorithm.
+不过，重要的是要记住，时间复杂度只是对效率的一种估算，因为它隐藏了*常数因子*。例如，一个运行时间为 $O(n)$ 的算法可能执行 $n/2$ 或 $5n$ 次操作。这对算法的实际运行时间有很大影响。
 
-## Maximum subarray sum
+## 最大子数组和
 
-There are often several possible algorithms for solving a problem such that their time complexities are different. This section discusses a classic problem that has a straightforward $O(n^3)$ solution. However, by designing a better algorithm, it is possible to solve the problem in $O(n^2)$ time and even in $O(n)$ time.
+解决一个问题通常可能有多种算法，它们的时间复杂度各不相同。本节讨论一个经典问题，它有一个直接的 $O(n^3)$ 解法。然而，通过设计更好的算法，可以在 $O(n^2)$ 时间内解决该问题，甚至能在 $O(n)$ 时间内解决。
 
-Given an array of $n$ numbers, our task is to calculate the **maximum subarray sum**, i.e., the largest possible sum of a sequence of consecutive values in the array[^2]. The problem is interesting when there may be negative values in the array. For example, in the array
+给定一个包含 $n$ 个数字的数组，我们的任务是计算**最大子数组和**，也就是数组中一段连续元素可能取到的最大和[^2]。当数组中可能存在负值时，这个问题才有趣。例如，在数组
 
 ![](assets/images/ch02-fig01.svg)
 
-the following subarray produces the maximum sum $10$:
+中，以下子数组能给出最大和 $10$：
 
 ![](assets/images/ch02-fig02.svg)
 
-We assume that an empty subarray is allowed, so the maximum subarray sum is always at least $0$.
+我们假定允许空的子数组，因此最大子数组和总是至少为 $0$。
 
-#### Algorithm 1
+#### 算法 1
 
-A straightforward way to solve the problem is to go through all possible subarrays, calculate the sum of values in each subarray and maintain the maximum sum. The following code implements this algorithm:
+解决该问题的一种直接方法是遍历所有可能的子数组，计算每个子数组中各元素之和，并维护最大值。以下代码实现了该算法：
 
 ```cpp
 int best = 0;
@@ -230,13 +230,13 @@ for (int a = 0; a < n; a++) {
 cout << best << "\n";
 ```
 
-The variables `a` and `b` fix the first and last index of the subarray, and the sum of values is calculated to the variable `sum`. The variable `best` contains the maximum sum found during the search.
+变量 `a` 和 `b` 固定子数组的首尾下标，各元素之和被计算到变量 `sum` 中。变量 `best` 保存搜索过程中找到的最大和。
 
-The time complexity of the algorithm is $O(n^3)$, because it consists of three nested loops that go through the input.
+该算法的时间复杂度是 $O(n^3)$，因为它由三个遍历输入的嵌套循环组成。
 
-#### Algorithm 2
+#### 算法 2
 
-It is easy to make Algorithm 1 more efficient by removing one loop from it. This is possible by calculating the sum at the same time when the right end of the subarray moves. The result is the following code:
+只需从算法 1 中去除一层循环，就能轻松让它更高效。要做到这一点，可以在子数组右端移动的同时计算和。结果就是以下代码：
 
 ```cpp
 int best = 0;
@@ -250,21 +250,21 @@ for (int a = 0; a < n; a++) {
 cout << best << "\n";
 ```
 
-After this change, the time complexity is $O(n^2)$.
+经过这一改动，时间复杂度是 $O(n^2)$。
 
-#### Algorithm 3
+#### 算法 3
 
-Surprisingly, it is possible to solve the problem in $O(n)$ time[^3], which means that just one loop is enough. The idea is to calculate, for each array position, the maximum sum of a subarray that ends at that position. After this, the answer for the problem is the maximum of those sums.
+令人惊讶的是，可以在 $O(n)$ 时间内解决该问题[^3]，这意味着只用一层循环就够了。其思路是，为数组的每个位置计算以该位置结尾的子数组的最大和。此后，问题的答案就是这些和之中的最大值。
 
-Consider the subproblem of finding the maximum-sum subarray that ends at position $k$. There are two possibilities:
+考虑这样一个子问题：求以位置 $k$ 结尾的最大和子数组。有两种可能：
 
-1.  The subarray only contains the element at position $k$.
+1.  该子数组只包含位置 $k$ 处的元素。
 
-2.  The subarray consists of a subarray that ends at position $k-1$, followed by the element at position $k$.
+2.  该子数组由一个以位置 $k-1$ 结尾的子数组，再加上位置 $k$ 处的元素构成。
 
-In the latter case, since we want to find a subarray with maximum sum, the subarray that ends at position $k-1$ should also have the maximum sum. Thus, we can solve the problem efficiently by calculating the maximum subarray sum for each ending position from left to right.
+在后一种情况中，由于我们想找出和最大的子数组，那么以位置 $k-1$ 结尾的那个子数组也应当具有最大和。因此，我们可以从左到右为每个结尾位置计算最大子数组和，从而高效地解决该问题。
 
-The following code implements the algorithm:
+以下代码实现了该算法：
 
 ```cpp
 int best = 0, sum = 0;
@@ -275,15 +275,15 @@ for (int k = 0; k < n; k++) {
 cout << best << "\n";
 ```
 
-The algorithm only contains one loop that goes through the input, so the time complexity is $O(n)$. This is also the best possible time complexity, because any algorithm for the problem has to examine all array elements at least once.
+该算法只包含一层遍历输入的循环，因此时间复杂度是 $O(n)$。这也是最优可能的时间复杂度，因为任何解决该问题的算法都必须至少检查每个数组元素一次。
 
-#### Efficiency comparison
+#### 效率比较
 
-It is interesting to study how efficient algorithms are in practice. The following table shows the running times of the above algorithms for different values of $n$ on a modern computer.
+研究算法在实际中的效率是很有趣的。下表展示了上述各算法在现代计算机上针对不同 $n$ 值的运行时间。
 
-In each test, the input was generated randomly. The time needed for reading the input was not measured.
+在每次测试中，输入都是随机生成的。读取输入所需的时间没有被计入。
 
-| array size $n$ | Algorithm 1 | Algorithm 2 | Algorithm 3 |
+| 数组大小 $n$ | 算法 1 | 算法 2 | 算法 3 |
 |---------------:|------------:|------------:|------------:|
 |         $10^2$ |     $0.0$ s |     $0.0$ s |     $0.0$ s |
 |         $10^3$ |     $0.1$ s |     $0.0$ s |     $0.0$ s |
@@ -292,10 +292,10 @@ In each test, the input was generated randomly. The time needed for reading the 
 |         $10^6$ | \> $10.0$ s | \> $10.0$ s |     $0.0$ s |
 |         $10^7$ | \> $10.0$ s | \> $10.0$ s |     $0.0$ s |
 
-The comparison shows that all algorithms are efficient when the input size is small, but larger inputs bring out remarkable differences in the running times of the algorithms. Algorithm 1 becomes slow when $n=10^4$, and Algorithm 2 becomes slow when $n=10^5$. Only Algorithm 3 is able to process even the largest inputs instantly.
+这一比较表明，当输入规模较小时，所有算法都很高效；但更大的输入会让各算法在运行时间上呈现出显著差异。算法 1 在 $n=10^4$ 时变慢，算法 2 在 $n=10^5$ 时变慢。只有算法 3 能瞬间处理哪怕是最大的输入。
 
-[^1]: A classic book on the topic is M. R. Garey's and D. S. Johnson's *Computers and Intractability: A Guide to the Theory of NP-Completeness* [31].
+[^1]: 关于该主题的一本经典著作是 M. R. Garey 和 D. S. Johnson 的 *Computers and Intractability: A Guide to the Theory of NP-Completeness* [31]。
 
-[^2]: J. Bentley's book *Programming Pearls* [8] made the problem popular.
+[^2]: J. Bentley 的书 *Programming Pearls* [8] 让这个问题广为人知。
 
-[^3]: In [8], this linear-time algorithm is attributed to J. B. Kadane, and the algorithm is sometimes called **Kadane's algorithm**.
+[^3]: 在 [8] 中，这个线性时间算法被归功于 J. B. Kadane，该算法有时被称为 **Kadane 算法**。

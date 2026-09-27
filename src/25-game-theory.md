@@ -1,78 +1,78 @@
-# Game theory
+# 博弈论
 
-In this chapter, we will focus on two-player games that do not contain random elements. Our goal is to find a strategy that we can follow to win the game no matter what the opponent does, if such a strategy exists.
+在本章中，我们将关注不含随机元素的两人博弈。我们的目标是找到一种策略，使得无论对手如何行动，我们都能赢得游戏（如果这样的策略存在的话）。
 
-It turns out that there is a general strategy for such games, and we can analyze the games using the **nim theory**. First, we will analyze simple games where players remove sticks from heaps, and after this, we will generalize the strategy used in those games to other games.
+事实证明，这类博弈存在一种通用的策略，我们可以用 **nim 理论**来分析这些博弈。首先，我们将分析一些简单的博弈，其中玩家从堆中取走小木棍；之后，我们会把在这些博弈中用到的策略推广到其他博弈。
 
-## Game states
+## 博弈状态
 
-Let us consider a game where there is initially a heap of $n$ sticks. Players $A$ and $B$ move alternately, and player $A$ begins. On each move, the player has to remove 1, 2 or 3 sticks from the heap, and the player who removes the last stick wins the game.
+我们考虑这样一个博弈：初始时有一堆 $n$ 根小木棍。玩家 $A$ 和 $B$ 轮流行动，玩家 $A$ 先手。每一步，玩家必须从堆中取走 1、2 或 3 根小木棍，取走最后一根小木棍的玩家赢得游戏。
 
-For example, if $n=10$, the game may proceed as follows:
+例如，若 $n=10$，游戏可能这样进行：
 
-- Player $A$ removes 2 sticks (8 sticks left).
+- 玩家 $A$ 取走 2 根小木棍（剩 8 根）。
 
-- Player $B$ removes 3 sticks (5 sticks left).
+- 玩家 $B$ 取走 3 根小木棍（剩 5 根）。
 
-- Player $A$ removes 1 stick (4 sticks left).
+- 玩家 $A$ 取走 1 根小木棍（剩 4 根）。
 
-- Player $B$ removes 2 sticks (2 sticks left).
+- 玩家 $B$ 取走 2 根小木棍（剩 2 根）。
 
-- Player $A$ removes 2 sticks and wins.
+- 玩家 $A$ 取走 2 根小木棍并获胜。
 
-This game consists of states $0,1,2,\ldots,n$, where the number of the state corresponds to the number of sticks left.
+这个博弈由状态 $0,1,2,\ldots,n$ 组成，其中状态的编号对应剩余小木棍的数量。
 
-#### Winning and losing states
+#### 必胜态与必败态
 
-A **winning state** is a state where the player will win the game if they play optimally, and a **losing state** is a state where the player will lose the game if the opponent plays optimally. It turns out that we can classify all states of a game so that each state is either a winning state or a losing state.
+**必胜态**是指在双方都采用最优策略时当前玩家将赢得游戏的状态，而**必败态**是指在对手采用最优策略时当前玩家将输掉游戏的状态。事实证明，我们可以将博弈的所有状态分类，使每个状态要么是必胜态，要么是必败态。
 
-In the above game, state 0 is clearly a losing state, because the player cannot make any moves. States 1, 2 and 3 are winning states, because we can remove 1, 2 or 3 sticks and win the game. State 4, in turn, is a losing state, because any move leads to a state that is a winning state for the opponent.
+在上述博弈中，状态 0 显然是必败态，因为玩家无法做出任何行动。状态 1、2 和 3 是必胜态，因为我们可以取走 1、2 或 3 根小木棍并赢得游戏。而状态 4 是必败态，因为任何一步行动都会导致一个对对手而言是必胜态的状态。
 
-More generally, if there is a move that leads from the current state to a losing state, the current state is a winning state, and otherwise the current state is a losing state. Using this observation, we can classify all states of a game starting with losing states where there are no possible moves.
+更一般地，如果存在一步行动能从当前状态到达某个必败态，那么当前状态就是必胜态，否则当前状态就是必败态。利用这一观察，我们可以从没有可行行动的必败态开始，对博弈的所有状态进行分类。
 
-The states $0 \ldots 15$ of the above game can be classified as follows ($W$ denotes a winning state and $L$ denotes a losing state):
+上述博弈的状态 $0 \ldots 15$ 可以分类如下（$W$ 表示必胜态，$L$ 表示必败态）：
 
 ![](assets/images/ch25-fig01.svg)
 
-It is easy to analyze this game: a state $k$ is a losing state if $k$ is divisible by 4, and otherwise it is a winning state. An optimal way to play the game is to always choose a move after which the number of sticks in the heap is divisible by 4. Finally, there are no sticks left and the opponent has lost.
+这个博弈很容易分析：状态 $k$ 是必败态，当且仅当 $k$ 能被 4 整除，否则它就是必胜态。最优的玩法是始终选择一步行动，使得行动之后堆中小木棍的数量能被 4 整除。最终，堆中不再有小木棍，对手输掉游戏。
 
-Of course, this strategy requires that the number of sticks is *not* divisible by 4 when it is our move. If it is, there is nothing we can do, and the opponent will win the game if they play optimally.
+当然，这个策略要求轮到我们行动时小木棍的数量*不*能被 4 整除。如果能被整除，我们无能为力，对手只要采用最优策略就会赢得游戏。
 
-#### State graph
+#### 状态图
 
-Let us now consider another stick game, where in each state $k$, it is allowed to remove any number $x$ of sticks such that $x$ is smaller than $k$ and divides $k$. For example, in state 8 we may remove 1, 2 or 4 sticks, but in state 7 the only allowed move is to remove 1 stick.
+现在考虑另一个取小木棍的博弈：在每个状态 $k$ 中，允许取走任意数量 $x$ 根小木棍，只要 $x$ 小于 $k$ 且能整除 $k$。例如，在状态 8 中我们可以取走 1、2 或 4 根小木棍，但在状态 7 中唯一允许的行动是取走 1 根小木棍。
 
-The following picture shows the states $1 \ldots 9$ of the game as a **state graph**, whose nodes are the states and edges are the moves between them:
+下面的图片把这个博弈的状态 $1 \ldots 9$ 表示为一个**状态图**，其结点是各个状态，边是状态之间的行动：
 
 ![](assets/images/ch25-fig02.svg)
 
-The final state in this game is always state 1, which is a losing state, because there are no valid moves. The classification of states $1 \ldots 9$ is as follows:
+这个博弈的最终状态总是状态 1，它是一个必败态，因为没有合法的行动。状态 $1 \ldots 9$ 的分类如下：
 
 ![](assets/images/ch25-fig03.svg)
 
-Surprisingly, in this game, all even-numbered states are winning states, and all odd-numbered states are losing states.
+令人惊讶的是，在这个博弈中，所有编号为偶数的状态都是必胜态，而所有编号为奇数的状态都是必败态。
 
-## Nim game
+## Nim 博弈
 
-The **nim game** is a simple game that has an important role in game theory, because many other games can be played using the same strategy. First, we focus on nim, and then we generalize the strategy to other games.
+**nim 博弈**是一个简单的博弈，它在博弈论中有着重要的地位，因为许多其他博弈都可以用相同的策略来玩。首先，我们聚焦于 nim，然后把这个策略推广到其他博弈。
 
-There are $n$ heaps in nim, and each heap contains some number of sticks. The players move alternately, and on each turn, the player chooses a heap that still contains sticks and removes any number of sticks from it. The winner is the player who removes the last stick.
+nim 中有 $n$ 堆，每堆包含若干根小木棍。玩家轮流行动，每一轮，玩家选择一堆仍含有小木棍的堆，并从中取走任意数量的小木棍。取走最后一根小木棍的玩家获胜。
 
-The states in nim are of the form $[x_1,x_2,\ldots,x_n]$, where $x_k$ denotes the number of sticks in heap $k$. For example, $[10,12,5]$ is a game where there are three heaps with 10, 12 and 5 sticks. The state $[0,0,\ldots,0]$ is a losing state, because it is not possible to remove any sticks, and this is always the final state.
+nim 中的状态形如 $[x_1,x_2,\ldots,x_n]$，其中 $x_k$ 表示第 $k$ 堆中小木棍的数量。例如，$[10,12,5]$ 是一个有三堆、分别含 10、12 和 5 根小木棍的博弈。状态 $[0,0,\ldots,0]$ 是必败态，因为无法再取走任何小木棍，而且它总是最终状态。
 
-#### Analysis
+#### 分析
 
-It turns out that we can easily classify any nim state by calculating the **nim sum** $s = x_1 \oplus x_2 \oplus \cdots \oplus x_n$, where $\oplus$ is the xor operation[^1]. The states whose nim sum is 0 are losing states, and all other states are winning states. For example, the nim sum of $[10,12,5]$ is $10 \oplus 12 \oplus 5 = 3$, so the state is a winning state.
+事实证明，我们可以通过计算 **nim 和** $s = x_1 \oplus x_2 \oplus \cdots \oplus x_n$ 来轻松地对任意 nim 状态进行分类，其中 $\oplus$ 是异或运算[^1]。nim 和为 0 的状态是必败态，其他所有状态都是必胜态。例如，$[10,12,5]$ 的 nim 和为 $10 \oplus 12 \oplus 5 = 3$，所以该状态是必胜态。
 
-But how is the nim sum related to the nim game? We can explain this by looking at how the nim sum changes when the nim state changes.
+但 nim 和与 nim 博弈之间有什么关系呢？我们可以通过考察 nim 状态变化时 nim 和如何变化来解释这一点。
 
-*Losing states:* The final state $[0,0,\ldots,0]$ is a losing state, and its nim sum is 0, as expected. In other losing states, any move leads to a winning state, because when a single value $x_k$ changes, the nim sum also changes, so the nim sum is different from 0 after the move.
+*必败态：* 最终状态 $[0,0,\ldots,0]$ 是必败态，其 nim 和为 0，符合预期。在其他必败态中，任何行动都会导致必胜态，因为当单个值 $x_k$ 改变时，nim 和也随之改变，所以行动后 nim 和不再等于 0。
 
-*Winning states:* We can move to a losing state if there is any heap $k$ for which $x_k \oplus s < x_k$. In this case, we can remove sticks from heap $k$ so that it will contain $x_k \oplus s$ sticks, which will lead to a losing state. There is always such a heap, where $x_k$ has a one bit at the position of the leftmost one bit of $s$.
+*必胜态：* 如果存在某一堆 $k$ 满足 $x_k \oplus s < x_k$，我们就可以移动到必败态。在这种情况下，我们可以从第 $k$ 堆中取走小木棍，使其含有 $x_k \oplus s$ 根小木棍，从而到达一个必败态。这样的堆总是存在的，其中 $x_k$ 在 $s$ 最左侧的 1 位所在位置上也是 1。
 
-As an example, consider the state $[10,12,5]$. This state is a winning state, because its nim sum is 3. Thus, there has to be a move which leads to a losing state. Next we will find out such a move.
+作为例子，考虑状态 $[10,12,5]$。该状态是必胜态，因为它的 nim 和为 3。因此，必然存在一步能到达必败态的行动。接下来我们将找出这样的一步行动。
 
-The nim sum of the state is as follows:
+该状态的 nim 和如下：
 
 |     |        |
 |----:|-------:|
@@ -81,7 +81,7 @@ The nim sum of the state is as follows:
 |   5 | `0101` |
 |   3 | `0011` |
 
-In this case, the heap with 10 sticks is the only heap that has a one bit at the position of the leftmost one bit of the nim sum:
+在这个例子中，含有 10 根小木棍的那一堆是唯一一个在 nim 和最左侧的 1 位所在位置上也含有 1 的堆：
 
 |     |                          |
 |----:|-------------------------:|
@@ -90,7 +90,7 @@ In this case, the heap with 10 sticks is the only heap that has a one bit at the
 |   5 |                   `0101` |
 |   3 | `00``1``1` |
 
-The new size of the heap has to be $10 \oplus 3 = 9$, so we will remove just one stick. After this, the state will be $[9,12,5]$, which is a losing state:
+该堆的新大小必须是 $10 \oplus 3 = 9$，所以我们只取走一根小木棍。之后，状态变为 $[9,12,5]$，这是一个必败态：
 
 |     |        |
 |----:|-------:|
@@ -99,93 +99,93 @@ The new size of the heap has to be $10 \oplus 3 = 9$, so we will remove just one
 |   5 | `0101` |
 |   0 | `0000` |
 
-#### Misère game
+#### 反博弈
 
-In a **misère game**, the goal of the game is opposite, so the player who removes the last stick loses the game. It turns out that the misère nim game can be optimally played almost like the standard nim game.
+在**反博弈**中，游戏的目标是相反的，因此取走最后一根小木棍的玩家输掉游戏。事实证明，反 nim 博弈的最优玩法与标准 nim 博弈几乎没有区别。
 
-The idea is to first play the misère game like the standard game, but change the strategy at the end of the game. The new strategy will be introduced in a situation where each heap would contain at most one stick after the next move.
+思路是首先像标准博弈一样玩反博弈，但在游戏接近尾声时改变策略。新策略将在下一步行动后每堆至多含有一根小木棍的局面下引入。
 
-In the standard game, we should choose a move after which there is an even number of heaps with one stick. However, in the misère game, we choose a move so that there is an odd number of heaps with one stick.
+在标准博弈中，我们应该选择一步行动，使得行动之后含有一根小木棍的堆的数量为偶数。然而，在反博弈中，我们选择一步行动，使得含有一根小木棍的堆的数量为奇数。
 
-This strategy works because a state where the strategy changes always appears in the game, and this state is a winning state, because it contains exactly one heap that has more than one stick so the nim sum is not 0.
+这个策略之所以有效，是因为策略发生改变的这样一种状态在游戏中总会出现，而且该状态是必胜态，因为它恰好含有一堆超过一根小木棍的堆，所以 nim 和不为 0。
 
-## Sprague--Grundy theorem
+## Sprague--Grundy 定理
 
-The **Sprague--Grundy theorem**[^2] generalizes the strategy used in nim to all games that fulfil the following requirements:
+**Sprague--Grundy 定理**[^2]把 nim 中用到的策略推广到所有满足以下要求的博弈：
 
-- There are two players who move alternately.
+- 有两名玩家轮流行动。
 
-- The game consists of states, and the possible moves in a state do not depend on whose turn it is.
+- 博弈由状态组成，某个状态下可行的行动不依赖于轮到谁行动。
 
-- The game ends when a player cannot make a move.
+- 当某位玩家无法行动时，博弈结束。
 
-- The game surely ends sooner or later.
+- 博弈必然会在某个时刻结束。
 
-- The players have complete information about the states and allowed moves, and there is no randomness in the game.
+- 玩家对状态和允许的行动拥有完全信息，且博弈中没有随机性。
 
-The idea is to calculate for each game state a Grundy number that corresponds to the number of sticks in a nim heap. When we know the Grundy numbers of all states, we can play the game like the nim game.
+其思路是为每个博弈状态计算一个 Grundy 数，它对应于 nim 中某一堆的小木棍数量。当我们知道所有状态的 Grundy 数后，就可以像玩 nim 博弈一样玩这个博弈。
 
-#### Grundy numbers
+#### Grundy 数
 
-The **Grundy number** of a game state is $$\textrm{mex}(\{g_1,g_2,\ldots,g_n\}),$$ where $g_1,g_2,\ldots,g_n$ are the Grundy numbers of the states to which we can move, and the mex function gives the smallest nonnegative number that is not in the set. For example, $\textrm{mex}(\{0,1,3\})=2$. If there are no possible moves in a state, its Grundy number is 0, because $\textrm{mex}(\emptyset)=0$.
+一个博弈状态的 **Grundy 数**是 $$\textrm{mex}(\{g_1,g_2,\ldots,g_n\}),$$ 其中 $g_1,g_2,\ldots,g_n$ 是我们能够到达的那些状态的 Grundy 数，而 mex 函数给出不在该集合中的最小非负整数。例如，$\textrm{mex}(\{0,1,3\})=2$。如果某个状态没有可行的行动，它的 Grundy 数为 0，因为 $\textrm{mex}(\emptyset)=0$。
 
-For example, in the state graph
+例如，在如下状态图中
 
 ![](assets/images/ch25-fig04.svg)
 
-the Grundy numbers are as follows:
+Grundy 数如下：
 
 ![](assets/images/ch25-fig05.svg)
 
-The Grundy number of a losing state is 0, and the Grundy number of a winning state is a positive number.
+必败态的 Grundy 数为 0，而必胜态的 Grundy 数为一个正数。
 
-The Grundy number of a state corresponds to the number of sticks in a nim heap. If the Grundy number is 0, we can only move to states whose Grundy numbers are positive, and if the Grundy number is $x>0$, we can move to states whose Grundy numbers include all numbers $0,1,\ldots,x-1$.
+一个状态的 Grundy 数对应于 nim 中某一堆的小木棍数量。如果 Grundy 数为 0，我们只能移动到 Grundy 数为正数的状态；如果 Grundy 数为 $x>0$，我们则可以移动到 Grundy 数包含所有数 $0,1,\ldots,x-1$ 的那些状态。
 
-As an example, consider a game where the players move a figure in a maze. Each square in the maze is either floor or wall. On each turn, the player has to move the figure some number of steps left or up. The winner of the game is the player who makes the last move.
+作为例子，考虑这样一个博弈：玩家在迷宫中移动一个图形。迷宫中的每个方格要么是地板，要么是墙。每一轮，玩家必须把图形向左或向上移动若干步。做出最后一步行动的玩家赢得游戏。
 
-The following picture shows a possible initial state of the game, where @ denotes the figure and \* denotes a square where it can move.
+下面的图片展示了该博弈的一个可能的初始状态，其中 @ 表示图形，\* 表示它可以移动到的方格。
 
 ![](assets/images/ch25-fig06.svg)
 
-The states of the game are all floor squares of the maze. In the above maze, the Grundy numbers are as follows:
+该博弈的状态是迷宫中所有的地板方格。在上述迷宫中，Grundy 数如下：
 
 ![](assets/images/ch25-fig07.svg)
 
-Thus, each state of the maze game corresponds to a heap in the nim game. For example, the Grundy number for the lower-right square is 2, so it is a winning state. We can reach a losing state and win the game by moving either four steps left or two steps up.
+因此，迷宫博弈的每个状态都对应于 nim 博弈中的一堆。例如，右下角方格的 Grundy 数为 2，所以它是必胜态。我们可以通过向左移动四步或向上移动两步到达必败态并赢得游戏。
 
-Note that unlike in the original nim game, it may be possible to move to a state whose Grundy number is larger than the Grundy number of the current state. However, the opponent can always choose a move that cancels such a move, so it is not possible to escape from a losing state.
+注意，与原始的 nim 博弈不同，这里可能可以移动到一个 Grundy 数比当前状态更大的状态。然而，对手总能选择一步行动来抵消这样的一步，所以不可能从必败态中逃脱。
 
-#### Subgames
+#### 子博弈
 
-Next we will assume that our game consists of subgames, and on each turn, the player first chooses a subgame and then a move in the subgame. The game ends when it is not possible to make any move in any subgame.
+接下来我们假设博弈由若干子博弈组成，每一轮玩家先选择一个子博弈，再在该子博弈中选择一步行动。当无法在任何子博弈中行动时，博弈结束。
 
-In this case, the Grundy number of a game is the nim sum of the Grundy numbers of the subgames. The game can be played like a nim game by calculating all Grundy numbers for subgames and then their nim sum.
+在这种情况下，一个博弈的 Grundy 数就是各子博弈 Grundy 数的 nim 和。通过计算所有子博弈的 Grundy 数再求它们的 nim 和，就可以像玩 nim 博弈一样玩这个博弈。
 
-As an example, consider a game that consists of three mazes. In this game, on each turn, the player chooses one of the mazes and then moves the figure in the maze. Assume that the initial state of the game is as follows:
+作为例子，考虑一个由三个迷宫组成的博弈。在这个博弈中，每一轮玩家选择一个迷宫，然后在该迷宫中移动图形。假设博弈的初始状态如下：
 
 |  |  |  |
 |:--:|:--:|:--:|
 | ![](assets/images/ch25-fig08.svg) | ![](assets/images/ch25-fig09.svg) | ![](assets/images/ch25-fig10.svg) |
 
-The Grundy numbers for the mazes are as follows:
+各迷宫的 Grundy 数如下：
 
 |  |  |  |
 |:--:|:--:|:--:|
 | ![](assets/images/ch25-fig11.svg) | ![](assets/images/ch25-fig12.svg) | ![](assets/images/ch25-fig13.svg) |
 
-In the initial state, the nim sum of the Grundy numbers is $2 \oplus 3 \oplus 3 = 2$, so the first player can win the game. One optimal move is to move two steps up in the first maze, which produces the nim sum $0 \oplus 3 \oplus 3 = 0$.
+在初始状态中，各 Grundy 数的 nim 和为 $2 \oplus 3 \oplus 3 = 2$，所以先手玩家可以赢得游戏。一步最优行动是在第一个迷宫中向上移动两步，这样产生的 nim 和为 $0 \oplus 3 \oplus 3 = 0$。
 
-#### Grundy's game
+#### Grundy 博弈
 
-Sometimes a move in a game divides the game into subgames that are independent of each other. In this case, the Grundy number of the game is
+有时，一步行动会把博弈分成若干个相互独立的子博弈。在这种情况下，博弈的 Grundy 数为
 
-$$\textrm{mex}(\{g_1, g_2, \ldots, g_n \}),$$ where $n$ is the number of possible moves and $$g_k = a_{k,1} \oplus a_{k,2} \oplus \ldots \oplus a_{k,m},$$ where move $k$ generates subgames with Grundy numbers $a_{k,1},a_{k,2},\ldots,a_{k,m}$.
+$$\textrm{mex}(\{g_1, g_2, \ldots, g_n \}),$$ 其中 $n$ 是可行行动的数量，且 $$g_k = a_{k,1} \oplus a_{k,2} \oplus \ldots \oplus a_{k,m},$$ 其中行动 $k$ 生成的子博弈的 Grundy 数为 $a_{k,1},a_{k,2},\ldots,a_{k,m}$。
 
-An example of such a game is **Grundy's game**. Initially, there is a single heap that contains $n$ sticks. On each turn, the player chooses a heap and divides it into two nonempty heaps such that the heaps are of different size. The player who makes the last move wins the game.
+这样的博弈的一个例子是 **Grundy 博弈**。初始时有一个含有 $n$ 根小木棍的堆。每一轮，玩家选择一个堆，把它分成两个非空且大小不同的堆。做出最后一步行动的玩家赢得游戏。
 
-Let $f(n)$ be the Grundy number of a heap that contains $n$ sticks. The Grundy number can be calculated by going through all ways to divide the heap into two heaps. For example, when $n=8$, the possibilities are $1+7$, $2+6$ and $3+5$, so $$f(8)=\textrm{mex}(\{f(1) \oplus f(7), f(2) \oplus f(6), f(3) \oplus f(5)\}).$$
+设 $f(n)$ 为含有 $n$ 根小木棍的堆的 Grundy 数。可以通过枚举把该堆分成两个堆的所有方式来计算 Grundy 数。例如，当 $n=8$ 时，可能的方式有 $1+7$、$2+6$ 和 $3+5$，所以 $$f(8)=\textrm{mex}(\{f(1) \oplus f(7), f(2) \oplus f(6), f(3) \oplus f(5)\}).$$
 
-In this game, the value of $f(n)$ is based on the values of $f(1),\ldots,f(n-1)$. The base cases are $f(1)=f(2)=0$, because it is not possible to divide the heaps of 1 and 2 sticks. The first Grundy numbers are: $$\begin{array}{lcl}
+在这个博弈中，$f(n)$ 的值基于 $f(1),\ldots,f(n-1)$ 的值。基础情况是 $f(1)=f(2)=0$，因为无法拆分含 1 根和 2 根小木棍的堆。最初的 Grundy 数为：$$\begin{array}{lcl}
 f(1) & = & 0 \\
 f(2) & = & 0 \\
 f(3) & = & 1 \\
@@ -194,8 +194,8 @@ f(5) & = & 2 \\
 f(6) & = & 1 \\
 f(7) & = & 0 \\
 f(8) & = & 2 \\
-\end{array}$$ The Grundy number for $n=8$ is 2, so it is possible to win the game. The winning move is to create heaps $1+7$, because $f(1) \oplus f(7) = 0$.
+\end{array}$$ $n=8$ 时的 Grundy 数为 2，所以可以赢得游戏。获胜的行动是分成 $1+7$ 两个堆，因为 $f(1) \oplus f(7) = 0$。
 
-[^1]: The optimal strategy for nim was published in 1901 by C. L. Bouton [10].
+[^1]: nim 的最优策略由 C. L. Bouton 于 1901 年发表 [10]。
 
-[^2]: The theorem was independently discovered by R. Sprague [69] and P. M. Grundy [34].
+[^2]: 该定理由 R. Sprague [69] 和 P. M. Grundy [34] 各自独立发现。

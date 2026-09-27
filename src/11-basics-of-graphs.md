@@ -1,116 +1,116 @@
-# Basics of graphs
+# 图的基础
 
-Many programming problems can be solved by modeling the problem as a graph problem and using an appropriate graph algorithm. A typical example of a graph is a network of roads and cities in a country. Sometimes, though, the graph is hidden in the problem and it may be difficult to detect it.
+许多程序设计问题都可以通过把问题建模为图，并使用合适的图算法来解决。图的一个典型例子是国家中的道路与城市网络。不过，有时图隐藏在问题之中，可能很难被发现。
 
-This part of the book discusses graph algorithms, especially focusing on topics that are important in competitive programming. In this chapter, we go through concepts related to graphs, and study different ways to represent graphs in algorithms.
+本书的这一部分讨论图算法，尤其关注在竞赛程序设计中重要的主题。在本章中，我们梳理与图相关的概念，并研究在算法中表示图的不同方式。
 
-## Graph terminology
+## 图的基本术语
 
-A **graph** consists of **nodes** and **edges**. In this book, the variable $n$ denotes the number of nodes in a graph, and the variable $m$ denotes the number of edges. The nodes are numbered using integers $1,2,\ldots,n$.
+一个**图**由**结点**和**边**组成。在本书中，变量 $n$ 表示图中结点的数量，变量 $m$ 表示边的数量。结点用整数 $1,2,\ldots,n$ 编号。
 
-For example, the following graph consists of 5 nodes and 7 edges:
+例如，下面的图由 5 个结点和 7 条边组成：
 
 ![](assets/images/ch11-fig01.svg)
 
-A **path** leads from node $a$ to node $b$ through edges of the graph. The **length** of a path is the number of edges in it. For example, the above graph contains a path $1 \rightarrow 3 \rightarrow 4 \rightarrow 5$ of length 3 from node 1 to node 5:
+一条**路径**通过图中的边从结点 $a$ 通向结点 $b$。路径的**长度**是其中边的数量。例如，上图包含一条从结点 1 到结点 5 的长度为 3 的路径 $1 \rightarrow 3 \rightarrow 4 \rightarrow 5$：
 
 ![](assets/images/ch11-fig02.svg)
 
-A path is a **cycle** if the first and last node is the same. For example, the above graph contains a cycle $1 \rightarrow 3 \rightarrow 4 \rightarrow 1$. A path is **simple** if each node appears at most once in the path.
+如果一条路径的第一个和最后一个结点相同，它就是一个**环**（cycle）。例如，上图包含一个环 $1 \rightarrow 3 \rightarrow 4 \rightarrow 1$。如果一条路径中每个结点最多出现一次，那么它是**简单**的。
 
-#### Connectivity
+#### 连通性
 
-A graph is **connected** if there is a path between any two nodes. For example, the following graph is connected:
+如果在任意两个结点之间都存在一条路径，那么这个图是**连通**的。例如，下面的图是连通的：
 
 ![](assets/images/ch11-fig03.svg)
 
-The following graph is not connected, because it is not possible to get from node 4 to any other node:
+下面的图不连通，因为无法从结点 4 到达任何其他结点：
 
 ![](assets/images/ch11-fig04.svg)
 
-The connected parts of a graph are called its **components**. For example, the following graph contains three components: $\{1,\,2,\,3\}$, $\{4,\,5,\,6,\,7\}$ and $\{8\}$.
+图的连通部分称为它的**连通分量**。例如，下面的图包含三个连通分量：$\{1,\,2,\,3\}$、$\{4,\,5,\,6,\,7\}$ 和 $\{8\}$。
 
 ![](assets/images/ch11-fig05.svg)
 
-A **tree** is a connected graph that consists of $n$ nodes and $n-1$ edges. There is a unique path between any two nodes of a tree. For example, the following graph is a tree:
+**树**是一个包含 $n$ 个结点和 $n-1$ 条边的连通图。树中任意两个结点之间都存在唯一的一条路径。例如，下面的图是一棵树：
 
 ![](assets/images/ch11-fig06.svg)
 
-#### Edge directions
+#### 边的方向
 
-A graph is **directed** if the edges can be traversed in one direction only. For example, the following graph is directed:
+如果边只能沿一个方向通行，那么这个图是**有向**的。例如，下面的图是有向的：
 
 ![](assets/images/ch11-fig07.svg)
 
-The above graph contains a path $3 \rightarrow 1 \rightarrow 2 \rightarrow 5$ from node $3$ to node $5$, but there is no path from node $5$ to node $3$.
+上图包含一条从结点 $3$ 到结点 $5$ 的路径 $3 \rightarrow 1 \rightarrow 2 \rightarrow 5$，但不存在从结点 $5$ 到结点 $3$ 的路径。
 
-#### Edge weights
+#### 边权
 
-In a **weighted** graph, each edge is assigned a **weight**. The weights are often interpreted as edge lengths. For example, the following graph is weighted:
+在**带权**图中，每条边都被赋予一个**权值**。权值通常被理解为边的长度。例如，下面的图是带权的：
 
 ![](assets/images/ch11-fig08.svg)
 
-The length of a path in a weighted graph is the sum of the edge weights on the path. For example, in the above graph, the length of the path $1 \rightarrow 2 \rightarrow 5$ is $12$, and the length of the path $1 \rightarrow 3 \rightarrow 4 \rightarrow 5$ is $11$. The latter path is the **shortest** path from node $1$ to node $5$.
+带权图中一条路径的长度是路径上各边权值之和。例如，在上图中，路径 $1 \rightarrow 2 \rightarrow 5$ 的长度是 $12$，路径 $1 \rightarrow 3 \rightarrow 4 \rightarrow 5$ 的长度是 $11$。后一条路径是从结点 $1$ 到结点 $5$ 的**最短路**。
 
-#### Neighbors and degrees
+#### 邻居与度数
 
-Two nodes are **neighbors** or **adjacent** if there is an edge between them. The **degree** of a node is the number of its neighbors. For example, in the following graph, the neighbors of node 2 are 1, 4 and 5, so its degree is 3.
+如果两个结点之间有一条边，那么它们是**邻居**或**相邻**的。一个结点的**度数**是它的邻居数量。例如，在下图中，结点 2 的邻居是 1、4 和 5，所以它的度数是 3。
 
 ![](assets/images/ch11-fig09.svg)
 
-The sum of degrees in a graph is always $2m$, where $m$ is the number of edges, because each edge increases the degree of exactly two nodes by one. For this reason, the sum of degrees is always even.
+图中所有结点的度数之和总是 $2m$，其中 $m$ 是边的数量，因为每条边恰好使两个结点的度数各增加一。因此，度数之和总是偶数。
 
-A graph is **regular** if the degree of every node is a constant $d$. A graph is **complete** if the degree of every node is $n-1$, i.e., the graph contains all possible edges between the nodes.
+如果每个结点的度数都是常数 $d$，那么这个图是**正则**的。如果每个结点的度数都是 $n-1$，即图中包含结点之间所有可能的边，那么这个图是**完全**的。
 
-In a directed graph, the **indegree** of a node is the number of edges that end at the node, and the **outdegree** of a node is the number of edges that start at the node. For example, in the following graph, the indegree of node 2 is 2, and the outdegree of node 2 is 1.
+在有向图中，一个结点的**入度**是以该结点为终点的边的数量，一个结点的**出度**是以该结点为起点的边的数量。例如，在下图中，结点 2 的入度是 2，出度是 1。
 
 ![](assets/images/ch11-fig10.svg)
 
-#### Colorings
+#### 着色
 
-In a **coloring** of a graph, each node is assigned a color so that no adjacent nodes have the same color.
+在图的**着色**中，每个结点被赋予一种颜色，使得任意两个相邻结点颜色都不同。
 
-A graph is **bipartite** if it is possible to color it using two colors. It turns out that a graph is bipartite exactly when it does not contain a cycle with an odd number of edges. For example, the graph
+如果可以用两种颜色对一个图着色，那么它是**二分图**。事实证明，一个图是二分图当且仅当它不包含边数为奇数的环。例如，图
 
 ![](assets/images/ch11-fig11.svg)
 
-is bipartite, because it can be colored as follows:
+是二分图，因为它可以按如下方式着色：
 
 ![](assets/images/ch11-fig12.svg)
 
-However, the graph
+然而，图
 
 ![](assets/images/ch11-fig13.svg)
 
-is not bipartite, because it is not possible to color the following cycle of three nodes using two colors:
+不是二分图，因为无法用两种颜色给下面这个由三个结点组成的环着色：
 
 ![](assets/images/ch11-fig14.svg)
 
-#### Simplicity
+#### 简单性
 
-A graph is **simple** if no edge starts and ends at the same node, and there are no multiple edges between two nodes. Often we assume that graphs are simple. For example, the following graph is *not* simple:
+如果一个图中没有起点和终点相同的边，且两个结点之间没有多条边，那么它是**简单**的。我们通常假设图是简单的。例如，下面的图*不是*简单的：
 
 ![](assets/images/ch11-fig15.svg)
 
-## Graph representation
+## 图的表示
 
-There are several ways to represent graphs in algorithms. The choice of a data structure depends on the size of the graph and the way the algorithm processes it. Next we will go through three common representations.
+在算法中有若干种表示图的方式。数据结构的选择取决于图的规模以及算法处理它的方式。接下来我们将介绍三种常见的表示方式。
 
-#### Adjacency list representation
+#### 邻接表表示
 
-In the adjacency list representation, each node $x$ in the graph is assigned an **adjacency list** that consists of nodes to which there is an edge from $x$. Adjacency lists are the most popular way to represent graphs, and most algorithms can be efficiently implemented using them.
+在邻接表表示中，图中每个结点 $x$ 都被赋予一个**邻接表**，其中包含从 $x$ 出发有边相连的结点。邻接表是表示图最常用的方式，大多数算法都可以借助它高效实现。
 
-A convenient way to store the adjacency lists is to declare an array of vectors as follows:
+存储邻接表的一种便捷方式是声明一个由 vector 组成的数组：
 
 ```cpp
 vector<int> adj[N];
 ```
 
-The constant $N$ is chosen so that all adjacency lists can be stored. For example, the graph
+常数 $N$ 的选取要使得所有邻接表都能被存储。例如，图
 
 ![](assets/images/ch11-fig16.svg)
 
-can be stored as follows:
+可以按如下方式存储：
 
 ```cpp
 adj[1].push_back(2);
@@ -120,19 +120,19 @@ adj[3].push_back(4);
 adj[4].push_back(1);
 ```
 
-If the graph is undirected, it can be stored in a similar way, but each edge is added in both directions.
+如果图是无向的，可以用类似的方式存储，只是每条边都要在两个方向上各添加一次。
 
-For a weighted graph, the structure can be extended as follows:
+对于带权图，该结构可以扩展如下：
 
 ```cpp
 vector<pair<int,int>> adj[N];
 ```
 
-In this case, the adjacency list of node $a$ contains the pair $(b,w)$ always when there is an edge from node $a$ to node $b$ with weight $w$. For example, the graph
+在这种情况下，只要存在一条从结点 $a$ 到结点 $b$、权值为 $w$ 的边，结点 $a$ 的邻接表中就会包含二元组 $(b,w)$。例如，图
 
 ![](assets/images/ch11-fig17.svg)
 
-can be stored as follows:
+可以按如下方式存储：
 
 ```cpp
 adj[1].push_back({2,5});
@@ -142,7 +142,7 @@ adj[3].push_back({4,5});
 adj[4].push_back({1,2});
 ```
 
-The benefit of using adjacency lists is that we can efficiently find the nodes to which we can move from a given node through an edge. For example, the following loop goes through all nodes to which we can move from node $s$:
+使用邻接表的好处是，我们可以高效地找出从给定结点出发，通过一条边可以到达的结点。例如，下面的循环遍历了从结点 $s$ 出发可以到达的所有结点：
 
 ```cpp
 for (auto u : adj[s]) {
@@ -150,47 +150,47 @@ for (auto u : adj[s]) {
 }
 ```
 
-#### Adjacency matrix representation
+#### 邻接矩阵表示
 
-An **adjacency matrix** is a two-dimensional array that indicates which edges the graph contains. We can efficiently check from an adjacency matrix if there is an edge between two nodes. The matrix can be stored as an array
+**邻接矩阵**是一个二维数组，用来表示图中包含哪些边。借助邻接矩阵，我们可以高效地判断两个结点之间是否存在一条边。该矩阵可以存储为一个数组
 
 ```cpp
 int adj[N][N];
 ```
 
-where each value $\texttt{adj}[a][b]$ indicates whether the graph contains an edge from node $a$ to node $b$. If the edge is included in the graph, then $\texttt{adj}[a][b]=1$, and otherwise $\texttt{adj}[a][b]=0$. For example, the graph
+其中每个值 $\texttt{adj}[a][b]$ 表示图中是否包含一条从结点 $a$ 到结点 $b$ 的边。如果图中包含这条边，则 $\texttt{adj}[a][b]=1$，否则 $\texttt{adj}[a][b]=0$。例如，图
 
 ![](assets/images/ch11-fig18.svg)
 
-can be represented as follows:
+可以表示如下：
 
 ![](assets/images/ch11-fig19.svg)
 
-If the graph is weighted, the adjacency matrix representation can be extended so that the matrix contains the weight of the edge if the edge exists. Using this representation, the graph
+如果图是带权的，邻接矩阵表示可以扩展为：当边存在时，矩阵中存放该边的权值。使用这种表示，图
 
 ![](assets/images/ch11-fig20.svg)
 
-corresponds to the following matrix:
+对应如下矩阵：
 
 ![](assets/images/ch11-fig21.svg)
 
-The drawback of the adjacency matrix representation is that the matrix contains $n^2$ elements, and usually most of them are zero. For this reason, the representation cannot be used if the graph is large.
+邻接矩阵表示的缺点是矩阵包含 $n^2$ 个元素，而其中大多数通常为零。因此，如果图很大，就不能使用这种表示。
 
-#### Edge list representation
+#### 边表表示
 
-An **edge list** contains all edges of a graph in some order. This is a convenient way to represent a graph if the algorithm processes all edges of the graph and it is not needed to find edges that start at a given node.
+**边表**按某种顺序包含图的所有边。如果算法需要处理图的所有边，而不需要找出从给定结点出发的边，那么这是表示图的一种便捷方式。
 
-The edge list can be stored in a vector
+边表可以存储在这样一个 vector 中：
 
 ```cpp
 vector<pair<int,int>> edges;
 ```
 
-where each pair $(a,b)$ denotes that there is an edge from node $a$ to node $b$. Thus, the graph
+其中每个二元组 $(a,b)$ 表示存在一条从结点 $a$ 到结点 $b$ 的边。因此，图
 
 ![](assets/images/ch11-fig22.svg)
 
-can be represented as follows:
+可以表示如下：
 
 ```cpp
 edges.push_back({1,2});
@@ -200,17 +200,17 @@ edges.push_back({3,4});
 edges.push_back({4,1});
 ```
 
-If the graph is weighted, the structure can be extended as follows:
+如果图是带权的，该结构可以扩展如下：
 
 ```cpp
 vector<tuple<int,int,int>> edges;
 ```
 
-Each element in this list is of the form $(a,b,w)$, which means that there is an edge from node $a$ to node $b$ with weight $w$. For example, the graph
+这个表中的每个元素都具有 $(a,b,w)$ 的形式，表示存在一条从结点 $a$ 到结点 $b$、权值为 $w$ 的边。例如，图
 
 ![](assets/images/ch11-fig23.svg)
 
-can be represented as follows[^1]:
+可以表示如下[^1]：
 
 ```cpp
 edges.push_back({1,2,5});
@@ -220,4 +220,4 @@ edges.push_back({3,4,5});
 edges.push_back({4,1,2});
 ```
 
-[^1]: In some older compilers, the function `make_tuple` must be used instead of the braces (for example, `make_tuple(1,2,5)` instead of `{1,2,5}`).
+[^1]: 在一些较旧的编译器中，必须使用函数 `make_tuple` 来代替花括号（例如用 `make_tuple(1,2,5)` 代替 `{1,2,5}`）。

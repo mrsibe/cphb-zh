@@ -1,20 +1,20 @@
-# Range queries
+# 区间查询
 
-In this chapter, we discuss data structures that allow us to efficiently process range queries. In a **range query**, our task is to calculate a value based on a subarray of an array. Typical range queries are:
+本章讨论能够高效处理区间查询的数据结构。在**区间查询**中，我们的任务是根据数组的某个子数组计算出一个值。典型的区间查询包括：
 
-- $\texttt{sum}_q(a,b)$: calculate the sum of values in range $[a,b]$
+- $\texttt{sum}_q(a,b)$：计算区间 $[a,b]$ 内各值之和
 
-- $\texttt{min}_q(a,b)$: find the minimum value in range $[a,b]$
+- $\texttt{min}_q(a,b)$：求区间 $[a,b]$ 内的最小值
 
-- $\texttt{max}_q(a,b)$: find the maximum value in range $[a,b]$
+- $\texttt{max}_q(a,b)$：求区间 $[a,b]$ 内的最大值
 
-For example, consider the range $[3,6]$ in the following array:
+例如，考虑以下数组中的区间 $[3,6]$：
 
 ![](assets/images/ch09-fig01.svg)
 
-In this case, $\texttt{sum}_q(3,6)=14$, $\texttt{min}_q(3,6)=1$ and $\texttt{max}_q(3,6)=6$.
+此时，$\texttt{sum}_q(3,6)=14$，$\texttt{min}_q(3,6)=1$，$\texttt{max}_q(3,6)=6$。
 
-A simple way to process range queries is to use a loop that goes through all array values in the range. For example, the following function can be used to process sum queries on an array:
+处理区间查询的一种简单方法是使用循环遍历区间内的所有数组值。例如，下面的函数可用于处理数组上的求和查询：
 
 ```cpp
 int sum(int a, int b) {
@@ -26,275 +26,149 @@ int sum(int a, int b) {
 }
 ```
 
-This function works in $O(n)$ time, where $n$ is the size of the array. Thus, we can process $q$ queries in $O(nq)$ time using the function. However, if both $n$ and $q$ are large, this approach is slow. Fortunately, it turns out that there are ways to process range queries much more efficiently.
+该函数在 $O(n)$ 时间内运行，其中 $n$ 是数组的大小。因此，使用该函数可以在 $O(nq)$ 时间内处理 $q$ 次查询。然而，如果 $n$ 和 $q$ 都很大，这种做法会很慢。幸运的是，事实证明有一些方法可以高效得多地处理区间查询。
 
-## Static array queries
+## 静态数组查询
 
-We first focus on a situation where the array is *static*, i.e., the array values are never updated between the queries. In this case, it suffices to construct a static data structure that tells us the answer for any possible query.
+我们首先关注数组是*静态*的情形，即在各次查询之间数组的值从不更新。在这种情况下，只需构造一个静态数据结构，就能给出任何可能查询的答案。
 
-#### Sum queries
+#### 求和查询
 
-We can easily process sum queries on a static array by constructing a **prefix sum array**. Each value in the prefix sum array equals the sum of values in the original array up to that position, i.e., the value at position $k$ is $\texttt{sum}_q(0,k)$. The prefix sum array can be constructed in $O(n)$ time.
+通过构造**前缀和数组**，我们可以轻松地处理静态数组上的求和查询。前缀和数组中的每个值都等于原数组中截至该位置的各值之和，即位置 $k$ 处的值为 $\texttt{sum}_q(0,k)$。前缀和数组可以在 $O(n)$ 时间内构造完成。
 
-For example, consider the following array:
+例如，考虑以下数组：
 
 ![](assets/images/ch09-fig02.svg)
 
-The corresponding prefix sum array is as follows:
+对应的前缀和数组如下：
 
 ![](assets/images/ch09-fig03.svg)
 
-Since the prefix sum array contains all values of $\texttt{sum}_q(0,k)$, we can calculate any value of $\texttt{sum}_q(a,b)$ in $O(1)$ time as follows: $$\texttt{sum}_q(a,b) = \texttt{sum}_q(0,b) - \texttt{sum}_q(0,a-1)$$ By defining $\texttt{sum}_q(0,-1)=0$, the above formula also holds when $a=0$.
+由于前缀和数组包含了 $\texttt{sum}_q(0,k)$ 的所有取值，我们可以按如下方式在 $O(1)$ 时间内计算出任意 $\texttt{sum}_q(a,b)$： $$\texttt{sum}_q(a,b) = \texttt{sum}_q(0,b) - \texttt{sum}_q(0,a-1)$$ 若定义 $\texttt{sum}_q(0,-1)=0$，则上述公式在 $a=0$ 时也成立。
 
-For example, consider the range $[3,6]$:
+例如，考虑区间 $[3,6]$：
 
 ![](assets/images/ch09-fig04.svg)
 
-In this case $\texttt{sum}_q(3,6)=8+6+1+4=19$. This sum can be calculated from two values of the prefix sum array:
+此时 $\texttt{sum}_q(3,6)=8+6+1+4=19$。这个和可以由前缀和数组中的两个值算出：
 
 ![](assets/images/ch09-fig05.svg)
 
-Thus, $\texttt{sum}_q(3,6)=\texttt{sum}_q(0,6)-\texttt{sum}_q(0,2)=27-8=19$.
+因此，$\texttt{sum}_q(3,6)=\texttt{sum}_q(0,6)-\texttt{sum}_q(0,2)=27-8=19$。
 
-It is also possible to generalize this idea to higher dimensions. For example, we can construct a two-dimensional prefix sum array that can be used to calculate the sum of any rectangular subarray in $O(1)$ time. Each sum in such an array corresponds to a subarray that begins at the upper-left corner of the array.
+这一思路也可以推广到更高维度。例如，我们可以构造一个二维前缀和数组，用它可以在 $O(1)$ 时间内算出任意矩形子数组的和。该数组中的每个和都对应一个从数组左上角开始的子数组。
 
-The following picture illustrates the idea:
+下图说明了这一思路：
 
 ![](assets/images/ch09-fig06.svg)
 
-The sum of the gray subarray can be calculated using the formula $$S(A) - S(B) - S(C) + S(D),$$ where $S(X)$ denotes the sum of values in a rectangular subarray from the upper-left corner to the position of $X$.
+灰色子数组的和可以用公式 $$S(A) - S(B) - S(C) + S(D),$$ 计算，其中 $S(X)$ 表示从左上角到 $X$ 所在位置的矩形子数组内各值之和。
 
-#### Minimum queries
+#### 最小值查询
 
-Minimum queries are more difficult to process than sum queries. Still, there is a quite simple $O(n \log n)$ time preprocessing method after which we can answer any minimum query in $O(1)$ time[^1]. Note that since minimum and maximum queries can be processed similarly, we can focus on minimum queries.
+最小值查询比求和查询更难处理。即便如此，仍有一种相当简单的 $O(n \log n)$ 时间预处理方法，之后我们就能在 $O(1)$ 时间内回答任意最小值查询[^1]。注意，由于最小值查询和最大值查询的处理方式类似，我们只需关注最小值查询。
 
-The idea is to precalculate all values of $\textrm{min}_q(a,b)$ where $b-a+1$ (the length of the range) is a power of two. For example, for the array
+思路是预先计算出所有这样的 $\textrm{min}_q(a,b)$：其中 $b-a+1$（区间的长度）是 2 的幂。例如，对于数组
 
 ![](assets/images/ch09-fig07.svg)
 
-the following values are calculated:
+会计算出以下各值：
 
-<table>
-<tbody>
-<tr>
-<td style="text-align: center;"><table>
-<thead>
-<tr>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="monospace">𝚖𝚒𝚗</mtext><mi>q</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\texttt{min}_q(a,b)</annotation></semantics></math></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">3</td>
-</tr>
-<tr>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">4</td>
-</tr>
-<tr>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">8</td>
-</tr>
-<tr>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">6</td>
-</tr>
-<tr>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">4</td>
-</tr>
-<tr>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">2</td>
-</tr>
-</tbody>
-</table></td>
-<td style="text-align: center;"><table>
-<thead>
-<tr>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="monospace">𝚖𝚒𝚗</mtext><mi>q</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\texttt{min}_q(a,b)</annotation></semantics></math></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-</tr>
-<tr>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">4</td>
-</tr>
-<tr>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">6</td>
-</tr>
-<tr>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">2</td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table></td>
-<td style="text-align: center;"><table>
-<thead>
-<tr>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math></th>
-<th style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="monospace">𝚖𝚒𝚗</mtext><mi>q</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\texttt{min}_q(a,b)</annotation></semantics></math></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">1</td>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">3</td>
-</tr>
-<tr>
-<td style="text-align: left;">2</td>
-<td style="text-align: left;">5</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">3</td>
-<td style="text-align: left;">6</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">4</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;">0</td>
-<td style="text-align: left;">7</td>
-<td style="text-align: left;">1</td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table></td>
-</tr>
-</tbody>
-</table>
+> **译者注**
+>
+> 原文将下面三个小表并排排版，从左到右分别对应区间长度为 $1$、$2$、$4$ 的情形。
 
-The number of precalculated values is $O(n \log n)$, because there are $O(\log n)$ range lengths that are powers of two. The values can be calculated efficiently using the recursive formula $$\texttt{min}_q(a,b) = \min(\texttt{min}_q(a,a+w-1),\texttt{min}_q(a+w,b)),$$ where $b-a+1$ is a power of two and $w=(b-a+1)/2$. Calculating all those values takes $O(n \log n)$ time.
+| $a$ | $b$ | $\texttt{min}_q(a,b)$ |
+| --- | --- | --- |
+| 0 | 0 | 1 |
+| 1 | 1 | 3 |
+| 2 | 2 | 4 |
+| 3 | 3 | 8 |
+| 4 | 4 | 6 |
+| 5 | 5 | 1 |
+| 6 | 6 | 4 |
+| 7 | 7 | 2 |
 
-After this, any value of $\texttt{min}_q(a,b)$ can be calculated in $O(1)$ time as a minimum of two precalculated values. Let $k$ be the largest power of two that does not exceed $b-a+1$. We can calculate the value of $\texttt{min}_q(a,b)$ using the formula $$\texttt{min}_q(a,b) = \min(\texttt{min}_q(a,a+k-1),\texttt{min}_q(b-k+1,b)).$$ In the above formula, the range $[a,b]$ is represented as the union of the ranges $[a,a+k-1]$ and $[b-k+1,b]$, both of length $k$.
+| $a$ | $b$ | $\texttt{min}_q(a,b)$ |
+| --- | --- | --- |
+| 0 | 1 | 1 |
+| 1 | 2 | 3 |
+| 2 | 3 | 4 |
+| 3 | 4 | 6 |
+| 4 | 5 | 1 |
+| 5 | 6 | 1 |
+| 6 | 7 | 2 |
 
-As an example, consider the range $[1,6]$:
+| $a$ | $b$ | $\texttt{min}_q(a,b)$ |
+| --- | --- | --- |
+| 0 | 3 | 1 |
+| 1 | 4 | 3 |
+| 2 | 5 | 1 |
+| 3 | 6 | 1 |
+| 4 | 7 | 1 |
+| 0 | 7 | 1 |
+
+预计算的值的数量为 $O(n \log n)$，因为长度是 2 的幂的区间共有 $O(\log n)$ 种。这些值可以利用递推公式 $$\texttt{min}_q(a,b) = \min(\texttt{min}_q(a,a+w-1),\texttt{min}_q(a+w,b)),$$ 高效地计算出来，其中 $b-a+1$ 是 2 的幂，$w=(b-a+1)/2$。计算所有这些值需要 $O(n \log n)$ 时间。
+
+在此之后，任意 $\texttt{min}_q(a,b)$ 都可以作为两个预计算值的最小值在 $O(1)$ 时间内算出。设 $k$ 为不超过 $b-a+1$ 的最大 2 的幂。我们可以用公式 $$\texttt{min}_q(a,b) = \min(\texttt{min}_q(a,a+k-1),\texttt{min}_q(b-k+1,b)).$$ 计算出 $\texttt{min}_q(a,b)$ 的值。在上述公式中，区间 $[a,b]$ 被表示为区间 $[a,a+k-1]$ 与 $[b-k+1,b]$ 的并集，二者的长度均为 $k$。
+
+作为例子，考虑区间 $[1,6]$：
 
 ![](assets/images/ch09-fig08.svg)
 
-The length of the range is 6, and the largest power of two that does not exceed 6 is 4. Thus the range $[1,6]$ is the union of the ranges $[1,4]$ and $[3,6]$:
+该区间的长度为 6，不超过 6 的最大 2 的幂是 4。因此区间 $[1,6]$ 是区间 $[1,4]$ 与 $[3,6]$ 的并集：
 
 ![](assets/images/ch09-fig09.svg)
 
 ![](assets/images/ch09-fig10.svg)
 
-Since $\texttt{min}_q(1,4)=3$ and $\texttt{min}_q(3,6)=1$, we conclude that $\texttt{min}_q(1,6)=1$.
+由于 $\texttt{min}_q(1,4)=3$ 且 $\texttt{min}_q(3,6)=1$，我们得出 $\texttt{min}_q(1,6)=1$。
 
-## Binary indexed tree
+## 树状数组
 
-A **binary indexed tree** or a **Fenwick tree**[^2] can be seen as a dynamic variant of a prefix sum array. It supports two $O(\log n)$ time operations on an array: processing a range sum query and updating a value.
+**树状数组**（binary indexed tree），又称 **Fenwick 树**[^2]，可以看作是前缀和数组的一种动态变体。它支持数组上的两种 $O(\log n)$ 时间操作：处理一次区间求和查询和更新一个值。
 
-The advantage of a binary indexed tree is that it allows us to efficiently update array values between sum queries. This would not be possible using a prefix sum array, because after each update, it would be necessary to build the whole prefix sum array again in $O(n)$ time.
+树状数组的优势在于，它允许我们在各次求和查询之间高效地更新数组的值。使用前缀和数组则做不到这一点，因为每次更新之后，都需要在 $O(n)$ 时间内重新构建整个前缀和数组。
 
-#### Structure
+#### 结构
 
-Even if the name of the structure is a binary indexed *tree*, it is usually represented as an array. In this section we assume that all arrays are one-indexed, because it makes the implementation easier.
+尽管这种结构的名字是二叉索引*树*，它通常用一个数组来表示。在本节中，我们假设所有数组都从 1 开始索引，因为这会使实现更容易。
 
-Let $p(k)$ denote the largest power of two that divides $k$. We store a binary indexed tree as an array `tree` such that $$\texttt{tree}[k] = \texttt{sum}_q(k-p(k)+1,k),$$ i.e., each position $k$ contains the sum of values in a range of the original array whose length is $p(k)$ and that ends at position $k$. For example, since $p(6)=2$, $\texttt{tree}[6]$ contains the value of $\texttt{sum}_q(5,6)$.
+设 $p(k)$ 表示能整除 $k$ 的最大 2 的幂。我们把树状数组存储为一个数组 `tree`，使得 $$\texttt{tree}[k] = \texttt{sum}_q(k-p(k)+1,k),$$ 即，每个位置 $k$ 存储原数组中某个区间内各值之和，该区间的长度为 $p(k)$ 且以位置 $k$ 结尾。例如，由于 $p(6)=2$，$\texttt{tree}[6]$ 存储的是 $\texttt{sum}_q(5,6)$ 的值。
 
-For example, consider the following array:
+例如，考虑以下数组：
 
 ![](assets/images/ch09-fig11.svg)
 
-The corresponding binary indexed tree is as follows:
+对应的树状数组如下：
 
 ![](assets/images/ch09-fig12.svg)
 
-The following picture shows more clearly how each value in the binary indexed tree corresponds to a range in the original array:
+下图更清楚地展示了树状数组中的每个值如何对应于原数组中的一个区间：
 
 ![](assets/images/ch09-fig13.svg)
 
-Using a binary indexed tree, any value of $\texttt{sum}_q(1,k)$ can be calculated in $O(\log n)$ time, because a range $[1,k]$ can always be divided into $O(\log n)$ ranges whose sums are stored in the tree.
+使用树状数组，任意 $\texttt{sum}_q(1,k)$ 都可以在 $O(\log n)$ 时间内算出，因为区间 $[1,k]$ 总可以被划分为 $O(\log n)$ 个区间，而这些区间的和被存储在树中。
 
-For example, the range $[1,7]$ consists of the following ranges:
+例如，区间 $[1,7]$ 由以下区间组成：
 
 ![](assets/images/ch09-fig14.svg)
 
-Thus, we can calculate the corresponding sum as follows: $$\texttt{sum}_q(1,7)=\texttt{sum}_q(1,4)+\texttt{sum}_q(5,6)+\texttt{sum}_q(7,7)=16+7+4=27$$
+因此，我们可以按如下方式计算相应的和： $$\texttt{sum}_q(1,7)=\texttt{sum}_q(1,4)+\texttt{sum}_q(5,6)+\texttt{sum}_q(7,7)=16+7+4=27$$
 
-To calculate the value of $\texttt{sum}_q(a,b)$ where $a>1$, we can use the same trick that we used with prefix sum arrays: $$\texttt{sum}_q(a,b) = \texttt{sum}_q(1,b) - \texttt{sum}_q(1,a-1).$$ Since we can calculate both $\texttt{sum}_q(1,b)$ and $\texttt{sum}_q(1,a-1)$ in $O(\log n)$ time, the total time complexity is $O(\log n)$.
+要计算 $a>1$ 时的 $\texttt{sum}_q(a,b)$，我们可以使用处理前缀和数组时用过的同一个技巧： $$\texttt{sum}_q(a,b) = \texttt{sum}_q(1,b) - \texttt{sum}_q(1,a-1).$$ 由于我们可以在 $O(\log n)$ 时间内分别算出 $\texttt{sum}_q(1,b)$ 和 $\texttt{sum}_q(1,a-1)$，总时间复杂度为 $O(\log n)$。
 
-Then, after updating a value in the original array, several values in the binary indexed tree should be updated. For example, if the value at position 3 changes, the sums of the following ranges change:
+此外，在更新原数组中的一个值之后，树状数组中的若干个值也需要更新。例如，如果位置 3 处的值发生变化，则以下区间的和会改变：
 
 ![](assets/images/ch09-fig15.svg)
 
-Since each array element belongs to $O(\log n)$ ranges in the binary indexed tree, it suffices to update $O(\log n)$ values in the tree.
+由于每个数组元素都属于树状数组中的 $O(\log n)$ 个区间，因此只需更新树中的 $O(\log n)$ 个值。
 
-#### Implementation
+#### 实现
 
-The operations of a binary indexed tree can be efficiently implemented using bit operations. The key fact needed is that we can calculate any value of $p(k)$ using the formula $$p(k) = k \& -k.$$
+树状数组的操作可以用位运算高效地实现。所需的关键事实是，我们可以用公式 $$p(k) = k \& -k.$$ 计算出任意 $p(k)$。
 
-The following function calculates the value of $\texttt{sum}_q(1,k)$:
+下面的函数计算 $\texttt{sum}_q(1,k)$ 的值：
 
 ```cpp
 int sum(int k) {
@@ -307,7 +181,7 @@ int sum(int k) {
 }
 ```
 
-The following function increases the array value at position $k$ by $x$ ($x$ can be positive or negative):
+下面的函数把位置 $k$ 处的数组值增加 $x$（$x$ 可以为正也可以为负）：
 
 ```cpp
 void add(int k, int x) {
@@ -318,65 +192,65 @@ void add(int k, int x) {
 }
 ```
 
-The time complexity of both the functions is $O(\log n)$, because the functions access $O(\log n)$ values in the binary indexed tree, and each move to the next position takes $O(1)$ time.
+两个函数的时间复杂度都是 $O(\log n)$，因为函数会访问树状数组中的 $O(\log n)$ 个值，而每次移动到下一个位置需要 $O(1)$ 时间。
 
-## Segment tree
+## 线段树
 
-A **segment tree**[^3] is a data structure that supports two operations: processing a range query and updating an array value. Segment trees can support sum queries, minimum and maximum queries and many other queries so that both operations work in $O(\log n)$ time.
+**线段树**[^3]是一种支持两种操作的数据结构：处理一次区间查询和更新一个数组值。线段树可以支持求和查询、最小值与最大值查询以及许多其他查询，且两种操作都能在 $O(\log n)$ 时间内完成。
 
-Compared to a binary indexed tree, the advantage of a segment tree is that it is a more general data structure. While binary indexed trees only support sum queries[^4], segment trees also support other queries. On the other hand, a segment tree requires more memory and is a bit more difficult to implement.
+与树状数组相比，线段树的优势在于它是一种更通用的数据结构。树状数组只支持求和查询[^4]，而线段树还支持其他查询。另一方面，线段树需要更多内存，实现起来也稍难一些。
 
-#### Structure
+#### 结构
 
-A segment tree is a binary tree such that the nodes on the bottom level of the tree correspond to the array elements, and the other nodes contain information needed for processing range queries.
+线段树是一棵二叉树，其最底层的结点对应数组元素，其余结点则包含处理区间查询所需的信息。
 
-In this section, we assume that the size of the array is a power of two and zero-based indexing is used, because it is convenient to build a segment tree for such an array. If the size of the array is not a power of two, we can always append extra elements to it.
+在本节中，我们假设数组的大小是 2 的幂且使用从 0 开始的索引，因为为这样的数组构建线段树比较方便。如果数组的大小不是 2 的幂，我们总是可以追加额外的元素。
 
-We will first discuss segment trees that support sum queries. As an example, consider the following array:
+我们首先讨论支持求和查询的线段树。作为例子，考虑以下数组：
 
 ![](assets/images/ch09-fig16.svg)
 
-The corresponding segment tree is as follows:
+对应的线段树如下：
 
 ![](assets/images/ch09-fig17.svg)
 
-Each internal tree node corresponds to an array range whose size is a power of two. In the above tree, the value of each internal node is the sum of the corresponding array values, and it can be calculated as the sum of the values of its left and right child node.
+每个内部树结点都对应一个大小为 2 的幂的数组区间。在上面的树中，每个内部结点的值是对应数组值之和，它可以由其左、右子结点的值相加得到。
 
-It turns out that any range $[a,b]$ can be divided into $O(\log n)$ ranges whose values are stored in tree nodes. For example, consider the range [2,7]:
+事实证明，任意区间 $[a,b]$ 都可以划分为 $O(\log n)$ 个区间，而这些区间的值存储在树结点中。例如，考虑区间 [2,7]：
 
 ![](assets/images/ch09-fig18.svg)
 
-Here $\texttt{sum}_q(2,7)=6+3+2+7+2+6=26$. In this case, the following two tree nodes correspond to the range:
+这里 $\texttt{sum}_q(2,7)=6+3+2+7+2+6=26$。此时，以下两个树结点对应该区间：
 
 ![](assets/images/ch09-fig19.svg)
 
-Thus, another way to calculate the sum is $9+17=26$.
+因此，计算该和的另一种方法是 $9+17=26$。
 
-When the sum is calculated using nodes located as high as possible in the tree, at most two nodes on each level of the tree are needed. Hence, the total number of nodes is $O(\log n)$.
+当使用位于树中尽可能高的结点来计算和时，树的每一层至多需要两个结点。因此，结点的总数为 $O(\log n)$。
 
-After an array update, we should update all nodes whose value depends on the updated value. This can be done by traversing the path from the updated array element to the top node and updating the nodes along the path.
+在一次数组更新之后，我们应更新所有取值依赖于被更新值的结点。这可以通过从被更新的数组元素向上遍历到顶部结点，并更新路径上的结点来完成。
 
-The following picture shows which tree nodes change if the array value 7 changes:
+下图展示了当数组中的值 7 发生变化时，哪些树结点会改变：
 
 ![](assets/images/ch09-fig20.svg)
 
-The path from bottom to top always consists of $O(\log n)$ nodes, so each update changes $O(\log n)$ nodes in the tree.
+从底部到顶部的路径总是由 $O(\log n)$ 个结点组成，所以每次更新会改变树中的 $O(\log n)$ 个结点。
 
-#### Implementation
+#### 实现
 
-We store a segment tree as an array of $2n$ elements where $n$ is the size of the original array and a power of two. The tree nodes are stored from top to bottom: $\texttt{tree}[1]$ is the top node, $\texttt{tree}[2]$ and $\texttt{tree}[3]$ are its children, and so on. Finally, the values from $\texttt{tree}[n]$ to $\texttt{tree}[2n-1]$ correspond to the values of the original array on the bottom level of the tree.
+我们用一个含 $2n$ 个元素的数组来存储线段树，其中 $n$ 是原数组的大小，且为 2 的幂。树结点自上而下存储：$\texttt{tree}[1]$ 是顶部结点，$\texttt{tree}[2]$ 和 $\texttt{tree}[3]$ 是它的子结点，依此类推。最后，从 $\texttt{tree}[n]$ 到 $\texttt{tree}[2n-1]$ 的值对应原数组在树最底层的值。
 
-For example, the segment tree
+例如，线段树
 
 ![](assets/images/ch09-fig21.svg)
 
-is stored as follows:
+的存储方式如下：
 
 ![](assets/images/ch09-fig22.svg)
 
-Using this representation, the parent of $\texttt{tree}[k]$ is $\texttt{tree}[\lfloor k/2 \rfloor]$, and its children are $\texttt{tree}[2k]$ and $\texttt{tree}[2k+1]$. Note that this implies that the position of a node is even if it is a left child and odd if it is a right child.
+在这种表示方式下，$\texttt{tree}[k]$ 的父结点是 $\texttt{tree}[\lfloor k/2 \rfloor]$，其子结点是 $\texttt{tree}[2k]$ 和 $\texttt{tree}[2k+1]$。注意，这意味着一个结点若是左子结点则其位置为偶数，若是右子结点则其位置为奇数。
 
-The following function calculates the value of $\texttt{sum}_q(a,b)$:
+下面的函数计算 $\texttt{sum}_q(a,b)$ 的值：
 
 ```cpp
 int sum(int a, int b) {
@@ -391,9 +265,9 @@ int sum(int a, int b) {
 }
 ```
 
-The function maintains a range that is initially $[a+n,b+n]$. Then, at each step, the range is moved one level higher in the tree, and before that, the values of the nodes that do not belong to the higher range are added to the sum.
+该函数维护一个初始为 $[a+n,b+n]$ 的区间。接着，每一步都把该区间向树的上方移动一层，在此之前，把不属于上层区间的结点的值累加到和中。
 
-The following function increases the array value at position $k$ by $x$:
+下面的函数把位置 $k$ 处的数组值增加 $x$：
 
 ```cpp
 void add(int k, int x) {
@@ -405,37 +279,37 @@ void add(int k, int x) {
 }
 ```
 
-First the function updates the value at the bottom level of the tree. After this, the function updates the values of all internal tree nodes, until it reaches the top node of the tree.
+首先，该函数更新树最底层的值。之后，函数更新所有内部树结点的值，直到到达树的顶部结点。
 
-Both the above functions work in $O(\log n)$ time, because a segment tree of $n$ elements consists of $O(\log n)$ levels, and the functions move one level higher in the tree at each step.
+上面两个函数都在 $O(\log n)$ 时间内运行，因为含 $n$ 个元素的线段树由 $O(\log n)$ 层组成，而函数每一步都向树的上方移动一层。
 
-#### Other queries
+#### 其他查询
 
-Segment trees can support all range queries where it is possible to divide a range into two parts, calculate the answer separately for both parts and then efficiently combine the answers. Examples of such queries are minimum and maximum, greatest common divisor, and bit operations and, or and xor.
+对于所有这样的区间查询，即能够把区间划分为两部分、分别计算两部分的答案、再高效地合并答案的查询，线段树都能支持。这类查询的例子有最小值与最大值、最大公约数，以及位运算中的与、或和异或。
 
-For example, the following segment tree supports minimum queries:
+例如，下面的线段树支持最小值查询：
 
 ![](assets/images/ch09-fig23.svg)
 
-In this case, every tree node contains the smallest value in the corresponding array range. The top node of the tree contains the smallest value in the whole array. The operations can be implemented like previously, but instead of sums, minima are calculated.
+此时，每个树结点都包含对应数组区间中的最小值。树的顶部结点包含整个数组中的最小值。这些操作可以像之前一样实现，只不过计算的是最小值而不是和。
 
-The structure of a segment tree also allows us to use binary search for locating array elements. For example, if the tree supports minimum queries, we can find the position of an element with the smallest value in $O(\log n)$ time.
+线段树的结构还允许我们使用二分查找来定位数组元素。例如，如果树支持最小值查询，我们可以在 $O(\log n)$ 时间内找到具有最小值的元素的位置。
 
-For example, in the above tree, an element with the smallest value 1 can be found by traversing a path downwards from the top node:
+例如，在上面的树中，可以沿着从顶部结点向下的路径找到具有最小值 1 的元素：
 
 ![](assets/images/ch09-fig24.svg)
 
-## Additional techniques
+## 其他技巧
 
-#### Index compression
+#### 索引压缩
 
-A limitation in data structures that are built upon an array is that the elements are indexed using consecutive integers. Difficulties arise when large indices are needed. For example, if we wish to use the index $10^9$, the array should contain $10^9$ elements which would require too much memory.
+以数组为基础构建的数据结构有一个局限：元素使用连续的整数来索引。当需要很大的索引时就会出现困难。例如，如果我们想使用索引 $10^9$，数组就得包含 $10^9$ 个元素，这会占用过多内存。
 
-However, we can often bypass this limitation by using **index compression**, where the original indices are replaced with indices $1,2,3,$ etc. This can be done if we know all the indices needed during the algorithm beforehand.
+然而，我们通常可以通过**索引压缩**绕过这一局限，即把原始索引替换为索引 $1,2,3,$ 等等。如果事先知道算法过程中需要的所有索引，就可以这样做。
 
-The idea is to replace each original index $x$ with $c(x)$ where $c$ is a function that compresses the indices. We require that the order of the indices does not change, so if $a<b$, then $c(a)<c(b)$. This allows us to conveniently perform queries even if the indices are compressed.
+其思路是把每个原始索引 $x$ 替换为 $c(x)$，其中 $c$ 是压缩索引的函数。我们要求索引的顺序不变，即若 $a<b$，则 $c(a)<c(b)$。这样即使索引被压缩，我们也能方便地执行查询。
 
-For example, if the original indices are $555$, $10^9$ and $8$, the new indices are:
+例如，如果原始索引是 $555$、$10^9$ 和 $8$，则新的索引为：
 
 $$\begin{array}{lcl}
 c(8) & = & 1 \\
@@ -443,32 +317,32 @@ c(555) & = & 2 \\
 c(10^9) & = & 3 \\
 \end{array}$$
 
-#### Range updates
+#### 区间更新
 
-So far, we have implemented data structures that support range queries and updates of single values. Let us now consider an opposite situation, where we should update ranges and retrieve single values. We focus on an operation that increases all elements in a range $[a,b]$ by $x$.
+到目前为止，我们实现的数据结构都支持区间查询和单个值的更新。现在让我们考虑相反的情形：需要更新区间并检索单个值。我们关注这样一个操作：把区间 $[a,b]$ 内的所有元素都增加 $x$。
 
-Surprisingly, we can use the data structures presented in this chapter also in this situation. To do this, we build a **difference array** whose values indicate the differences between consecutive values in the original array. Thus, the original array is the prefix sum array of the difference array. For example, consider the following array:
+令人惊讶的是，在这种情况下我们也可以使用本章介绍的数据结构。为此，我们构造一个**差分数组**，其值表示原数组中相邻值之间的差。于是，原数组就是差分数组的前缀和数组。例如，考虑以下数组：
 
 ![](assets/images/ch09-fig25.svg)
 
-The difference array for the above array is as follows:
+上述数组的差分数组如下：
 
 ![](assets/images/ch09-fig26.svg)
 
-For example, the value 2 at position 6 in the original array corresponds to the sum $3-2+4-3=2$ in the difference array.
+例如，原数组中位置 6 处的值 2 对应于差分数组中的和 $3-2+4-3=2$。
 
-The advantage of the difference array is that we can update a range in the original array by changing just two elements in the difference array. For example, if we want to increase the original array values between positions 1 and 4 by 5, it suffices to increase the difference array value at position 1 by 5 and decrease the value at position 5 by 5. The result is as follows:
+差分数组的优势在于，我们只需改变差分数组中的两个元素，就能更新原数组中的一个区间。例如，如果我们想把原数组中位置 1 到位置 4 之间的值都增加 5，只需把差分数组中位置 1 处的值增加 5，并把位置 5 处的值减少 5 即可。结果如下：
 
 ![](assets/images/ch09-fig27.svg)
 
-More generally, to increase the values in range $[a,b]$ by $x$, we increase the value at position $a$ by $x$ and decrease the value at position $b+1$ by $x$. Thus, it is only needed to update single values and process sum queries, so we can use a binary indexed tree or a segment tree.
+更一般地，要把区间 $[a,b]$ 内的值增加 $x$，我们把位置 $a$ 处的值增加 $x$，并把位置 $b+1$ 处的值减少 $x$。因此，只需要做单个值的更新和求和查询，所以我们可以使用树状数组或线段树。
 
-A more difficult problem is to support both range queries and range updates. In Chapter 28 we will see that even this is possible.
+更难的问题是要同时支持区间查询和区间更新。在第 28 章中我们会看到，连这一点也是可以做到的。
 
-[^1]: This technique was introduced in [7] and sometimes called the **sparse table** method. There are also more sophisticated techniques [25] where the preprocessing time is only $O(n)$, but such algorithms are not needed in competitive programming.
+[^1]: 该技巧由 [7] 提出，有时被称为**稀疏表**（sparse table）方法。还有一些更精细的技巧 [25]，其预处理时间仅为 $O(n)$，但这类算法在算法竞赛中并不需要。
 
-[^2]: The binary indexed tree structure was presented by P. M. Fenwick in 1994 [24].
+[^2]: 树状数组结构由 P. M. Fenwick 于 1994 年提出 [24]。
 
-[^3]: The bottom-up-implementation in this chapter corresponds to that in [70]. Similar structures were used in late 1970's to solve geometric problems [9].
+[^3]: 本章中自底向上的实现与 [70] 中的实现相对应。20 世纪 70 年代末曾使用类似的结构来解决几何问题 [9]。
 
-[^4]: In fact, using *two* binary indexed trees it is possible to support minimum queries [19], but this is more complicated than to use a segment tree.
+[^4]: 事实上，使用*两棵*树状数组也可以支持最小值查询 [19]，但这比使用线段树更为复杂。

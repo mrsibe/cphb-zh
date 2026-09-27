@@ -1,14 +1,14 @@
-# Data structures
+# 数据结构
 
-A **data structure** is a way to store data in the memory of a computer. It is important to choose an appropriate data structure for a problem, because each data structure has its own advantages and disadvantages. The crucial question is: which operations are efficient in the chosen data structure?
+**数据结构**是一种在计算机内存中存储数据的方式。为一个问题选择合适的数据结构非常重要，因为每种数据结构都有自己的优点与缺点。关键问题是：在所选的数据结构中，哪些操作是高效的？
 
-This chapter introduces the most important data structures in the C++ standard library. It is a good idea to use the standard library whenever possible, because it will save a lot of time. Later in the book we will learn about more sophisticated data structures that are not available in the standard library.
+本章介绍 C++ 标准库中最重要的数据结构。只要有可能就应当使用标准库，因为这样可以节省大量时间。在本书后面，我们将学习标准库中没有的、更复杂的数据结构。
 
-## Dynamic arrays
+## 动态数组
 
-A **dynamic array** is an array whose size can be changed during the execution of the program. The most popular dynamic array in C++ is the `vector` structure, which can be used almost like an ordinary array.
+**动态数组**是大小可以在程序执行期间改变的数组。C++ 中最常用的动态数组是 `vector` 结构，它的用法几乎和普通数组一样。
 
-The following code creates an empty vector and adds three elements to it:
+下面的代码创建一个空 vector 并向其中添加三个元素：
 
 ```cpp
 vector<int> v;
@@ -17,7 +17,7 @@ v.push_back(2); // [3,2]
 v.push_back(5); // [3,2,5]
 ```
 
-After this, the elements can be accessed like in an ordinary array:
+此后，可以像普通数组一样访问这些元素：
 
 ```cpp
 cout << v[0] << "\n"; // 3
@@ -25,7 +25,7 @@ cout << v[1] << "\n"; // 2
 cout << v[2] << "\n"; // 5
 ```
 
-The function `size` returns the number of elements in the vector. The following code iterates through the vector and prints all elements in it:
+函数 `size` 返回 vector 中元素的个数。下面的代码遍历该 vector 并打印其中所有元素：
 
 ```cpp
 for (int i = 0; i < v.size(); i++) {
@@ -33,7 +33,7 @@ for (int i = 0; i < v.size(); i++) {
 }
 ```
 
-A shorter way to iterate through a vector is as follows:
+遍历 vector 的一种更简短的方式如下：
 
 ```cpp
 for (auto x : v) {
@@ -41,7 +41,7 @@ for (auto x : v) {
 }
 ```
 
-The function `back` returns the last element in the vector, and the function `pop_back` removes the last element:
+函数 `back` 返回 vector 中的最后一个元素，函数 `pop_back` 删除最后一个元素：
 
 ```cpp
 vector<int> v;
@@ -52,13 +52,13 @@ v.pop_back();
 cout << v.back() << "\n"; // 5
 ```
 
-The following code creates a vector with five elements:
+下面的代码创建一个包含五个元素的 vector：
 
 ```cpp
 vector<int> v = {2,4,2,5,1};
 ```
 
-Another way to create a vector is to give the number of elements and the initial value for each element:
+创建 vector 的另一种方式是给出元素个数以及每个元素的初始值：
 
 ```cpp
 // size 10, initial value 0
@@ -70,11 +70,11 @@ vector<int> v(10);
 vector<int> v(10, 5);
 ```
 
-The internal implementation of a vector uses an ordinary array. If the size of the vector increases and the array becomes too small, a new array is allocated and all the elements are moved to the new array. However, this does not happen often and the average time complexity of `push_back` is $O(1)$.
+vector 的内部实现使用一个普通数组。如果 vector 的大小增大而数组变得太小，就会分配一个新数组，并把所有元素移动到新数组。不过这种情况并不经常发生，`push_back` 的平均时间复杂度是 $O(1)$。
 
-The `string` structure is also a dynamic array that can be used almost like a vector. In addition, there is special syntax for strings that is not available in other data structures. Strings can be combined using the `+` symbol. The function $\texttt{substr}(k,x)$ returns the substring that begins at position $k$ and has length $x$, and the function $\texttt{find}(\texttt{t})$ finds the position of the first occurrence of a substring `t`.
+`string` 结构也是一个动态数组，用法几乎和 vector 一样。此外，字符串还有其它数据结构所没有的特殊语法。可以用 `+` 符号拼接字符串。函数 $\texttt{substr}(k,x)$ 返回从位置 $k$ 开始、长度为 $x$ 的子串，函数 $\texttt{find}(\texttt{t})$ 查找子串 `t` 第一次出现的位置。
 
-The following code presents some string operations:
+下面的代码演示了一些字符串操作：
 
 ```cpp
 string a = "hatti";
@@ -86,15 +86,15 @@ string c = b.substr(3,4);
 cout << c << "\n"; // tiva
 ```
 
-## Set structures
+## 集合结构
 
-A **set** is a data structure that maintains a collection of elements. The basic operations of sets are element insertion, search and removal.
+**集合（set）**是一种维护元素集合的数据结构。集合的基本操作是插入元素、查找和删除元素。
 
-The C++ standard library contains two set implementations: The structure `set` is based on a balanced binary tree and its operations work in $O(\log n)$ time. The structure `unordered_set` uses hashing, and its operations work in $O(1)$ time on average.
+C++ 标准库包含两种集合实现：结构 `set` 基于平衡二叉搜索树，其操作在 $O(\log n)$ 时间内完成。结构 `unordered_set` 使用哈希，其操作平均在 $O(1)$ 时间内完成。
 
-The choice of which set implementation to use is often a matter of taste. The benefit of the `set` structure is that it maintains the order of the elements and provides functions that are not available in `unordered_set`. On the other hand, `unordered_set` can be more efficient.
+选择使用哪种集合实现通常取决于个人偏好。`set` 结构的优点是它维护元素的顺序，并提供 `unordered_set` 所没有的函数。另一方面，`unordered_set` 可能更高效。
 
-The following code creates a set that contains integers, and shows some of the operations. The function `insert` adds an element to the set, the function `count` returns the number of occurrences of an element in the set, and the function `erase` removes an element from the set.
+下面的代码创建一个包含整数的集合，并展示了一些操作。函数 `insert` 向集合添加元素，函数 `count` 返回某元素在集合中出现的次数，函数 `erase` 从集合中删除元素。
 
 ```cpp
 set<int> s;
@@ -109,7 +109,7 @@ cout << s.count(3) << "\n"; // 0
 cout << s.count(4) << "\n"; // 1
 ```
 
-A set can be used mostly like a vector, but it is not possible to access the elements using the `[]` notation. The following code creates a set, prints the number of elements in it, and then iterates through all the elements:
+集合的用法大体上和 vector 一样，但不能用 `[]` 记号访问元素。下面的代码创建一个集合，打印其中元素的个数，然后遍历所有元素：
 
 ```cpp
 set<int> s = {2,5,6,8};
@@ -119,7 +119,7 @@ for (auto x : s) {
 }
 ```
 
-An important property of sets is that all their elements are *distinct*. Thus, the function `count` always returns either 0 (the element is not in the set) or 1 (the element is in the set), and the function `insert` never adds an element to the set if it is already there. The following code illustrates this:
+集合的一个重要性质是其中所有元素都*互不相同*。因此，函数 `count` 总是返回 0（元素不在集合中）或 1（元素在集合中），并且如果元素已经存在，函数 `insert` 绝不会把它再次加入集合。下面的代码说明了这一点：
 
 ```cpp
 set<int> s;
@@ -129,7 +129,7 @@ s.insert(5);
 cout << s.count(5) << "\n"; // 1
 ```
 
-C++ also contains the structures `multiset` and `unordered_multiset` that otherwise work like `set` and `unordered_set` but they can contain multiple instances of an element. For example, in the following code all three instances of the number 5 are added to a multiset:
+C++ 还包含结构 `multiset` 和 `unordered_multiset`，它们在其它方面与 `set` 和 `unordered_set` 的用法相同，但可以包含某个元素的多个实例。例如，在下面的代码中，数字 5 的三个实例都被加入了 multiset：
 
 ```cpp
 multiset<int> s;
@@ -139,27 +139,27 @@ s.insert(5);
 cout << s.count(5) << "\n"; // 3
 ```
 
-The function `erase` removes all instances of an element from a multiset:
+函数 `erase` 会从 multiset 中删除某元素的所有实例：
 
 ```cpp
 s.erase(5);
 cout << s.count(5) << "\n"; // 0
 ```
 
-Often, only one instance should be removed, which can be done as follows:
+通常只需要删除一个实例，这可以按如下方式完成：
 
 ```cpp
 s.erase(s.find(5));
 cout << s.count(5) << "\n"; // 2
 ```
 
-## Map structures
+## 映射结构
 
-A **map** is a generalized array that consists of key-value-pairs. While the keys in an ordinary array are always the consecutive integers $0,1,\ldots,n-1$, where $n$ is the size of the array, the keys in a map can be of any data type and they do not have to be consecutive values.
+**映射（map）**是一种广义的数组，由键值对组成。普通数组的键总是连续的整数 $0,1,\ldots,n-1$（其中 $n$ 是数组的大小），而 map 的键可以是任意数据类型，而且不必是连续的值。
 
-The C++ standard library contains two map implementations that correspond to the set implementations: the structure `map` is based on a balanced binary tree and accessing elements takes $O(\log n)$ time, while the structure `unordered_map` uses hashing and accessing elements takes $O(1)$ time on average.
+C++ 标准库包含两种映射实现，与两种集合实现相对应：结构 `map` 基于平衡二叉搜索树，访问元素需要 $O(\log n)$ 时间；而结构 `unordered_map` 使用哈希，访问元素平均需要 $O(1)$ 时间。
 
-The following code creates a map where the keys are strings and the values are integers:
+下面的代码创建一个键为字符串、值为整数的 map：
 
 ```cpp
 map<string,int> m;
@@ -169,14 +169,14 @@ m["harpsichord"] = 9;
 cout << m["banana"] << "\n"; // 3
 ```
 
-If the value of a key is requested but the map does not contain it, the key is automatically added to the map with a default value. For example, in the following code, the key "aybabtu" with value 0 is added to the map.
+如果请求某个键的值而 map 中不包含它，该键会自动以默认值加入 map。例如，在下面的代码中，值为 0 的键 "aybabtu" 会被加入 map。
 
 ```cpp
 map<string,int> m;
 cout << m["aybabtu"] << "\n"; // 0
 ```
 
-The function `count` checks if a key exists in a map:
+函数 `count` 检查某个键是否存在于 map 中：
 
 ```text
 if (m.count("aybabtu")) {
@@ -184,7 +184,7 @@ if (m.count("aybabtu")) {
 }
 ```
 
-The following code prints all the keys and values in a map:
+下面的代码打印 map 中的所有键和值：
 
 ```cpp
 for (auto x : m) {
@@ -192,58 +192,25 @@ for (auto x : m) {
 }
 ```
 
-## Iterators and ranges
+## 迭代器与范围
 
-Many functions in the C++ standard library operate with iterators. An **iterator** is a variable that points to an element in a data structure.
+C++ 标准库中的许多函数都用迭代器进行操作。**迭代器**是指向数据结构中某个元素的变量。
 
-The often used iterators `begin` and `end` define a range that contains all elements in a data structure. The iterator `begin` points to the first element in the data structure, and the iterator `end` points to the position *after* the last element. The situation looks as follows:
+常用的迭代器 `begin` 和 `end` 定义一个包含数据结构中所有元素的范围。迭代器 `begin` 指向数据结构中的第一个元素，而迭代器 `end` 指向最后一个元素*之后*的位置。情况如下所示：
 
-<table>
-<tbody>
-<tr>
-<td style="text-align: left;">{</td>
-<td style="text-align: left;">3,</td>
-<td style="text-align: left;">4,</td>
-<td style="text-align: left;">6,</td>
-<td style="text-align: left;">8,</td>
-<td style="text-align: left;">12,</td>
-<td style="text-align: left;">13,</td>
-<td style="text-align: left;">14,</td>
-<td style="text-align: left;">17</td>
-<td style="text-align: left;">}</td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>↑</mo><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td colspan="3" style="text-align: left;"><code>s.begin()</code></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>s.end()</code></td>
-</tr>
-</tbody>
-</table>
+|   |   |   |   |   |   |   |   |   |   |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| { | 3, | 4, | 6, | 8, | 12, | 13, | 14, | 17 | } |
+|   | ↑ |   |   |   |   |   |   |   | ↑ |
+|   | `s.begin()` |   |   |   |   |   |   |   | `s.end()` |
 
-Note the asymmetry in the iterators: `s.begin()` points to an element in the data structure, while `s.end()` points outside the data structure. Thus, the range defined by the iterators is *half-open*.
+注意迭代器的不对称性：`s.begin()` 指向数据结构中的一个元素，而 `s.end()` 指向数据结构之外。因此，由这两个迭代器定义的范围是*半开*的。
 
-#### Working with ranges
+#### 使用范围
 
-Iterators are used in C++ standard library functions that are given a range of elements in a data structure. Usually, we want to process all elements in a data structure, so the iterators `begin` and `end` are given for the function.
+C++ 标准库中那些接受数据结构中一段元素范围的函数会用到迭代器。通常我们要处理数据结构中的所有元素，所以把迭代器 `begin` 和 `end` 传给函数。
 
-For example, the following code sorts a vector using the function `sort`, then reverses the order of the elements using the function `reverse`, and finally shuffles the order of the elements using the function `random_shuffle`.
+例如，下面的代码先用函数 `sort` 对一个 vector 排序，然后用函数 `reverse` 反转元素的顺序，最后用函数 `random_shuffle` 打乱元素的顺序。
 
 ```cpp
 sort(v.begin(), v.end());
@@ -251,7 +218,7 @@ reverse(v.begin(), v.end());
 random_shuffle(v.begin(), v.end());
 ```
 
-These functions can also be used with an ordinary array. In this case, the functions are given pointers to the array instead of iterators:
+这些函数也可以用于普通数组。此时传给函数的是指向数组的指针，而不是迭代器：
 
 ```cpp
 sort(a, a+n);
@@ -259,30 +226,30 @@ reverse(a, a+n);
 random_shuffle(a, a+n);
 ```
 
-#### Set iterators
+#### 集合迭代器
 
-Iterators are often used to access elements of a set. The following code creates an iterator `it` that points to the smallest element in a set:
+迭代器常用于访问集合的元素。下面的代码创建一个迭代器 `it`，指向集合中最小的元素：
 
 ```cpp
 set<int>::iterator it = s.begin();
 ```
 
-A shorter way to write the code is as follows:
+写这段代码的一种更简短方式如下：
 
 ```cpp
 auto it = s.begin();
 ```
 
-The element to which an iterator points can be accessed using the `*` symbol. For example, the following code prints the first element in the set:
+可以用 `*` 符号访问迭代器所指向的元素。例如，下面的代码打印集合中的第一个元素：
 
 ```cpp
 auto it = s.begin();
 cout << *it << "\n";
 ```
 
-Iterators can be moved using the operators `++` (forward) and `--` (backward), meaning that the iterator moves to the next or previous element in the set.
+可以用运算符 `++`（向前）和 `--`（向后）移动迭代器，即把迭代器移动到集合中的下一个或上一个元素。
 
-The following code prints all the elements in increasing order:
+下面的代码按递增顺序打印集合中的所有元素：
 
 ```cpp
 for (auto it = s.begin(); it != s.end(); it++) {
@@ -290,14 +257,14 @@ for (auto it = s.begin(); it != s.end(); it++) {
 }
 ```
 
-The following code prints the largest element in the set:
+下面的代码打印集合中最大的元素：
 
 ```cpp
 auto it = s.end(); it--;
 cout << *it << "\n";
 ```
 
-The function $\texttt{find}(x)$ returns an iterator that points to an element whose value is $x$. However, if the set does not contain $x$, the iterator will be `end`.
+函数 $\texttt{find}(x)$ 返回指向值为 $x$ 的元素的迭代器。但是，如果集合中不包含 $x$，迭代器将是 `end`。
 
 ```cpp
 auto it = s.find(x);
@@ -306,9 +273,9 @@ if (it == s.end()) {
 }
 ```
 
-The function $\texttt{lower\_bound}(x)$ returns an iterator to the smallest element in the set whose value is *at least* $x$, and the function $\texttt{upper\_bound}(x)$ returns an iterator to the smallest element in the set whose value is *larger than* $x$. In both functions, if such an element does not exist, the return value is `end`. These functions are not supported by the `unordered_set` structure which does not maintain the order of the elements.
+函数 $\texttt{lower\_bound}(x)$ 返回指向集合中值*至少*为 $x$ 的最小元素的迭代器，函数 $\texttt{upper\_bound}(x)$ 返回指向集合中值*大于* $x$ 的最小元素的迭代器。在这两个函数中，如果这样的元素不存在，返回值就是 `end`。`unordered_set` 结构不支持这些函数，因为它不维护元素的顺序。
 
-For example, the following code finds the element nearest to $x$:
+例如，下面的代码找出最接近 $x$ 的元素：
 
 ```cpp
 auto it = s.lower_bound(x);
@@ -325,13 +292,13 @@ if (it == s.begin()) {
 }
 ```
 
-The code assumes that the set is not empty, and goes through all possible cases using an iterator `it`. First, the iterator points to the smallest element whose value is at least $x$. If `it` equals `begin`, the corresponding element is nearest to $x$. If `it` equals `end`, the largest element in the set is nearest to $x$. If none of the previous cases hold, the element nearest to $x$ is either the element that corresponds to `it` or the previous element.
+该代码假定集合非空，并通过迭代器 `it` 遍历所有可能的情况。首先，迭代器指向值至少为 $x$ 的最小元素。如果 `it` 等于 `begin`，那么对应的元素最接近 $x$。如果 `it` 等于 `end`，那么集合中最大的元素最接近 $x$。如果前面两种情况都不成立，那么最接近 $x$ 的元素要么是 `it` 对应的元素，要么是它的前一个元素。
 
-## Other structures
+## 其他结构
 
-#### Bitset
+#### 位集
 
-A **bitset** is an array whose each value is either 0 or 1. For example, the following code creates a bitset that contains 10 elements:
+**位集（bitset）**是一个每个取值要么是 0 要么是 1 的数组。例如，下面的代码创建一个包含 10 个元素的位集：
 
 ```cpp
 bitset<10> s;
@@ -343,9 +310,9 @@ cout << s[4] << "\n"; // 1
 cout << s[5] << "\n"; // 0
 ```
 
-The benefit of using bitsets is that they require less memory than ordinary arrays, because each element in a bitset only uses one bit of memory. For example, if $n$ bits are stored in an `int` array, $32n$ bits of memory will be used, but a corresponding bitset only requires $n$ bits of memory. In addition, the values of a bitset can be efficiently manipulated using bit operators, which makes it possible to optimize algorithms using bit sets.
+使用位集的好处是它们比普通数组占用更少的内存，因为位集中的每个元素只使用一个比特的内存。例如，如果在 `int` 数组中存储 $n$ 个比特，将使用 $32n$ 比特的内存，而对应的位集只需要 $n$ 比特的内存。此外，可以使用位运算高效地处理位集的值，从而可以用位集来优化算法。
 
-The following code shows another way to create the above bitset:
+下面的代码展示创建上述位集的另一种方式：
 
 ```cpp
 bitset<10> s(string("0010011010")); // from right to left
@@ -353,14 +320,14 @@ cout << s[4] << "\n"; // 1
 cout << s[5] << "\n"; // 0
 ```
 
-The function `count` returns the number of ones in the bitset:
+函数 `count` 返回位集中 1 的个数：
 
 ```cpp
 bitset<10> s(string("0010011010"));
 cout << s.count() << "\n"; // 4
 ```
 
-The following code shows examples of using bit operations:
+下面的代码展示使用位运算的示例：
 
 ```cpp
 bitset<10> a(string("0010110110"));
@@ -370,11 +337,11 @@ cout << (a|b) << "\n"; // 1011111110
 cout << (a^b) << "\n"; // 1001101110
 ```
 
-#### Deque
+#### 双端队列
 
-A **deque** is a dynamic array whose size can be efficiently changed at both ends of the array. Like a vector, a deque provides the functions `push_back` and `pop_back`, but it also includes the functions `push_front` and `pop_front` which are not available in a vector.
+**双端队列（deque）**是一种动态数组，其大小可以高效地在数组两端改变。和 vector 一样，双端队列提供函数 `push_back` 和 `pop_back`，但它还包含 vector 所没有的函数 `push_front` 和 `pop_front`。
 
-A deque can be used as follows:
+双端队列可以按如下方式使用：
 
 ```cpp
 deque<int> d;
@@ -385,13 +352,13 @@ d.pop_back(); // [3,5]
 d.pop_front(); // [5]
 ```
 
-The internal implementation of a deque is more complex than that of a vector, and for this reason, a deque is slower than a vector. Still, both adding and removing elements take $O(1)$ time on average at both ends.
+双端队列的内部实现比 vector 更复杂，因此双端队列比 vector 慢。尽管如此，在两端的添加和删除元素平均都只需要 $O(1)$ 时间。
 
-#### Stack
+#### 栈
 
-A **stack** is a data structure that provides two $O(1)$ time operations: adding an element to the top, and removing an element from the top. It is only possible to access the top element of a stack.
+**栈（stack）**是一种提供两种 $O(1)$ 时间操作的数据结构：向栈顶添加元素、从栈顶删除元素。只能访问栈顶元素。
 
-The following code shows how a stack can be used:
+下面的代码展示如何使用栈：
 
 ```cpp
 stack<int> s;
@@ -403,11 +370,11 @@ s.pop();
 cout << s.top(); // 2
 ```
 
-#### Queue
+#### 队列
 
-A **queue** also provides two $O(1)$ time operations: adding an element to the end of the queue, and removing the first element in the queue. It is only possible to access the first and last element of a queue.
+**队列（queue）**也提供两种 $O(1)$ 时间的操作：向队列末尾添加元素、删除队列中的第一个元素。只能访问队列的第一个和最后一个元素。
 
-The following code shows how a queue can be used:
+下面的代码展示如何使用队列：
 
 ```cpp
 queue<int> q;
@@ -419,13 +386,13 @@ q.pop();
 cout << q.front(); // 2
 ```
 
-#### Priority queue
+#### 优先队列
 
-A **priority queue** maintains a set of elements. The supported operations are insertion and, depending on the type of the queue, retrieval and removal of either the minimum or maximum element. Insertion and removal take $O(\log n)$ time, and retrieval takes $O(1)$ time.
+**优先队列（priority queue）**维护一组元素。它支持的操作是插入，以及根据队列的类型，检索并删除最小或最大元素。插入和删除需要 $O(\log n)$ 时间，检索需要 $O(1)$ 时间。
 
-While an ordered set efficiently supports all the operations of a priority queue, the benefit of using a priority queue is that it has smaller constant factors. A priority queue is usually implemented using a heap structure that is much simpler than a balanced binary tree used in an ordered set.
+虽然有序集合能高效支持优先队列的所有操作，但使用优先队列的好处是它的常数因子更小。优先队列通常用堆结构实现，这比有序集合中使用的平衡二叉搜索树简单得多。
 
-By default, the elements in a C++ priority queue are sorted in decreasing order, and it is possible to find and remove the largest element in the queue. The following code illustrates this:
+默认情况下，C++ 优先队列中的元素按递减顺序排列，可以找出并删除队列中最大的元素。下面的代码说明了这一点：
 
 ```cpp
 priority_queue<int> q;
@@ -442,29 +409,29 @@ cout << q.top() << "\n"; // 6
 q.pop();
 ```
 
-If we want to create a priority queue that supports finding and removing the smallest element, we can do it as follows:
+如果我们想创建支持找出并删除最小元素的优先队列，可以按如下方式完成：
 
 ```cpp
 priority_queue<int,vector<int>,greater<int>> q;
 ```
 
-#### Policy-based data structures
+#### 基于策略的数据结构
 
-The `g++` compiler also supports some data structures that are not part of the C++ standard library. Such structures are called *policy-based* data structures. To use these structures, the following lines must be added to the code:
+`g++` 编译器还支持一些不属于 C++ 标准库的数据结构。这类结构称为*基于策略的*数据结构。要使用这些结构，必须把下面几行加入代码：
 
 ```cpp
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 ```
 
-After this, we can define a data structure `indexed_set` that is like `set` but can be indexed like an array. The definition for `int` values is as follows:
+此后，我们可以定义一个数据结构 `indexed_set`，它类似 `set`，但可以像数组一样按索引访问。对于 `int` 值的定义如下：
 
 ```cpp
 typedef tree<int,null_type,less<int>,rb_tree_tag,
              tree_order_statistics_node_update> indexed_set;
 ```
 
-Now we can create a set as follows:
+现在可以按如下方式创建一个集合：
 
 ```cpp
 indexed_set s;
@@ -474,53 +441,53 @@ s.insert(7);
 s.insert(9);
 ```
 
-The speciality of this set is that we have access to the indices that the elements would have in a sorted array. The function $\texttt{find\_by\_order}$ returns an iterator to the element at a given position:
+这个集合的特殊之处在于，我们可以访问元素在有序数组中将会具有的下标。函数 $\texttt{find\_by\_order}$ 返回指向给定位置的元素的迭代器：
 
 ```cpp
 auto x = s.find_by_order(2);
 cout << *x << "\n"; // 7
 ```
 
-And the function $\texttt{order\_of\_key}$ returns the position of a given element:
+而函数 $\texttt{order\_of\_key}$ 返回给定元素的位置：
 
 ```cpp
 cout << s.order_of_key(7) << "\n"; // 2
 ```
 
-If the element does not appear in the set, we get the position that the element would have in the set:
+如果该元素不在集合中，我们得到的是该元素在集合中将会具有的位置：
 
 ```cpp
 cout << s.order_of_key(6) << "\n"; // 2
 cout << s.order_of_key(8) << "\n"; // 3
 ```
 
-Both the functions work in logarithmic time.
+这两个函数都在对数时间内工作。
 
-## Comparison to sorting
+## 与排序的比较
 
-It is often possible to solve a problem using either data structures or sorting. Sometimes there are remarkable differences in the actual efficiency of these approaches, which may be hidden in their time complexities.
+通常既可以用数据结构、也可以用排序来解决同一个问题。有时这两种方法在实际效率上会有显著差异，而这些差异可能隐藏在其时间复杂度中。
 
-Let us consider a problem where we are given two lists $A$ and $B$ that both contain $n$ elements. Our task is to calculate the number of elements that belong to both of the lists. For example, for the lists $$A = [5,2,8,9]  \textrm{and}  B = [3,2,9,5],$$ the answer is 3 because the numbers 2, 5 and 9 belong to both of the lists.
+让我们考虑这样一个问题：给定两个都包含 $n$ 个元素的列表 $A$ 和 $B$。我们的任务是计算同时属于这两个列表的元素个数。例如，对于列表 $$A = [5,2,8,9]  \textrm{and}  B = [3,2,9,5],$$ 答案是 3，因为数字 2、5 和 9 同时属于这两个列表。
 
-A straightforward solution to the problem is to go through all pairs of elements in $O(n^2)$ time, but next we will focus on more efficient algorithms.
+解决该问题的一个直接方法是遍历所有元素对，用时 $O(n^2)$，但接下来我们将关注更高效的算法。
 
-#### Algorithm 1
+#### 算法 1
 
-We construct a set of the elements that appear in $A$, and after this, we iterate through the elements of $B$ and check for each elements if it also belongs to $A$. This is efficient because the elements of $A$ are in a set. Using the `set` structure, the time complexity of the algorithm is $O(n \log n)$.
+我们构造一个由出现在 $A$ 中的元素组成的集合，然后遍历 $B$ 的元素，对每个元素检查它是否也属于 $A$。这样做是高效的，因为 $A$ 的元素在一个集合中。使用 `set` 结构时，该算法的时间复杂度是 $O(n \log n)$。
 
-#### Algorithm 2
+#### 算法 2
 
-It is not necessary to maintain an ordered set, so instead of the `set` structure we can also use the `unordered_set` structure. This is an easy way to make the algorithm more efficient, because we only have to change the underlying data structure. The time complexity of the new algorithm is $O(n)$.
+没有必要维护有序集合，因此除了 `set` 结构，我们也可以使用 `unordered_set` 结构。这是让算法更高效的一种简单方法，因为我们只需更换底层数据结构。新算法的时间复杂度是 $O(n)$。
 
-#### Algorithm 3
+#### 算法 3
 
-Instead of data structures, we can use sorting. First, we sort both lists $A$ and $B$. After this, we iterate through both the lists at the same time and find the common elements. The time complexity of sorting is $O(n \log n)$, and the rest of the algorithm works in $O(n)$ time, so the total time complexity is $O(n \log n)$.
+除了数据结构，我们也可以使用排序。首先，我们对列表 $A$ 和 $B$ 都排序。然后，我们同时遍历两个列表，找出公共元素。排序的时间复杂度是 $O(n \log n)$，算法的其余部分在 $O(n)$ 时间内完成，所以总的时间复杂度是 $O(n \log n)$。
 
-#### Efficiency comparison
+#### 效率比较
 
-The following table shows how efficient the above algorithms are when $n$ varies and the elements of the lists are random integers between $1 \ldots 10^9$:
+下表展示了当 $n$ 变化、列表中的元素是 $1 \ldots 10^9$ 之间的随机整数时，上述算法的效率：
 
-|            $n$ | Algorithm 1 | Algorithm 2 | Algorithm 3 |
+|            $n$ | 算法 1 | 算法 2 | 算法 3 |
 |---------------:|------------:|------------:|------------:|
 |         $10^6$ |     $1.5$ s |     $0.3$ s |     $0.2$ s |
 | $2 \cdot 10^6$ |     $3.7$ s |     $0.8$ s |     $0.3$ s |
@@ -528,6 +495,6 @@ The following table shows how efficient the above algorithms are when $n$ varies
 | $4 \cdot 10^6$ |     $7.7$ s |     $1.7$ s |     $0.7$ s |
 | $5 \cdot 10^6$ |    $10.0$ s |     $2.3$ s |     $0.9$ s |
 
-Algorithms 1 and 2 are equal except that they use different set structures. In this problem, this choice has an important effect on the running time, because Algorithm 2 is 4--5 times faster than Algorithm 1.
+算法 1 和算法 2 除了使用不同的集合结构外完全相同。在这个问题中，这一选择对运行时间有重要影响，因为算法 2 比算法 1 快 4--5 倍。
 
-However, the most efficient algorithm is Algorithm 3 which uses sorting. It only uses half the time compared to Algorithm 2. Interestingly, the time complexity of both Algorithm 1 and Algorithm 3 is $O(n \log n)$, but despite this, Algorithm 3 is ten times faster. This can be explained by the fact that sorting is a simple procedure and it is done only once at the beginning of Algorithm 3, and the rest of the algorithm works in linear time. On the other hand, Algorithm 1 maintains a complex balanced binary tree during the whole algorithm.
+然而，最高效的算法是使用排序的算法 3。它所需的时间只有算法 2 的一半。有趣的是，算法 1 和算法 3 的时间复杂度都是 $O(n \log n)$，但尽管如此，算法 3 却快了十倍。这可以这样解释：排序是一个简单的过程，在算法 3 中只在开头执行一次，而算法的其余部分在线性时间内完成。另一方面，算法 1 在整个算法过程中都在维护一棵复杂的平衡二叉搜索树。

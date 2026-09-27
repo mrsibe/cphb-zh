@@ -1,44 +1,44 @@
-# Spanning trees
+# 生成树
 
-A **spanning tree** of a graph consists of all nodes of the graph and some of the edges of the graph so that there is a path between any two nodes. Like trees in general, spanning trees are connected and acyclic. Usually there are several ways to construct a spanning tree.
+图的**生成树**由该图的所有结点和部分边组成，使得任意两个结点之间都存在一条路径。与一般的树一样，生成树是连通且无环的。通常，构造生成树的方式有多种。
 
-For example, consider the following graph:
+例如，考虑下面的图：
 
 ![](assets/images/ch15-fig01.svg)
 
-One spanning tree for the graph is as follows:
+该图的一棵生成树如下：
 
 ![](assets/images/ch15-fig02.svg)
 
-The weight of a spanning tree is the sum of its edge weights. For example, the weight of the above spanning tree is $3+5+9+3+2=22$.
+生成树的权是其所有边权之和。例如，上面这棵生成树的权为 $3+5+9+3+2=22$。
 
-A **minimum spanning tree** is a spanning tree whose weight is as small as possible. The weight of a minimum spanning tree for the example graph is 20, and such a tree can be constructed as follows:
+**最小生成树**是权尽可能小的生成树。对于示例图，最小生成树的权为 20，可以如下构造这样一棵树：
 
 ![](assets/images/ch15-fig03.svg)
 
-In a similar way, a **maximum spanning tree** is a spanning tree whose weight is as large as possible. The weight of a maximum spanning tree for the example graph is 32:
+类似地，**最大生成树**是权尽可能大的生成树。示例图的最大生成树的权为 32：
 
 ![](assets/images/ch15-fig04.svg)
 
-Note that a graph may have several minimum and maximum spanning trees, so the trees are not unique.
+注意，一个图可能有多棵最小生成树和最大生成树，因此这些树并不是唯一的。
 
-It turns out that several greedy methods can be used to construct minimum and maximum spanning trees. In this chapter, we discuss two algorithms that process the edges of the graph ordered by their weights. We focus on finding minimum spanning trees, but the same algorithms can find maximum spanning trees by processing the edges in reverse order.
+事实证明，可以用若干种贪心方法来构造最小生成树和最大生成树。在本章中，我们讨论两种按边权顺序处理图中边的算法。我们重点关注寻找最小生成树，但同样的算法只需按相反顺序处理边，就能找出最大生成树。
 
-## Kruskal's algorithm
+## Kruskal 算法
 
-In **Kruskal's algorithm**[^1], the initial spanning tree only contains the nodes of the graph and does not contain any edges. Then the algorithm goes through the edges ordered by their weights, and always adds an edge to the tree if it does not create a cycle.
+在 **Kruskal 算法**[^1] 中，初始的生成树只包含图的结点，不包含任何边。随后，算法按边权顺序遍历所有的边，只要一条边不会形成环，就把它加入树中。
 
-The algorithm maintains the components of the tree. Initially, each node of the graph belongs to a separate component. Always when an edge is added to the tree, two components are joined. Finally, all nodes belong to the same component, and a minimum spanning tree has been found.
+算法维护树的各个分量。最初，图的每个结点各自属于一个独立的分量。每当一条边被加入树中，就有两个分量被合并。最终，所有结点属于同一个分量，此时便得到了一棵最小生成树。
 
-#### Example
+#### 示例
 
-Let us consider how Kruskal's algorithm processes the following graph:
+我们来考察 Kruskal 算法如何处理下面的图：
 
 ![](assets/images/ch15-fig05.svg)
 
-The first step of the algorithm is to sort the edges in increasing order of their weights. The result is the following list:
+算法的第一步是按边权递增的顺序对边排序，结果得到如下列表：
 
-| edge | weight |
+| 边   | 权 |
 |:-----|:-------|
 | 5--6 | 2      |
 | 1--2 | 3      |
@@ -50,47 +50,47 @@ The first step of the algorithm is to sort the edges in increasing order of thei
 | 3--4 | 9      |
 |      |        |
 
-After this, the algorithm goes through the list and adds each edge to the tree if it joins two separate components.
+此后，算法遍历该列表，只要一条边连接的是两个不同的分量，就把它加入树中。
 
-Initially, each node is in its own component:
+最初，每个结点各自属于一个分量：
 
 ![](assets/images/ch15-fig06.svg)
 
-The first edge to be added to the tree is the edge 5--6 that creates a component $\{5,6\}$ by joining the components $\{5\}$ and $\{6\}$:
+第一条被加入树中的边是边 5--6，它把分量 $\{5\}$ 与 $\{6\}$ 合并，得到分量 $\{5,6\}$：
 
 ![](assets/images/ch15-fig07.svg)
 
-After this, the edges 1--2, 3--6 and 1--5 are added in a similar way:
+此后，边 1--2、3--6 和 1--5 以类似的方式被加入：
 
 ![](assets/images/ch15-fig08.svg)
 
-After those steps, most components have been joined and there are two components in the tree: $\{1,2,3,5,6\}$ and $\{4\}$.
+经过这些步骤后，大多数分量已被合并，树中还剩两个分量：$\{1,2,3,5,6\}$ 和 $\{4\}$。
 
-The next edge in the list is the edge 2--3, but it will not be included in the tree, because nodes 2 and 3 are already in the same component. For the same reason, the edge 2--5 will not be included in the tree.
+列表中的下一条边是边 2--3，但它不会被加入树中，因为结点 2 和 3 已经属于同一分量。出于同样的原因，边 2--5 也不会被加入树中。
 
-Finally, the edge 4--6 will be included in the tree:
+最后，边 4--6 将被加入树中：
 
 ![](assets/images/ch15-fig09.svg)
 
-After this, the algorithm will not add any new edges, because the graph is connected and there is a path between any two nodes. The resulting graph is a minimum spanning tree with weight $2+3+3+5+7=20$.
+此后，算法不会再加入任何新边，因为图是连通的，任意两个结点之间都有路径。最终得到的图是一棵权为 $2+3+3+5+7=20$ 的最小生成树。
 
-#### Why does this work?
+#### 为什么这样做是正确的？
 
-It is a good question why Kruskal's algorithm works. Why does the greedy strategy guarantee that we will find a minimum spanning tree?
+Kruskal 算法为什么正确，是个值得思考的问题。为什么这种贪心策略能保证我们找到一棵最小生成树？
 
-Let us see what happens if the minimum weight edge of the graph is *not* included in the spanning tree. For example, suppose that a spanning tree for the previous graph would not contain the minimum weight edge 5--6. We do not know the exact structure of such a spanning tree, but in any case it has to contain some edges. Assume that the tree would be as follows:
+让我们看看，如果图中权最小的边*没有*被包含在生成树中会怎样。例如，假设前一个图的某棵生成树不包含权最小的边 5--6。我们不知道这样一棵生成树的确切结构，但无论如何它必须包含一些边。假设这棵树如下：
 
 ![](assets/images/ch15-fig10.svg)
 
-However, it is not possible that the above tree would be a minimum spanning tree for the graph. The reason for this is that we can remove an edge from the tree and replace it with the minimum weight edge 5--6. This produces a spanning tree whose weight is *smaller*:
+然而，上面这棵树不可能是该图的最小生成树。原因是，我们可以从树中删去一条边，并用权最小的边 5--6 替换它。这样得到的生成树权*更小*：
 
 ![](assets/images/ch15-fig11.svg)
 
-For this reason, it is always optimal to include the minimum weight edge in the tree to produce a minimum spanning tree. Using a similar argument, we can show that it is also optimal to add the next edge in weight order to the tree, and so on. Hence, Kruskal's algorithm works correctly and always produces a minimum spanning tree.
+正因如此，要得到最小生成树，把权最小的边包含进树中总是最优的。用类似的论证，可以证明按权顺序加入下一条边也同样最优，依此类推。因此，Kruskal 算法是正确的，总能得到一棵最小生成树。
 
-#### Implementation
+#### 实现
 
-When implementing Kruskal's algorithm, it is convenient to use the edge list representation of the graph. The first phase of the algorithm sorts the edges in the list in $O(m \log m)$ time. After this, the second phase of the algorithm builds the minimum spanning tree as follows:
+在实现 Kruskal 算法时，使用图的边列表表示会比较方便。算法的第一阶段用 $O(m \log m)$ 的时间对列表中的边进行排序。此后，算法的第二阶段按如下方式构造最小生成树：
 
 ```cpp
 for (...) {
@@ -98,44 +98,44 @@ for (...) {
 }
 ```
 
-The loop goes through the edges in the list and always processes an edge $a$--$b$ where $a$ and $b$ are two nodes. Two functions are needed: the function `same` determines if $a$ and $b$ are in the same component, and the function `unite` joins the components that contain $a$ and $b$.
+循环遍历列表中的边，每次处理一条边 $a$--$b$，其中 $a$ 和 $b$ 是两个结点。这里需要两个函数：函数 `same` 判断 $a$ 和 $b$ 是否属于同一分量，函数 `unite` 合并包含 $a$ 和 $b$ 的分量。
 
-The problem is how to efficiently implement the functions `same` and `unite`. One possibility is to implement the function `same` as a graph traversal and check if we can get from node $a$ to node $b$. However, the time complexity of such a function would be $O(n+m)$ and the resulting algorithm would be slow, because the function `same` will be called for each edge in the graph.
+问题在于如何高效地实现函数 `same` 和 `unite`。一种做法是把函数 `same` 实现为一次图遍历，检查能否从结点 $a$ 到达结点 $b$。然而，这样一个函数的时间复杂度是 $O(n+m)$，由此得到的算法会非常慢，因为图中的每条边都会调用一次函数 `same`。
 
-We will solve the problem using a union-find structure that implements both functions in $O(\log n)$ time. Thus, the time complexity of Kruskal's algorithm will be $O(m \log n)$ after sorting the edge list.
+我们将用一种并查集结构来解决这个问题，它在 $O(\log n)$ 时间内实现这两个函数。因此，在排好边列表之后，Kruskal 算法的时间复杂度为 $O(m \log n)$。
 
-## Union-find structure
+## 并查集结构
 
-A **union-find structure** maintains a collection of sets. The sets are disjoint, so no element belongs to more than one set. Two $O(\log n)$ time operations are supported: the `unite` operation joins two sets, and the `find` operation finds the representative of the set that contains a given element[^2].
+**并查集结构**维护一个集合的集合。这些集合两两不交，因此没有任何元素属于一个以上的集合。它支持两种 $O(\log n)$ 时间的操作：`unite` 操作合并两个集合，`find` 操作找出包含给定元素的集合的代表元[^2]。
 
-#### Structure
+#### 结构
 
-In a union-find structure, one element in each set is the representative of the set, and there is a chain from any other element of the set to the representative. For example, assume that the sets are $\{1,4,7\}$, $\{5\}$ and $\{2,3,6,8\}$:
+在并查集中，每个集合中的一个元素是该集合的代表元，集合中任何其他元素到该代表元之间都有一条链。例如，假设集合为 $\{1,4,7\}$、$\{5\}$ 和 $\{2,3,6,8\}$：
 
 ![](assets/images/ch15-fig12.svg)
 
-In this case the representatives of the sets are 4, 5 and 2. We can find the representative of any element by following the chain that begins at the element. For example, the element 2 is the representative for the element 6, because we follow the chain $6 \rightarrow 3 \rightarrow 2$. Two elements belong to the same set exactly when their representatives are the same.
+在本例中，各集合的代表元是 4、5 和 2。沿从某个元素开始的链前进，就能找到该元素的代表元。例如，元素 6 的代表元是元素 2，因为沿链 $6 \rightarrow 3 \rightarrow 2$ 前进即可到达。两个元素属于同一集合，当且仅当它们的代表元相同。
 
-Two sets can be joined by connecting the representative of one set to the representative of the other set. For example, the sets $\{1,4,7\}$ and $\{2,3,6,8\}$ can be joined as follows:
+把一个集合的代表元连接到另一个集合的代表元，即可合并这两个集合。例如，集合 $\{1,4,7\}$ 和 $\{2,3,6,8\}$ 可以按如下方式合并：
 
 ![](assets/images/ch15-fig13.svg)
 
-The resulting set contains the elements $\{1,2,3,4,6,7,8\}$. From this on, the element 2 is the representative for the entire set and the old representative 4 points to the element 2.
+合并后的集合包含元素 $\{1,2,3,4,6,7,8\}$。从此以后，元素 2 是整个集合的代表元，而原来的代表元 4 指向元素 2。
 
-The efficiency of the union-find structure depends on how the sets are joined. It turns out that we can follow a simple strategy: always connect the representative of the *smaller* set to the representative of the *larger* set (or if the sets are of equal size, we can make an arbitrary choice). Using this strategy, the length of any chain will be $O(\log n)$, so we can find the representative of any element efficiently by following the corresponding chain.
+并查集的效率取决于集合如何合并。事实证明，我们可以遵循一个简单的策略：总是把*较小*集合的代表元连接到*较大*集合的代表元上（若两集合大小相等，则可以任意选择）。采用这一策略，任何链的长度都是 $O(\log n)$，因此沿相应的链前进就能高效地找到任意元素的代表元。
 
-#### Implementation
+#### 实现
 
-The union-find structure can be implemented using arrays. In the following implementation, the array `link` contains for each element the next element in the chain or the element itself if it is a representative, and the array `size` indicates for each representative the size of the corresponding set.
+并查集可以用数组实现。在下面的实现中，数组 `link` 为每个元素存储它在链中的下一个元素，若该元素是代表元则存储它自身；数组 `size` 为每个代表元存储相应集合的大小。
 
-Initially, each element belongs to a separate set:
+最初，每个元素各自属于一个集合：
 
 ```cpp
 for (int i = 1; i <= n; i++) link[i] = i;
 for (int i = 1; i <= n; i++) size[i] = 1;
 ```
 
-The function `find` returns the representative for an element $x$. The representative can be found by following the chain that begins at $x$.
+函数 `find` 返回元素 $x$ 的代表元。沿从 $x$ 开始的链前进即可找到该代表元。
 
 ```cpp
 int find(int x) {
@@ -144,7 +144,7 @@ int find(int x) {
 }
 ```
 
-The function `same` checks whether elements $a$ and $b$ belong to the same set. This can easily be done by using the function `find`:
+函数 `same` 检查元素 $a$ 和 $b$ 是否属于同一集合。借助函数 `find` 很容易做到这一点：
 
 ```cpp
 bool same(int a, int b) {
@@ -152,7 +152,7 @@ bool same(int a, int b) {
 }
 ```
 
-The function `unite` joins the sets that contain elements $a$ and $b$ (the elements have to be in different sets). The function first finds the representatives of the sets and then connects the smaller set to the larger set.
+函数 `unite` 合并包含元素 $a$ 和 $b$ 的集合（这两个元素必须属于不同的集合）。该函数先找出两个集合的代表元，然后把较小的集合连接到较大的集合上。
 
 ```cpp
 void unite(int a, int b) {
@@ -164,44 +164,44 @@ void unite(int a, int b) {
 }
 ```
 
-The time complexity of the function `find` is $O(\log n)$ assuming that the length of each chain is $O(\log n)$. In this case, the functions `same` and `unite` also work in $O(\log n)$ time. The function `unite` makes sure that the length of each chain is $O(\log n)$ by connecting the smaller set to the larger set.
+假设每条链的长度为 $O(\log n)$，则函数 `find` 的时间复杂度为 $O(\log n)$。在这种情况下，函数 `same` 和 `unite` 也在 $O(\log n)$ 时间内完成。函数 `unite` 通过把较小集合连接到较大集合上，保证了每条链的长度为 $O(\log n)$。
 
-## Prim's algorithm
+## Prim 算法
 
-**Prim's algorithm**[^3] is an alternative method for finding a minimum spanning tree. The algorithm first adds an arbitrary node to the tree. After this, the algorithm always chooses a minimum-weight edge that adds a new node to the tree. Finally, all nodes have been added to the tree and a minimum spanning tree has been found.
+**Prim 算法**[^3] 是寻找最小生成树的另一种方法。算法首先把任意一个结点加入树中。此后，算法总是选择一条能把新结点加入树中的最小权边。最终，所有结点都被加入树中，此时便得到了一棵最小生成树。
 
-Prim's algorithm resembles Dijkstra's algorithm. The difference is that Dijkstra's algorithm always selects an edge whose distance from the starting node is minimum, but Prim's algorithm simply selects the minimum weight edge that adds a new node to the tree.
+Prim 算法与 Dijkstra 算法相似。区别在于，Dijkstra 算法总是选择距离起始结点最近的边，而 Prim 算法只是选择能把新结点加入树中的最小权边。
 
-#### Example
+#### 示例
 
-Let us consider how Prim's algorithm works in the following graph:
+我们来考察 Prim 算法在下面的图中是如何工作的：
 
 ![](assets/images/ch15-fig14.svg)
 
-Initially, there are no edges between the nodes:
+最初，结点之间没有任何边：
 
 ![](assets/images/ch15-fig15.svg)
 
-An arbitrary node can be the starting node, so let us choose node 1. First, we add node 2 that is connected by an edge of weight 3:
+任意结点都可以作为起始结点，因此我们选择结点 1。首先，我们加入通过一条权为 3 的边相连的结点 2：
 
 ![](assets/images/ch15-fig16.svg)
 
-After this, there are two edges with weight 5, so we can add either node 3 or node 5 to the tree. Let us add node 3 first:
+此后，有两条权为 5 的边，因此可以把结点 3 或结点 5 加入树中。我们先加入结点 3：
 
 ![](assets/images/ch15-fig17.svg)
 
-The process continues until all nodes have been included in the tree:
+这一过程持续进行，直到所有结点都被加入树中：
 
 ![](assets/images/ch15-fig18.svg)
 
-#### Implementation
+#### 实现
 
-Like Dijkstra's algorithm, Prim's algorithm can be efficiently implemented using a priority queue. The priority queue should contain all nodes that can be connected to the current component using a single edge, in increasing order of the weights of the corresponding edges.
+与 Dijkstra 算法一样，Prim 算法可以用优先队列高效实现。优先队列应包含所有能用一条边连接到当前分量的结点，并按相应边的权递增排列。
 
-The time complexity of Prim's algorithm is $O(n + m \log m)$ that equals the time complexity of Dijkstra's algorithm. In practice, Prim's and Kruskal's algorithms are both efficient, and the choice of the algorithm is a matter of taste. Still, most competitive programmers use Kruskal's algorithm.
+Prim 算法的时间复杂度为 $O(n + m \log m)$，与 Dijkstra 算法的时间复杂度相同。在实践中，Prim 算法和 Kruskal 算法都同样高效，选哪个算法只是个人偏好。不过，大多数竞赛选手使用 Kruskal 算法。
 
-[^1]: The algorithm was published in 1956 by J. B. Kruskal [53].
+[^1]: 该算法由 J. B. Kruskal 于 1956 年发表 [53]。
 
-[^2]: The structure presented here was introduced in 1971 by J. D. Hopcroft and J. D. Ullman [42]. Later, in 1975, R. E. Tarjan studied a more sophisticated variant of the structure [72] that is discussed in many algorithm textbooks nowadays.
+[^2]: 这里介绍的结构由 J. D. Hopcroft 和 J. D. Ullman 于 1971 年提出 [42]。后来在 1975 年，R. E. Tarjan 研究了该结构的一种更精巧的变体 [72]，如今许多算法教材都会讨论它。
 
-[^3]: The algorithm is named after R. C. Prim who published it in 1957 [61]. However, the same algorithm was discovered already in 1930 by V. Jarník.
+[^3]: 该算法以 R. C. Prim 命名，他于 1957 年发表了它 [61]。然而，Jarník 早在 1930 年就发现了同一个算法。

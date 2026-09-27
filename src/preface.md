@@ -1,12 +1,12 @@
-# Preface
+# 前言
 
-The purpose of this book is to give you a thorough introduction to competitive programming. It is assumed that you already know the basics of programming, but no previous background in competitive programming is needed.
+本书的目的是带你全面入门竞赛程序设计。我们假定你已经掌握编程基础，但不需要任何竞赛程序设计的背景。
 
-The book is especially intended for students who want to learn algorithms and possibly participate in the International Olympiad in Informatics (IOI) or in the International Collegiate Programming Contest (ICPC). Of course, the book is also suitable for anybody else interested in competitive programming.
+本书主要面向希望学习算法、并有可能参加国际信息学奥林匹克（IOI）或国际大学生程序设计竞赛（ICPC）的学生。当然，本书也适合任何对竞赛程序设计感兴趣的人。
 
-It takes a long time to become a good competitive programmer, but it is also an opportunity to learn a lot. You can be sure that you will get a good general understanding of algorithms if you spend time reading the book, solving problems and taking part in contests.
+成为一名优秀的竞赛选手需要长期积累，但这同时也是一个收获颇丰的学习机会。只要坚持阅读本书、做题并参加比赛，你一定能够对算法形成良好的整体理解。
 
-The book is under continuous development. You can always send feedback on the book to `ahslaaks@cs.helsinki.fi`.
+本书仍在持续开发中。你可以随时将反馈发送至 `ahslaaks@cs.helsinki.fi`。
 
-Helsinki, August 2019  
+赫尔辛基，2019 年 8 月  
 Antti Laaksonen

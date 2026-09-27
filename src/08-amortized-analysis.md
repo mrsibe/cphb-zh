@@ -1,139 +1,139 @@
-# Amortized analysis
+# 均摊分析
 
-The time complexity of an algorithm is often easy to analyze just by examining the structure of the algorithm: what loops does the algorithm contain and how many times the loops are performed. However, sometimes a straightforward analysis does not give a true picture of the efficiency of the algorithm.
+算法的时间复杂度往往只需审视算法的结构就能轻松分析：算法包含哪些循环，这些循环又执行了多少次。然而，有时直接分析并不能真实反映算法的效率。
 
-**Amortized analysis** can be used to analyze algorithms that contain operations whose time complexity varies. The idea is to estimate the total time used to all such operations during the execution of the algorithm, instead of focusing on individual operations.
+**均摊分析**（amortized analysis）可用于分析那些包含时间复杂度会变化的操作的算法。其思路是估计算法执行期间所有此类操作所用的总时间，而不是关注单个操作。
 
-## Two pointers method
+## 双指针方法
 
-In the **two pointers method**, two pointers are used to iterate through the array values. Both pointers can move to one direction only, which ensures that the algorithm works efficiently. Next we discuss two problems that can be solved using the two pointers method.
+在**双指针方法**中，使用两个指针遍历数组的值。两个指针都只能朝一个方向移动，这保证了算法的高效。接下来我们讨论两个可用双指针方法解决的问题。
 
-#### Subarray sum
+#### 子数组求和
 
-As the first example, consider a problem where we are given an array of $n$ positive integers and a target sum $x$, and we want to find a subarray whose sum is $x$ or report that there is no such subarray.
+作为第一个例子，考虑这样一个问题：给定一个含 $n$ 个正整数的数组和一个目标和 $x$，我们想找出一个和为 $x$ 的子数组，或者报告不存在这样的子数组。
 
-For example, the array
+例如，数组
 
 ![](assets/images/ch08-fig01.svg)
 
-contains a subarray whose sum is 8:
+包含一个和为 8 的子数组：
 
 ![](assets/images/ch08-fig02.svg)
 
-This problem can be solved in $O(n)$ time by using the two pointers method. The idea is to maintain pointers that point to the first and last value of a subarray. On each turn, the left pointer moves one step to the right, and the right pointer moves to the right as long as the resulting subarray sum is at most $x$. If the sum becomes exactly $x$, a solution has been found.
+这个问题可以用双指针方法在 $O(n)$ 时间内解决。思路是维护分别指向子数组第一个值和最后一个值的指针。每一轮中，左指针向右移动一步，而右指针在子数组的和不超过 $x$ 的前提下尽可能向右移动。如果和恰好等于 $x$，则找到了一个解。
 
-As an example, consider the following array and a target sum $x=8$:
+举例来说，考虑以下数组和目标和 $x=8$：
 
 ![](assets/images/ch08-fig03.svg)
 
-The initial subarray contains the values 1, 3 and 2 whose sum is 6:
+初始子数组包含值 1、3 和 2，其和为 6：
 
 ![](assets/images/ch08-fig04.svg)
 
-Then, the left pointer moves one step to the right. The right pointer does not move, because otherwise the subarray sum would exceed $x$.
+接着，左指针向右移动一步。右指针不移动，因为否则子数组的和将超过 $x$。
 
 ![](assets/images/ch08-fig05.svg)
 
-Again, the left pointer moves one step to the right, and this time the right pointer moves three steps to the right. The subarray sum is $2+5+1=8$, so a subarray whose sum is $x$ has been found.
+左指针再次向右移动一步，这次右指针向右移动三步。子数组的和为 $2+5+1=8$，因此找到了一个和为 $x$ 的子数组。
 
 ![](assets/images/ch08-fig06.svg)
 
-The running time of the algorithm depends on the number of steps the right pointer moves. While there is no useful upper bound on how many steps the pointer can move on a *single* turn. we know that the pointer moves *a total of* $O(n)$ steps during the algorithm, because it only moves to the right.
+算法的运行时间取决于右指针移动的步数。虽然在*单次*轮次中指针能移动多少步没有有用的上界，但我们知道在整个算法过程中指针*总共*移动 $O(n)$ 步，因为它只向右移动。
 
-Since both the left and right pointer move $O(n)$ steps during the algorithm, the algorithm works in $O(n)$ time.
+由于左指针和右指针在算法过程中都移动 $O(n)$ 步，算法在 $O(n)$ 时间内运行。
 
-#### 2SUM problem
+#### 2SUM 问题
 
-Another problem that can be solved using the two pointers method is the following problem, also known as the **2SUM problem**: given an array of $n$ numbers and a target sum $x$, find two array values such that their sum is $x$, or report that no such values exist.
+另一个可用双指针方法解决的问题是下面这个，也被称为 **2SUM 问题**：给定一个含 $n$ 个数的数组和一个目标和 $x$，找出两个数组值使它们的和为 $x$，或者报告不存在这样的值。
 
-To solve the problem, we first sort the array values in increasing order. After that, we iterate through the array using two pointers. The left pointer starts at the first value and moves one step to the right on each turn. The right pointer begins at the last value and always moves to the left until the sum of the left and right value is at most $x$. If the sum is exactly $x$, a solution has been found.
+为解决这个问题，我们首先按递增顺序对数组的值排序。之后，我们用两个指针遍历数组。左指针从第一个值开始，每一轮向右移动一步。右指针从最后一个值开始，总是向左移动，直到左值和右值之和不超过 $x$。如果和恰好等于 $x$，则找到了一个解。
 
-For example, consider the following array and a target sum $x=12$:
+例如，考虑以下数组和目标和 $x=12$：
 
 ![](assets/images/ch08-fig07.svg)
 
-The initial positions of the pointers are as follows. The sum of the values is $1+10=11$ that is smaller than $x$.
+指针的初始位置如下。值之和为 $1+10=11$，小于 $x$。
 
 ![](assets/images/ch08-fig08.svg)
 
-Then the left pointer moves one step to the right. The right pointer moves three steps to the left, and the sum becomes $4+7=11$.
+然后左指针向右移动一步。右指针向左移动三步，和变为 $4+7=11$。
 
 ![](assets/images/ch08-fig09.svg)
 
-After this, the left pointer moves one step to the right again. The right pointer does not move, and a solution $5+7=12$ has been found.
+此后，左指针再次向右移动一步。右指针不移动，于是找到了一个解 $5+7=12$。
 
 ![](assets/images/ch08-fig10.svg)
 
-The running time of the algorithm is $O(n \log n)$, because it first sorts the array in $O(n \log n)$ time, and then both pointers move $O(n)$ steps.
+算法的运行时间为 $O(n \log n)$，因为它首先用 $O(n \log n)$ 时间对数组排序，然后两个指针都移动 $O(n)$ 步。
 
-Note that it is possible to solve the problem in another way in $O(n \log n)$ time using binary search. In such a solution, we iterate through the array and for each array value, we try to find another value that yields the sum $x$. This can be done by performing $n$ binary searches, each of which takes $O(\log n)$ time.
+注意，还可以用另一种方式在 $O(n \log n)$ 时间内解决这个问题，即使用二分搜索。在这种解法中，我们遍历数组，对每个数组值尝试找出另一个能得到和 $x$ 的值。这可以通过执行 $n$ 次二分搜索来完成，每次耗时 $O(\log n)$。
 
-A more difficult problem is the **3SUM problem** that asks to find *three* array values whose sum is $x$. Using the idea of the above algorithm, this problem can be solved in $O(n^2)$ time[^1]. Can you see how?
+一个更困难的问题是 **3SUM 问题**，它要求找出*三个*数组值使其和为 $x$。利用上述算法的思路，这个问题可以在 $O(n^2)$ 时间内解决[^1]。你能看出怎么做吗？
 
-## Nearest smaller elements
+## 最近的较小元素
 
-Amortized analysis is often used to estimate the number of operations performed on a data structure. The operations may be distributed unevenly so that most operations occur during a certain phase of the algorithm, but the total number of the operations is limited.
+均摊分析常用于估计对某个数据结构执行的操作次数。这些操作可能分布不均，以致大多数操作发生在算法的某个阶段，但操作的总次数是有限的。
 
-As an example, consider the problem of finding for each array element the **nearest smaller element**, i.e., the first smaller element that precedes the element in the array. It is possible that no such element exists, in which case the algorithm should report this. Next we will see how the problem can be efficiently solved using a stack structure.
+举例来说，考虑这样一个问题：为每个数组元素找出其**最近的较小元素**，即数组中位于该元素之前、且比它小的第一个元素。可能存在没有这样的元素的情况，此时算法应报告这一情况。接下来我们将看到如何用栈结构高效地解决这个问题。
 
-We go through the array from left to right and maintain a stack of array elements. At each array position, we remove elements from the stack until the top element is smaller than the current element, or the stack is empty. Then, we report that the top element is the nearest smaller element of the current element, or if the stack is empty, there is no such element. Finally, we add the current element to the stack.
+我们从左到右遍历数组，并维护一个存放数组元素的栈。在每个数组位置，我们不断从栈中弹出元素，直到栈顶元素小于当前元素，或者栈为空。然后，我们报告栈顶元素就是当前元素的最近较小元素，或者如果栈为空，则不存在这样的元素。最后，我们把当前元素压入栈中。
 
-As an example, consider the following array:
+举例来说，考虑以下数组：
 
 ![](assets/images/ch08-fig11.svg)
 
-First, the elements 1, 3 and 4 are added to the stack, because each element is larger than the previous element. Thus, the nearest smaller element of 4 is 3, and the nearest smaller element of 3 is 1.
+首先，元素 1、3 和 4 被压入栈中，因为每个元素都比前一个元素大。因此，4 的最近较小元素是 3，3 的最近较小元素是 1。
 
 ![](assets/images/ch08-fig12.svg)
 
-The next element 2 is smaller than the two top elements in the stack. Thus, the elements 3 and 4 are removed from the stack, and then the element 2 is added to the stack. Its nearest smaller element is 1:
+下一个元素 2 小于栈中位于顶部的两个元素。因此，元素 3 和 4 被弹出栈，然后元素 2 被压入栈中。它的最近较小元素是 1：
 
 ![](assets/images/ch08-fig13.svg)
 
-Then, the element 5 is larger than the element 2, so it will be added to the stack, and its nearest smaller element is 2:
+接着，元素 5 大于元素 2，因此它被压入栈中，其最近较小元素是 2：
 
 ![](assets/images/ch08-fig14.svg)
 
-After this, the element 5 is removed from the stack and the elements 3 and 4 are added to the stack:
+此后，元素 5 被弹出栈，元素 3 和 4 被压入栈中：
 
 ![](assets/images/ch08-fig15.svg)
 
-Finally, all elements except 1 are removed from the stack and the last element 2 is added to the stack:
+最后，除 1 之外的所有元素都被弹出栈，最后一个元素 2 被压入栈中：
 
 ![](assets/images/ch08-fig16.svg)
 
-The efficiency of the algorithm depends on the total number of stack operations. If the current element is larger than the top element in the stack, it is directly added to the stack, which is efficient. However, sometimes the stack can contain several larger elements and it takes time to remove them. Still, each element is added *exactly once* to the stack and removed *at most once* from the stack. Thus, each element causes $O(1)$ stack operations, and the algorithm works in $O(n)$ time.
+算法的效率取决于栈操作的总次数。如果当前元素大于栈顶元素，它会直接被压入栈中，这是高效的。然而，有时栈中可能包含若干较大的元素，弹出它们需要时间。尽管如此，每个元素被*恰好一次*压入栈，并*至多一次*弹出栈。因此，每个元素引起 $O(1)$ 次栈操作，算法在 $O(n)$ 时间内运行。
 
-## Sliding window minimum
+## 滑动窗口最小值
 
-A **sliding window** is a constant-size subarray that moves from left to right through the array. At each window position, we want to calculate some information about the elements inside the window. In this section, we focus on the problem of maintaining the **sliding window minimum**, which means that we should report the smallest value inside each window.
+**滑动窗口**是一个固定大小的子数组，它从左到右在数组中移动。在每个窗口位置，我们想计算关于窗口内元素的某些信息。本节我们聚焦于维护**滑动窗口最小值**的问题，即我们要报告每个窗口内的最小值。
 
-The sliding window minimum can be calculated using a similar idea that we used to calculate the nearest smaller elements. We maintain a queue where each element is larger than the previous element, and the first element always corresponds to the minimum element inside the window. After each window move, we remove elements from the end of the queue until the last queue element is smaller than the new window element, or the queue becomes empty. We also remove the first queue element if it is not inside the window anymore. Finally, we add the new window element to the end of the queue.
+滑动窗口最小值可以用与计算最近较小元素类似的思路来计算。我们维护一个队列，其中每个元素都大于前一个元素，且队首元素始终对应窗口内的最小值。每次窗口移动后，我们从队尾移除元素，直到队尾元素小于新的窗口元素，或者队列变空。如果队首元素不再位于窗口内，我们也将其移除。最后，我们把新的窗口元素加入队尾。
 
-As an example, consider the following array:
+举例来说，考虑以下数组：
 
 ![](assets/images/ch08-fig17.svg)
 
-Suppose that the size of the sliding window is 4. At the first window position, the smallest value is 1:
+假设滑动窗口的大小为 4。在第一个窗口位置，最小值为 1：
 
 ![](assets/images/ch08-fig18.svg)
 
-Then the window moves one step right. The new element 3 is smaller than the elements 4 and 5 in the queue, so the elements 4 and 5 are removed from the queue and the element 3 is added to the queue. The smallest value is still 1.
+然后窗口向右移动一步。新元素 3 小于队列中的元素 4 和 5，因此元素 4 和 5 被移出队列，元素 3 被加入队列。最小值仍然是 1。
 
 ![](assets/images/ch08-fig19.svg)
 
-After this, the window moves again, and the smallest element 1 does not belong to the window anymore. Thus, it is removed from the queue and the smallest value is now 3. Also the new element 4 is added to the queue.
+此后，窗口再次移动，最小元素 1 不再属于该窗口。因此，它被移出队列，此时最小值为 3。同时新元素 4 被加入队列。
 
 ![](assets/images/ch08-fig20.svg)
 
-The next new element 1 is smaller than all elements in the queue. Thus, all elements are removed from the queue and it will only contain the element 1:
+下一个新元素 1 小于队列中的所有元素。因此，所有元素都被移出队列，队列中将只包含元素 1：
 
 ![](assets/images/ch08-fig21.svg)
 
-Finally the window reaches its last position. The element 2 is added to the queue, but the smallest value inside the window is still 1.
+最后窗口到达它的最后一个位置。元素 2 被加入队列，但窗口内的最小值仍然是 1。
 
 ![](assets/images/ch08-fig22.svg)
 
-Since each array element is added to the queue exactly once and removed from the queue at most once, the algorithm works in $O(n)$ time.
+由于每个数组元素被恰好一次加入队列，并至多一次移出队列，算法在 $O(n)$ 时间内运行。
 
-[^1]: For a long time, it was thought that solving the 3SUM problem more efficiently than in $O(n^2)$ time would not be possible. However, in 2014, it turned out [33] that this is not the case.
+[^1]: 在很长一段时间里，人们认为以比 $O(n^2)$ 时间更高效的方式解决 3SUM 问题是不可能的。然而，在 2014 年，人们发现 [33] 事实并非如此。

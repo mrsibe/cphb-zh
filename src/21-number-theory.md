@@ -1,54 +1,54 @@
-# Number theory
+# 数论
 
-**Number theory** is a branch of mathematics that studies integers. Number theory is a fascinating field, because many questions involving integers are very difficult to solve even if they seem simple at first glance.
+**数论**是研究整数的一个数学分支。数论是一个引人入胜的领域，因为许多涉及整数的问题即便乍看之下很简单，求解起来却极其困难。
 
-As an example, consider the following equation: $$x^3 + y^3 + z^3 = 33$$ It is easy to find three real numbers $x$, $y$ and $z$ that satisfy the equation. For example, we can choose $$\begin{array}{lcl}
+举个例子，考虑下面这个方程：$$x^3 + y^3 + z^3 = 33$$ 很容易找到三个满足该方程的实数 $x$、$y$ 和 $z$。例如，我们可以取 $$\begin{array}{lcl}
 x = 3, \\
 y = \sqrt[3]{3}, \\
 z = \sqrt[3]{3}.\\
-\end{array}$$ However, it is an open problem in number theory if there are any three *integers* $x$, $y$ and $z$ that would satisfy the equation [6].
+\end{array}$$ 然而，是否存在任何三个*整数* $x$、$y$ 和 $z$ 满足该方程，是数论中的一个未解问题 [6]。
 
-In this chapter, we will focus on basic concepts and algorithms in number theory. Throughout the chapter, we will assume that all numbers are integers, if not otherwise stated.
+在本章中，我们将聚焦于数论中的基本概念和算法。贯穿整章，若无特别说明，我们都假定所有数都是整数。
 
-## Primes and factors
+## 素数与因子
 
-A number $a$ is called a **factor** or a **divisor** of a number $b$ if $a$ divides $b$. If $a$ is a factor of $b$, we write $a \mid b$, and otherwise we write $a \nmid b$. For example, the factors of 24 are 1, 2, 3, 4, 6, 8, 12 and 24.
+如果 $a$ 整除 $b$，则称 $a$ 是 $b$ 的一个**因子**或**约数**。若 $a$ 是 $b$ 的因子，我们记作 $a \mid b$，否则记作 $a \nmid b$。例如，24 的因子是 1、2、3、4、6、8、12 和 24。
 
-A number $n>1$ is a **prime** if its only positive factors are 1 and $n$. For example, 7, 19 and 41 are primes, but 35 is not a prime, because $5 \cdot 7 = 35$. For every number $n>1$, there is a unique **prime factorization** $$n = p_1^{\alpha_1} p_2^{\alpha_2} \cdots p_k^{\alpha_k},$$ where $p_1,p_2,\ldots,p_k$ are distinct primes and $\alpha_1,\alpha_2,\ldots,\alpha_k$ are positive numbers. For example, the prime factorization for 84 is $$84 = 2^2 \cdot 3^1 \cdot 7^1.$$
+若 $n>1$ 的正因子只有 1 和 $n$，则称 $n$ 是一个**素数**。例如，7、19 和 41 都是素数，但 35 不是素数，因为 $5 \cdot 7 = 35$。对于每个数 $n>1$，都有唯一的**素因数分解** $$n = p_1^{\alpha_1} p_2^{\alpha_2} \cdots p_k^{\alpha_k},$$ 其中 $p_1,p_2,\ldots,p_k$ 是互不相同的素数，$\alpha_1,\alpha_2,\ldots,\alpha_k$ 是正整数。例如，84 的素因数分解为 $$84 = 2^2 \cdot 3^1 \cdot 7^1.$$
 
-The **number of factors** of a number $n$ is $$\tau(n)=\prod_{i=1}^k (\alpha_i+1),$$ because for each prime $p_i$, there are $\alpha_i+1$ ways to choose how many times it appears in the factor. For example, the number of factors of 84 is $\tau(84)=3 \cdot 2 \cdot 2 = 12$. The factors are 1, 2, 3, 4, 6, 7, 12, 14, 21, 28, 42 and 84.
+一个数 $n$ 的**因子个数**为 $$\tau(n)=\prod_{i=1}^k (\alpha_i+1),$$ 因为对于每个素数 $p_i$，有 $\alpha_i+1$ 种方式选择它在因子中出现的次数。例如，84 的因子个数是 $\tau(84)=3 \cdot 2 \cdot 2 = 12$。这些因子是 1、2、3、4、6、7、12、14、21、28、42 和 84。
 
-The **sum of factors** of $n$ is $$\sigma(n)=\prod_{i=1}^k (1+p_i+\ldots+p_i^{\alpha_i}) = \prod_{i=1}^k \frac{p_i^{a_i+1}-1}{p_i-1},$$ where the latter formula is based on the geometric progression formula. For example, the sum of factors of 84 is $$\sigma(84)=\frac{2^3-1}{2-1} \cdot \frac{3^2-1}{3-1} \cdot \frac{7^2-1}{7-1} = 7 \cdot 4 \cdot 8 = 224.$$
+$n$ 的**因子之和**为 $$\sigma(n)=\prod_{i=1}^k (1+p_i+\ldots+p_i^{\alpha_i}) = \prod_{i=1}^k \frac{p_i^{a_i+1}-1}{p_i-1},$$ 其中后一个公式基于等比数列求和公式。例如，84 的因子之和为 $$\sigma(84)=\frac{2^3-1}{2-1} \cdot \frac{3^2-1}{3-1} \cdot \frac{7^2-1}{7-1} = 7 \cdot 4 \cdot 8 = 224.$$
 
-The **product of factors** of $n$ is $$\mu(n)=n^{\tau(n)/2},$$ because we can form $\tau(n)/2$ pairs from the factors, each with product $n$. For example, the factors of 84 produce the pairs $1 \cdot 84$, $2 \cdot 42$, $3 \cdot 28$, etc., and the product of the factors is $\mu(84)=84^6=351298031616$.
+$n$ 的**因子之积**为 $$\mu(n)=n^{\tau(n)/2},$$ 因为我们可以把因子两两配对成 $\tau(n)/2$ 对，每对的乘积为 $n$。例如，84 的因子构成配对 $1 \cdot 84$、$2 \cdot 42$、$3 \cdot 28$ 等等，因子之积为 $\mu(84)=84^6=351298031616$。
 
-A number $n$ is called a **perfect number** if $n=\sigma(n)-n$, i.e., $n$ equals the sum of its factors between $1$ and $n-1$. For example, 28 is a perfect number, because $28=1+2+4+7+14$.
+如果 $n=\sigma(n)-n$，即 $n$ 等于其所有介于 $1$ 与 $n-1$ 之间的因子之和，则称 $n$ 是一个**完全数**。例如，28 是一个完全数，因为 $28=1+2+4+7+14$。
 
-#### Number of primes
+#### 素数的个数
 
-It is easy to show that there is an infinite number of primes. If the number of primes would be finite, we could construct a set $P=\{p_1,p_2,\ldots,p_n\}$ that would contain all the primes. For example, $p_1=2$, $p_2=3$, $p_3=5$, and so on. However, using $P$, we could form a new prime $$p_1 p_2 \cdots p_n+1$$ that is larger than all elements in $P$. This is a contradiction, and the number of primes has to be infinite.
+很容易证明素数有无穷多个。若素数的个数是有限的，我们可以构造一个集合 $P=\{p_1,p_2,\ldots,p_n\}$ 包含所有素数。例如，$p_1=2$、$p_2=3$、$p_3=5$，依此类推。然而，利用 $P$，我们可以构造一个新的素数 $$p_1 p_2 \cdots p_n+1$$ 它比 $P$ 中的所有元素都大。这是一个矛盾，因此素数的个数必然是无穷的。
 
-#### Density of primes
+#### 素数的密度
 
-The density of primes means how often there are primes among the numbers. Let $\pi(n)$ denote the number of primes between $1$ and $n$. For example, $\pi(10)=4$, because there are 4 primes between $1$ and $10$: 2, 3, 5 and 7.
+素数的密度指的是素数在数字中出现的频繁程度。设 $\pi(n)$ 表示 $1$ 到 $n$ 之间素数的个数。例如，$\pi(10)=4$，因为 $1$ 到 $10$ 之间有 4 个素数：2、3、5 和 7。
 
-It is possible to show that $$\pi(n) \approx \frac{n}{\ln n},$$ which means that primes are quite frequent. For example, the number of primes between $1$ and $10^6$ is $\pi(10^6)=78498$, and $10^6 / \ln 10^6 \approx 72382$.
+可以证明 $$\pi(n) \approx \frac{n}{\ln n},$$ 这意味着素数相当频繁。例如，$1$ 到 $10^6$ 之间素数的个数是 $\pi(10^6)=78498$，而 $10^6 / \ln 10^6 \approx 72382$。
 
-#### Conjectures
+#### 猜想
 
-There are many *conjectures* involving primes. Most people think that the conjectures are true, but nobody has been able to prove them. For example, the following conjectures are famous:
+有许多涉及素数的*猜想*。大多数人认为这些猜想是正确的，但没有人能够证明它们。例如，以下猜想非常著名：
 
-- **Goldbach's conjecture**: Each even integer $n>2$ can be represented as a sum $n=a+b$ so that both $a$ and $b$ are primes.
+- **哥德巴赫猜想**：每个偶数 $n>2$ 都可以表示为一个和 $n=a+b$，使得 $a$ 和 $b$ 都是素数。
 
-- **Twin prime conjecture**: There is an infinite number of pairs of the form $\{p,p+2\}$, where both $p$ and $p+2$ are primes.
+- **孪生素数猜想**：存在无穷多对形如 $\{p,p+2\}$ 的素数对，其中 $p$ 和 $p+2$ 都是素数。
 
-- **Legendre's conjecture**: There is always a prime between numbers $n^2$ and $(n+1)^2$, where $n$ is any positive integer.
+- **勒让德猜想**：在数 $n^2$ 与 $(n+1)^2$ 之间总存在一个素数，其中 $n$ 是任意正整数。
 
-#### Basic algorithms
+#### 基本算法
 
-If a number $n$ is not prime, it can be represented as a product $a \cdot b$, where $a \le \sqrt n$ or $b \le \sqrt n$, so it certainly has a factor between $2$ and $\lfloor \sqrt n \rfloor$. Using this observation, we can both test if a number is prime and find the prime factorization of a number in $O(\sqrt n)$ time.
+如果数 $n$ 不是素数，它可以表示为一个乘积 $a \cdot b$，其中 $a \le \sqrt n$ 或 $b \le \sqrt n$，因此它必定有一个介于 $2$ 与 $\lfloor \sqrt n \rfloor$ 之间的因子。利用这一观察，我们既可以在 $O(\sqrt n)$ 时间内判断一个数是否为素数，也可以在同样的时间内求出它的素因数分解。
 
-The following function `prime` checks if the given number $n$ is prime. The function attempts to divide $n$ by all numbers between $2$ and $\lfloor \sqrt n \rfloor$, and if none of them divides $n$, then $n$ is prime.
+下面的函数 `prime` 判断给定的数 $n$ 是否为素数。该函数尝试用 $2$ 到 $\lfloor \sqrt n \rfloor$ 之间的所有数去除 $n$，若其中没有一个能整除 $n$，则 $n$ 是素数。
 
 ```cpp
 bool prime(int n) {
@@ -60,7 +60,7 @@ bool prime(int n) {
 }
 ```
 
-The following function `factors` constructs a vector that contains the prime factorization of $n$. The function divides $n$ by its prime factors, and adds them to the vector. The process ends when the remaining number $n$ has no factors between $2$ and $\lfloor \sqrt n \rfloor$. If $n>1$, it is prime and the last factor.
+下面的函数 `factors` 构造一个包含 $n$ 的素因数分解的向量。该函数用 $n$ 的素因子来除 $n$，并把它们加入向量。当剩余的数 $n$ 在 $2$ 到 $\lfloor \sqrt n \rfloor$ 之间没有任何因子时，过程结束。若 $n>1$，则它是素数，也是最后一个因子。
 
 ```cpp
 vector<int> factors(int n) {
@@ -76,21 +76,21 @@ vector<int> factors(int n) {
 }
 ```
 
-Note that each prime factor appears in the vector as many times as it divides the number. For example, $24=2^3 \cdot 3$, so the result of the function is $[2,2,2,3]$.
+注意，每个素因子在向量中出现的次数等于它整除该数的次数。例如，$24=2^3 \cdot 3$，因此该函数的结果是 $[2,2,2,3]$。
 
-#### Sieve of Eratosthenes
+#### 埃拉托色尼筛法
 
-The **sieve of Eratosthenes** is a preprocessing algorithm that builds an array using which we can efficiently check if a given number between $2 \ldots n$ is prime and, if it is not, find one prime factor of the number.
+**埃拉托色尼筛法**是一种预处理算法，它构建一个数组，借助该数组我们可以高效地判断 $2 \ldots n$ 之间的给定数是否为素数，若不是，则找出该数的一个素因子。
 
-The algorithm builds an array $\texttt{sieve}$ whose positions $2,3,\ldots,n$ are used. The value $\texttt{sieve}[k]=0$ means that $k$ is prime, and the value $\texttt{sieve}[k] \neq 0$ means that $k$ is not a prime and one of its prime factors is $\texttt{sieve}[k]$.
+该算法构建一个数组 $\texttt{sieve}$，用到它的位置 $2,3,\ldots,n$。值 $\texttt{sieve}[k]=0$ 表示 $k$ 是素数，值 $\texttt{sieve}[k] \neq 0$ 表示 $k$ 不是素数，且它的一个素因子是 $\texttt{sieve}[k]$。
 
-The algorithm iterates through the numbers $2 \ldots n$ one by one. Always when a new prime $x$ is found, the algorithm records that the multiples of $x$ ($2x,3x,4x,\ldots$) are not primes, because the number $x$ divides them.
+该算法逐个遍历 $2 \ldots n$ 中的数。每当发现一个新的素数 $x$，算法就记录 $x$ 的倍数（$2x,3x,4x,\ldots$）不是素数，因为数 $x$ 整除它们。
 
-For example, if $n=20$, the array is as follows:
+例如，若 $n=20$，数组如下：
 
 ![](assets/images/ch21-fig01.svg)
 
-The following code implements the sieve of Eratosthenes. The code assumes that each element of `sieve` is initially zero.
+下面的代码实现了埃拉托色尼筛法。代码假定 `sieve` 的每个元素初始时都为零。
 
 ```cpp
 for (int x = 2; x <= n; x++) {
@@ -101,27 +101,27 @@ for (int x = 2; x <= n; x++) {
 }
 ```
 
-The inner loop of the algorithm is executed $n/x$ times for each value of $x$. Thus, an upper bound for the running time of the algorithm is the harmonic sum $$\sum_{x=2}^n n/x = n/2 + n/3 + n/4 + \cdots + n/n = O(n \log n).$$
+算法的内层循环对每个 $x$ 的值执行 $n/x$ 次。因此，算法运行时间的一个上界是调和和 $$\sum_{x=2}^n n/x = n/2 + n/3 + n/4 + \cdots + n/n = O(n \log n).$$
 
-In fact, the algorithm is more efficient, because the inner loop will be executed only if the number $x$ is prime. It can be shown that the running time of the algorithm is only $O(n \log \log n)$, a complexity very near to $O(n)$.
+事实上，该算法更加高效，因为内层循环仅当数 $x$ 是素数时才会执行。可以证明该算法的运行时间只有 $O(n \log \log n)$，这是一个非常接近 $O(n)$ 的复杂度。
 
-#### Euclid's algorithm
+#### 欧几里得算法
 
-The **greatest common divisor** of numbers $a$ and $b$, $\gcd(a,b)$, is the greatest number that divides both $a$ and $b$, and the **least common multiple** of $a$ and $b$, $\textrm{lcm}(a,b)$, is the smallest number that is divisible by both $a$ and $b$. For example, $\gcd(24,36)=12$ and $\textrm{lcm}(24,36)=72$.
+数 $a$ 与 $b$ 的**最大公约数** $\gcd(a,b)$，是能同时整除 $a$ 和 $b$ 的最大数；$a$ 与 $b$ 的**最小公倍数** $\textrm{lcm}(a,b)$，是能同时被 $a$ 和 $b$ 整除的最小数。例如，$\gcd(24,36)=12$，$\textrm{lcm}(24,36)=72$。
 
-The greatest common divisor and the least common multiple are connected as follows: $$\textrm{lcm}(a,b)=\frac{ab}{\textrm{gcd}(a,b)}$$
+最大公约数与最小公倍数之间的联系如下：$$\textrm{lcm}(a,b)=\frac{ab}{\textrm{gcd}(a,b)}$$
 
-**Euclid's algorithm**[^1] provides an efficient way to find the greatest common divisor of two numbers. The algorithm is based on the following formula: $$\begin{equation*}
+**欧几里得算法**[^1]提供了一种高效求两个数的最大公约数的方法。该算法基于以下公式：$$\begin{equation*}
     \textrm{gcd}(a,b) = \begin{cases}
                a        & b = 0\\
                \textrm{gcd}(b,a \bmod b) & b \neq 0\\
            \end{cases}
 \end{equation*}$$
 
-For example, $$\textrm{gcd}(24,36) = \textrm{gcd}(36,24)
+例如，$$\textrm{gcd}(24,36) = \textrm{gcd}(36,24)
 = \textrm{gcd}(24,12) = \textrm{gcd}(12,0)=12.$$
 
-The algorithm can be implemented as follows:
+该算法可以实现如下：
 
 ```cpp
 int gcd(int a, int b) {
@@ -130,29 +130,29 @@ int gcd(int a, int b) {
 }
 ```
 
-It can be shown that Euclid's algorithm works in $O(\log n)$ time, where $n=\min(a,b)$. The worst case for the algorithm is the case when $a$ and $b$ are consecutive Fibonacci numbers. For example, $$\textrm{gcd}(13,8)=\textrm{gcd}(8,5)
+可以证明欧几里得算法在 $O(\log n)$ 时间内运行，其中 $n=\min(a,b)$。该算法最坏的情况是 $a$ 和 $b$ 为相邻的斐波那契数。例如，$$\textrm{gcd}(13,8)=\textrm{gcd}(8,5)
 =\textrm{gcd}(5,3)=\textrm{gcd}(3,2)=\textrm{gcd}(2,1)=\textrm{gcd}(1,0)=1.$$
 
-#### Euler's totient function
+#### 欧拉函数
 
-Numbers $a$ and $b$ are **coprime** if $\textrm{gcd}(a,b)=1$. **Euler's totient function** $\varphi(n)$ gives the number of coprime numbers to $n$ between $1$ and $n$. For example, $\varphi(12)=4$, because 1, 5, 7 and 11 are coprime to 12.
+若 $\textrm{gcd}(a,b)=1$，则称数 $a$ 与 $b$ **互素**。**欧拉函数** $\varphi(n)$ 给出 $1$ 到 $n$ 之间与 $n$ 互素的数的个数。例如，$\varphi(12)=4$，因为 1、5、7 和 11 与 12 互素。
 
-The value of $\varphi(n)$ can be calculated from the prime factorization of $n$ using the formula $$\varphi(n) = \prod_{i=1}^k p_i^{\alpha_i-1}(p_i-1).$$ For example, $\varphi(12)=2^1 \cdot (2-1) \cdot 3^0 \cdot (3-1)=4$. Note that $\varphi(n)=n-1$ if $n$ is prime.
+$\varphi(n)$ 的值可以利用 $n$ 的素因数分解根据以下公式计算：$$\varphi(n) = \prod_{i=1}^k p_i^{\alpha_i-1}(p_i-1).$$ 例如，$\varphi(12)=2^1 \cdot (2-1) \cdot 3^0 \cdot (3-1)=4$。注意，若 $n$ 是素数，则 $\varphi(n)=n-1$。
 
-## Modular arithmetic
+## 模运算
 
-In **modular arithmetic**, the set of numbers is limited so that only numbers $0,1,2,\ldots,m-1$ are used, where $m$ is a constant. Each number $x$ is represented by the number $x \bmod m$: the remainder after dividing $x$ by $m$. For example, if $m=17$, then $75$ is represented by $75 \bmod 17 = 7$.
+在**模运算**中，数的集合受到限制，只使用数 $0,1,2,\ldots,m-1$，其中 $m$ 是一个常数。每个数 $x$ 由数 $x \bmod m$ 表示：即 $x$ 除以 $m$ 后的余数。例如，若 $m=17$，则 $75$ 由 $75 \bmod 17 = 7$ 表示。
 
-Often we can take remainders before doing calculations. In particular, the following formulas hold: $$\begin{array}{rcl}
+通常我们可以在计算之前先取余数。特别地，以下公式成立：$$\begin{array}{rcl}
 (x+y) \bmod m & = & (x \bmod m + y \bmod m) \bmod m \\
 (x-y) \bmod m & = & (x \bmod m - y \bmod m) \bmod m \\
 (x \cdot y) \bmod m & = & (x \bmod m \cdot y \bmod m) \bmod m \\
 x^n \bmod m & = & (x \bmod m)^n \bmod m \\
 \end{array}$$
 
-#### Modular exponentiation
+#### 模幂
 
-There is often need to efficiently calculate the value of $x^n \bmod m$. This can be done in $O(\log n)$ time using the following recursion: $$\begin{equation*}
+我们经常需要高效地计算 $x^n \bmod m$ 的值。这可以利用以下递归在 $O(\log n)$ 时间内完成：$$\begin{equation*}
     x^n = \begin{cases}
                1        & n = 0\\
                x^{n/2} \cdot x^{n/2} & \text{$n$ is even}\\
@@ -160,9 +160,9 @@ There is often need to efficiently calculate the value of $x^n \bmod m$. This ca
            \end{cases}
 \end{equation*}$$
 
-It is important that in the case of an even $n$, the value of $x^{n/2}$ is calculated only once. This guarantees that the time complexity of the algorithm is $O(\log n)$, because $n$ is always halved when it is even.
+重要的是，在 $n$ 为偶数的情况下，$x^{n/2}$ 的值只计算一次。这保证了算法的时间复杂度为 $O(\log n)$，因为每当 $n$ 为偶数时它都会被减半。
 
-The following function calculates the value of $x^n \bmod m$:
+下面的函数计算 $x^n \bmod m$ 的值：
 
 ```cpp
 int modpow(int x, int n, int m) {
@@ -174,94 +174,94 @@ int modpow(int x, int n, int m) {
 }
 ```
 
-#### Fermat's theorem and Euler's theorem
+#### 费马定理与欧拉定理
 
-**Fermat's theorem** states that $$x^{m-1} \bmod m = 1$$ when $m$ is prime and $x$ and $m$ are coprime. This also yields $$x^k \bmod m = x^{k \bmod (m-1)} \bmod m.$$ More generally, **Euler's theorem** states that $$x^{\varphi(m)} \bmod m = 1$$ when $x$ and $m$ are coprime. Fermat's theorem follows from Euler's theorem, because if $m$ is a prime, then $\varphi(m)=m-1$.
+**费马定理**指出，当 $m$ 是素数且 $x$ 与 $m$ 互素时，$$x^{m-1} \bmod m = 1$$ 由此还可得到 $$x^k \bmod m = x^{k \bmod (m-1)} \bmod m.$$ 更一般地，**欧拉定理**指出，当 $x$ 与 $m$ 互素时，$$x^{\varphi(m)} \bmod m = 1.$$ 费马定理可由欧拉定理推出，因为若 $m$ 是素数，则 $\varphi(m)=m-1$。
 
-#### Modular inverse
+#### 模逆元
 
-The inverse of $x$ modulo $m$ is a number $x^{-1}$ such that $$x x^{-1} \bmod m = 1.$$ For example, if $x=6$ and $m=17$, then $x^{-1}=3$, because $6\cdot3 \bmod 17=1$.
+$x$ 模 $m$ 的逆元是一个数 $x^{-1}$，满足 $$x x^{-1} \bmod m = 1.$$ 例如，若 $x=6$ 且 $m=17$，则 $x^{-1}=3$，因为 $6\cdot3 \bmod 17=1$。
 
-Using modular inverses, we can divide numbers modulo $m$, because division by $x$ corresponds to multiplication by $x^{-1}$. For example, to evaluate the value of $36/6 \bmod 17$, we can use the formula $2 \cdot 3 \bmod 17$, because $36 \bmod 17 = 2$ and $6^{-1} \bmod 17 = 3$.
+利用模逆元，我们可以在模 $m$ 下做除法，因为除以 $x$ 对应于乘以 $x^{-1}$。例如，要计算 $36/6 \bmod 17$ 的值，我们可以使用公式 $2 \cdot 3 \bmod 17$，因为 $36 \bmod 17 = 2$ 且 $6^{-1} \bmod 17 = 3$。
 
-However, a modular inverse does not always exist. For example, if $x=2$ and $m=4$, the equation $$x x^{-1} \bmod m = 1$$ cannot be solved, because all multiples of 2 are even and the remainder can never be 1 when $m=4$. It turns out that the value of $x^{-1} \bmod m$ can be calculated exactly when $x$ and $m$ are coprime.
+然而，模逆元并不总是存在。例如，若 $x=2$ 且 $m=4$，方程 $$x x^{-1} \bmod m = 1$$ 无法求解，因为 2 的所有倍数都是偶数，当 $m=4$ 时余数永远不可能是 1。事实证明，$x^{-1} \bmod m$ 的值恰好在 $x$ 与 $m$ 互素时才能计算。
 
-If a modular inverse exists, it can be calculated using the formula $$x^{-1} = x^{\varphi(m)-1}.$$ If $m$ is prime, the formula becomes $$x^{-1} = x^{m-2}.$$ For example, $$6^{-1} \bmod 17 =6^{17-2} \bmod 17 = 3.$$
+若模逆元存在，它可以用以下公式计算：$$x^{-1} = x^{\varphi(m)-1}.$$ 若 $m$ 是素数，该公式变为 $$x^{-1} = x^{m-2}.$$ 例如，$$6^{-1} \bmod 17 =6^{17-2} \bmod 17 = 3.$$
 
-This formula allows us to efficiently calculate modular inverses using the modular exponentation algorithm. The formula can be derived using Euler's theorem. First, the modular inverse should satisfy the following equation: $$x x^{-1} \bmod m = 1.$$ On the other hand, according to Euler's theorem, $$x^{\varphi(m)} \bmod m =  xx^{\varphi(m)-1} \bmod m = 1,$$ so the numbers $x^{-1}$ and $x^{\varphi(m)-1}$ are equal.
+这个公式使我们能够借助模幂算法高效地计算模逆元。该公式可以由欧拉定理推导得出。首先，模逆元应满足以下方程：$$x x^{-1} \bmod m = 1.$$ 另一方面，根据欧拉定理，$$x^{\varphi(m)} \bmod m =  xx^{\varphi(m)-1} \bmod m = 1,$$ 因此数 $x^{-1}$ 与 $x^{\varphi(m)-1}$ 相等。
 
-#### Computer arithmetic
+#### 计算机算术
 
-In programming, unsigned integers are represented modulo $2^k$, where $k$ is the number of bits of the data type. A usual consequence of this is that a number wraps around if it becomes too large.
+在程序设计中，无符号整数以 $2^k$ 为模表示，其中 $k$ 是该数据类型的位数。通常的后果是，若一个数变得过大，它会回绕。
 
-For example, in C++, numbers of type `unsigned int` are represented modulo $2^{32}$. The following code declares an `unsigned int` variable whose value is $123456789$. After this, the value will be multiplied by itself, and the result is $123456789^2 \bmod 2^{32} = 2537071545$.
+例如，在 C++ 中，`unsigned int` 类型的数以 $2^{32}$ 为模表示。下面的代码声明了一个值为 $123456789$ 的 `unsigned int` 变量。之后，该值将与自身相乘，结果为 $123456789^2 \bmod 2^{32} = 2537071545$。
 
 ```cpp
 unsigned int x = 123456789;
 cout << x*x << "\n"; // 2537071545
 ```
 
-## Solving equations
+## 求解方程
 
-#### Diophantine equations
+#### 丢番图方程
 
-A **Diophantine equation** is an equation of the form $$ax + by = c,$$ where $a$, $b$ and $c$ are constants and the values of $x$ and $y$ should be found. Each number in the equation has to be an integer. For example, one solution for the equation $5x+2y=11$ is $x=3$ and $y=-2$.
+**丢番图方程**是形如 $$ax + by = c,$$ 的方程，其中 $a$、$b$ 和 $c$ 是常数，需要求出 $x$ 和 $y$ 的值。方程中的每个数都必须是整数。例如，方程 $5x+2y=11$ 的一个解是 $x=3$、$y=-2$。
 
-We can efficiently solve a Diophantine equation by using Euclid's algorithm. It turns out that we can extend Euclid's algorithm so that it will find numbers $x$ and $y$ that satisfy the following equation: $$ax + by = \textrm{gcd}(a,b)$$
+我们可以利用欧几里得算法高效地求解丢番图方程。事实表明，我们可以扩展欧几里得算法，使其能求出满足以下方程的数 $x$ 和 $y$：$$ax + by = \textrm{gcd}(a,b)$$
 
-A Diophantine equation can be solved if $c$ is divisible by $\textrm{gcd}(a,b)$, and otherwise it cannot be solved.
+丢番图方程在 $c$ 能被 $\textrm{gcd}(a,b)$ 整除时可解，否则无解。
 
-As an example, let us find numbers $x$ and $y$ that satisfy the following equation: $$39x + 15y = 12$$ The equation can be solved, because $\textrm{gcd}(39,15)=3$ and $3 \mid 12$. When Euclid's algorithm calculates the greatest common divisor of 39 and 15, it produces the following sequence of function calls: $$\textrm{gcd}(39,15) = \textrm{gcd}(15,9)
+举个例子，让我们求出满足以下方程的数 $x$ 和 $y$：$$39x + 15y = 12$$ 该方程可解，因为 $\textrm{gcd}(39,15)=3$ 且 $3 \mid 12$。当欧几里得算法计算 39 与 15 的最大公约数时，它产生如下函数调用序列：$$\textrm{gcd}(39,15) = \textrm{gcd}(15,9)
 = \textrm{gcd}(9,6) = \textrm{gcd}(6,3)
-= \textrm{gcd}(3,0) = 3$$ This corresponds to the following equations: $$\begin{array}{lcl}
+= \textrm{gcd}(3,0) = 3$$ 这对应于以下方程：$$\begin{array}{lcl}
 39 - 2 \cdot 15 & = & 9 \\
 15 - 1 \cdot 9 & = & 6 \\
 9 - 1 \cdot 6 & = & 3 \\
-\end{array}$$ Using these equations, we can derive $$39 \cdot 2 + 15 \cdot (-5) = 3$$ and by multiplying this by 4, the result is $$39 \cdot 8 + 15 \cdot (-20) = 12,$$ so a solution to the equation is $x=8$ and $y=-20$.
+\end{array}$$ 利用这些方程，我们可以推出 $$39 \cdot 2 + 15 \cdot (-5) = 3$$ 把它乘以 4，结果为 $$39 \cdot 8 + 15 \cdot (-20) = 12,$$ 因此该方程的一个解是 $x=8$、$y=-20$。
 
-A solution to a Diophantine equation is not unique, because we can form an infinite number of solutions if we know one solution. If a pair $(x,y)$ is a solution, then also all pairs $$(x+\frac{kb}{\textrm{gcd}(a,b)},y-\frac{ka}{\textrm{gcd}(a,b)})$$ are solutions, where $k$ is any integer.
+丢番图方程的解不是唯一的，因为只要知道一个解，我们就能构造出无穷多个解。若 $(x,y)$ 是一个解，则所有形如 $$(x+\frac{kb}{\textrm{gcd}(a,b)},y-\frac{ka}{\textrm{gcd}(a,b)})$$ 的数对也都是解，其中 $k$ 是任意整数。
 
-#### Chinese remainder theorem
+#### 中国剩余定理
 
-The **Chinese remainder theorem** solves a group of equations of the form $$\begin{array}{lcl}
+**中国剩余定理**求解以下形式的一组方程：$$\begin{array}{lcl}
 x & = & a_1 \bmod m_1 \\
 x & = & a_2 \bmod m_2 \\
 \cdots \\
 x & = & a_n \bmod m_n \\
-\end{array}$$ where all pairs of $m_1,m_2,\ldots,m_n$ are coprime.
+\end{array}$$ 其中 $m_1,m_2,\ldots,m_n$ 两两互素。
 
-Let $x^{-1}_m$ be the inverse of $x$ modulo $m$, and $$X_k = \frac{m_1 m_2 \cdots m_n}{m_k}.$$ Using this notation, a solution to the equations is $$x = a_1 X_1 {X_1}^{-1}_{m_1} + a_2 X_2 {X_2}^{-1}_{m_2} + \cdots + a_n X_n {X_n}^{-1}_{m_n}.$$ In this solution, for each $k=1,2,\ldots,n$, $$a_k X_k {X_k}^{-1}_{m_k} \bmod m_k = a_k,$$ because $$X_k {X_k}^{-1}_{m_k} \bmod m_k = 1.$$ Since all other terms in the sum are divisible by $m_k$, they have no effect on the remainder, and $x \bmod m_k = a_k$.
+设 $x^{-1}_m$ 为 $x$ 模 $m$ 的逆元，并令 $$X_k = \frac{m_1 m_2 \cdots m_n}{m_k}.$$ 使用这一记号，方程的一个解为 $$x = a_1 X_1 {X_1}^{-1}_{m_1} + a_2 X_2 {X_2}^{-1}_{m_2} + \cdots + a_n X_n {X_n}^{-1}_{m_n}.$$ 在这个解中，对每个 $k=1,2,\ldots,n$，都有 $$a_k X_k {X_k}^{-1}_{m_k} \bmod m_k = a_k,$$ 因为 $$X_k {X_k}^{-1}_{m_k} \bmod m_k = 1.$$ 由于和式中所有其他项都能被 $m_k$ 整除，它们对余数没有影响，故 $x \bmod m_k = a_k$。
 
-For example, a solution for $$\begin{array}{lcl}
+例如，$$\begin{array}{lcl}
 x & = & 3 \bmod 5 \\
 x & = & 4 \bmod 7 \\
 x & = & 2 \bmod 3 \\
-\end{array}$$ is $$3 \cdot 21 \cdot 1 + 4 \cdot 15 \cdot 1 + 2 \cdot 35 \cdot 2 = 263.$$
+\end{array}$$ 的一个解是 $$3 \cdot 21 \cdot 1 + 4 \cdot 15 \cdot 1 + 2 \cdot 35 \cdot 2 = 263.$$
 
-Once we have found a solution $x$, we can create an infinite number of other solutions, because all numbers of the form $$x+m_1 m_2 \cdots m_n$$ are solutions.
+一旦我们求得一个解 $x$，就可以构造出无穷多个其他解，因为所有形如 $$x+m_1 m_2 \cdots m_n$$ 的数都是解。
 
-## Other results
+## 其他结论
 
-#### Lagrange's theorem
+#### 拉格朗日定理
 
-**Lagrange's theorem** states that every positive integer can be represented as a sum of four squares, i.e., $a^2+b^2+c^2+d^2$. For example, the number 123 can be represented as the sum $8^2+5^2+5^2+3^2$.
+**拉格朗日定理**指出，每个正整数都可以表示为四个平方数之和，即 $a^2+b^2+c^2+d^2$。例如，数 123 可以表示为和 $8^2+5^2+5^2+3^2$。
 
-#### Zeckendorf's theorem
+#### 齐肯多夫定理
 
-**Zeckendorf's theorem** states that every positive integer has a unique representation as a sum of Fibonacci numbers such that no two numbers are equal or consecutive Fibonacci numbers. For example, the number 74 can be represented as the sum $55+13+5+1$.
+**齐肯多夫定理**指出，每个正整数都有唯一的表示方式，即表示为若干斐波那契数之和，且其中没有两个数相等或是相邻的斐波那契数。例如，数 74 可以表示为和 $55+13+5+1$。
 
-#### Pythagorean triples
+#### 毕达哥拉斯三元组
 
-A **Pythagorean triple** is a triple $(a,b,c)$ that satisfies the Pythagorean theorem $a^2+b^2=c^2$, which means that there is a right triangle with side lengths $a$, $b$ and $c$. For example, $(3,4,5)$ is a Pythagorean triple.
+**毕达哥拉斯三元组**是满足毕达哥拉斯定理 $a^2+b^2=c^2$ 的三元组 $(a,b,c)$，这意味着存在一个边长分别为 $a$、$b$ 和 $c$ 的直角三角形。例如，$(3,4,5)$ 是一个毕达哥拉斯三元组。
 
-If $(a,b,c)$ is a Pythagorean triple, all triples of the form $(ka,kb,kc)$ are also Pythagorean triples where $k>1$. A Pythagorean triple is *primitive* if $a$, $b$ and $c$ are coprime, and all Pythagorean triples can be constructed from primitive triples using a multiplier $k$.
+若 $(a,b,c)$ 是毕达哥拉斯三元组，则所有形如 $(ka,kb,kc)$ 的三元组也都是毕达哥拉斯三元组，其中 $k>1$。若 $a$、$b$ 和 $c$ 互素，则毕达哥拉斯三元组是*本原的*，所有毕达哥拉斯三元组都可以由本原三元组乘以一个倍数 $k$ 构造得到。
 
-**Euclid's formula** can be used to produce all primitive Pythagorean triples. Each such triple is of the form $$(n^2-m^2,2nm,n^2+m^2),$$ where $0<m<n$, $n$ and $m$ are coprime and at least one of $n$ and $m$ is even. For example, when $m=1$ and $n=2$, the formula produces the smallest Pythagorean triple $$(2^2-1^2,2\cdot2\cdot1,2^2+1^2)=(3,4,5).$$
+**欧几里得公式**可用于生成所有本原毕达哥拉斯三元组。每个这样的三元组都具有形式 $$(n^2-m^2,2nm,n^2+m^2),$$ 其中 $0<m<n$，$n$ 与 $m$ 互素，且 $n$ 与 $m$ 中至少有一个是偶数。例如，当 $m=1$ 且 $n=2$ 时，该公式生成最小的毕达哥拉斯三元组 $$(2^2-1^2,2\cdot2\cdot1,2^2+1^2)=(3,4,5).$$
 
-#### Wilson's theorem
+#### 威尔逊定理
 
-**Wilson's theorem** states that a number $n$ is prime exactly when $$(n-1)! \bmod n = n-1.$$ For example, the number 11 is prime, because $$10! \bmod 11 = 10,$$ and the number 12 is not prime, because $$11! \bmod 12 = 0 \neq 11.$$
+**威尔逊定理**指出，数 $n$ 是素数当且仅当 $$(n-1)! \bmod n = n-1.$$ 例如，数 11 是素数，因为 $$10! \bmod 11 = 10,$$ 而数 12 不是素数，因为 $$11! \bmod 12 = 0 \neq 11.$$
 
-Hence, Wilson's theorem can be used to find out whether a number is prime. However, in practice, the theorem cannot be applied to large values of $n$, because it is difficult to calculate values of $(n-1)!$ when $n$ is large.
+因此，威尔逊定理可用于判断一个数是否为素数。然而在实践中，该定理无法应用于较大的 $n$，因为当 $n$ 很大时难以计算 $(n-1)!$ 的值。
 
-[^1]: Euclid was a Greek mathematician who lived in about 300 BC. This is perhaps the first known algorithm in history.
+[^1]: 欧几里得是一位古希腊数学家，生活在大约公元前 300 年。这也许是历史上已知的第一个算法。

@@ -1,28 +1,32 @@
-# Introduction
+# 简介
 
-Competitive programming combines two topics: (1) the design of algorithms and (2) the implementation of algorithms.
+竞赛程序设计包含两个主题：（1）算法的设计，以及（2）算法的实现。
 
-The **design of algorithms** consists of problem solving and mathematical thinking. Skills for analyzing problems and solving them creatively are needed. An algorithm for solving a problem has to be both correct and efficient, and the core of the problem is often about inventing an efficient algorithm.
+**算法的设计**包括问题求解与数学思维。你需要具备分析问题并创造性地解决它们的能力。求解一个问题的算法必须既正确又高效，而问题的核心往往在于设计出一个高效的算法。
 
-Theoretical knowledge of algorithms is important to competitive programmers. Typically, a solution to a problem is a combination of well-known techniques and new insights. The techniques that appear in competitive programming also form the basis for the scientific research of algorithms.
+算法的理论知识对竞赛选手很重要。通常，一个问题的解法是若干已知技巧与新洞察的组合。竞赛程序设计中出现的技巧也构成了算法科学研究的基础。
 
-The **implementation of algorithms** requires good programming skills. In competitive programming, the solutions are graded by testing an implemented algorithm using a set of test cases. Thus, it is not enough that the idea of the algorithm is correct, but the implementation also has to be correct.
+**算法的实现**需要良好的编程能力。在竞赛程序设计中，解答是通过用一组测试用例检验所实现的算法来评判的。因此，仅仅算法思路正确还不够，实现也必须正确。
 
-A good coding style in contests is straightforward and concise. Programs should be written quickly, because there is not much time available. Unlike in traditional software engineering, the programs are short (usually at most a few hundred lines of code), and they do not need to be maintained after the contest.
+竞赛中良好的编码风格是直截了当且简洁。程序应当快速写完，因为可用的时间并不多。与传统软件工程不同，竞赛程序很短（通常最多几百行代码），比赛结束后也无需维护。
 
-## Programming languages
+## 编程语言
 
-At the moment, the most popular programming languages used in contests are C++, Python and Java. For example, in Google Code Jam 2017, among the best 3,000 participants, 79 % used C++, 16 % used Python and 8 % used Java [32]. Some participants also used several languages.
+目前，竞赛中最常用的编程语言是 C++、Python 和 Java。例如，在 Google Code Jam 2017 中，排名前 3000 的参赛者里，79% 使用 C++，16% 使用 Python，8% 使用 Java [32]。也有一些参赛者使用了多种语言。
 
-Many people think that C++ is the best choice for a competitive programmer, and C++ is nearly always available in contest systems. The benefits of using C++ are that it is a very efficient language and its standard library contains a large collection of data structures and algorithms.
+许多人认为 C++ 是竞赛选手的最佳选择，而且几乎所有的竞赛系统都提供 C++。使用 C++ 的好处在于它是一种非常高效的语言，其标准库还包含大量数据结构和算法。
 
-On the other hand, it is good to master several languages and understand their strengths. For example, if large integers are needed in the problem, Python can be a good choice, because it contains built-in operations for calculating with large integers. Still, most problems in programming contests are set so that using a specific programming language is not an unfair advantage.
+另一方面，掌握多种语言并了解它们各自的优势是件好事。例如，如果题目中需要大整数，Python 可能是个不错的选择，因为它内置了大整数运算。不过，编程竞赛中的大多数题目在命制时都会避免让使用某种特定编程语言成为不公平的优势。
 
-All example programs in this book are written in C++, and the standard library's data structures and algorithms are often used. The programs follow the C++11 standard, which can be used in most contests nowadays. If you cannot program in C++ yet, now is a good time to start learning.
+本书中的所有示例程序都用 C++ 编写，并且经常使用标准库中的数据结构和算法。这些程序遵循 C++11 标准，如今大多数竞赛都可使用该标准。如果你还不会用 C++ 编程，那么现在正是开始学习的好时机。
 
-#### C++ code template
+> **译者注**
+>
+> 本书写作时主要使用 C++11 标准。如今主流竞赛平台通常已支持更新的标准（如 C++17、C++20），但本书示例按 C++11 编写，在更新的标准下同样可以编译运行。
 
-A typical C++ code template for competitive programming looks like this:
+#### C++ 代码模板
+
+竞赛程序设计中一个典型的 C++ 代码模板如下：
 
 ```cpp
 #include <bits/stdc++.h>
@@ -30,27 +34,27 @@ A typical C++ code template for competitive programming looks like this:
 using namespace std;
 
 int main() {
-    // solution comes here
+    // 在此编写解答
 }
 ```
 
-The `#include` line at the beginning of the code is a feature of the `g++` compiler that allows us to include the entire standard library. Thus, it is not needed to separately include libraries such as `iostream`, `vector` and `algorithm`, but rather they are available automatically.
+代码开头的 `#include` 行是 `g++` 编译器的一个特性，它允许我们包含整个标准库。因此，无需分别包含 `iostream`、`vector` 和 `algorithm` 等库，它们会自动可用。
 
-The `using` line declares that the classes and functions of the standard library can be used directly in the code. Without the `using` line we would have to write, for example, `std::cout`, but now it suffices to write `cout`.
+`using` 行声明了标准库中的类和函数可以在代码中直接使用。如果没有 `using` 行，我们就必须写成 `std::cout`，而现在只需写 `cout` 即可。
 
-The code can be compiled using the following command:
+这段代码可以用下面的命令编译：
 
 ```text
 g++ -std=c++11 -O2 -Wall test.cpp -o test
 ```
 
-This command produces a binary file `test` from the source code `test.cpp`. The compiler follows the C++11 standard (`-std=c++11`), optimizes the code (`-O2`) and shows warnings about possible errors (`-Wall`).
+该命令从源代码 `test.cpp` 生成一个二进制文件 `test`。编译器遵循 C++11 标准（`-std=c++11`），对代码进行优化（`-O2`），并给出可能错误的警告（`-Wall`）。
 
-## Input and output
+## 输入与输出
 
-In most contests, standard streams are used for reading input and writing output. In C++, the standard streams are `cin` for input and `cout` for output. In addition, the C functions `scanf` and `printf` can be used.
+在大多数竞赛中，读取输入和写出输出都使用标准流。在 C++ 中，标准流是用于输入的 `cin` 和用于输出的 `cout`。此外，也可以使用 C 语言的函数 `scanf` 和 `printf`。
 
-The input for the program usually consists of numbers and strings that are separated with spaces and newlines. They can be read from the `cin` stream as follows:
+程序的输入通常由数字和字符串组成，它们之间用空格和换行分隔。可以像下面这样从 `cin` 流中读取：
 
 ```cpp
 int a, b;
@@ -58,7 +62,7 @@ string x;
 cin >> a >> b >> x;
 ```
 
-This kind of code always works, assuming that there is at least one space or newline between each element in the input. For example, the above code can read both of the following inputs:
+只要输入中的每个元素之间至少有一个空格或换行，这种代码就总能正常工作。例如，上面的代码可以读取以下两种输入：
 
 ```text
 123 456 monkey
@@ -69,7 +73,7 @@ This kind of code always works, assuming that there is at least one space or new
 monkey
 ```
 
-The `cout` stream is used for output as follows:
+`cout` 流用于输出的方式如下：
 
 ```cpp
 int a = 123, b = 456;
@@ -77,70 +81,70 @@ string x = "monkey";
 cout << a << " " << b << " " << x << "\n";
 ```
 
-Input and output is sometimes a bottleneck in the program. The following lines at the beginning of the code make input and output more efficient:
+输入输出有时会成为程序的瓶颈。在代码开头加上以下几行可以让输入输出更高效：
 
 ```cpp
 ios::sync_with_stdio(0);
 cin.tie(0);
 ```
 
-Note that the newline `"\n"` works faster than `endl`, because `endl` always causes a flush operation.
+注意，换行符 `"\n"` 比 `endl` 更快，因为 `endl` 总会触发一次 flush 操作。
 
-The C functions `scanf` and `printf` are an alternative to the C++ standard streams. They are usually a bit faster, but they are also more difficult to use. The following code reads two integers from the input:
+C 语言的函数 `scanf` 和 `printf` 是 C++ 标准流的替代方案。它们通常稍快一些，但也更不容易使用。下面的代码从输入中读取两个整数：
 
 ```cpp
 int a, b;
 scanf("%d %d", &a, &b);
 ```
 
-The following code prints two integers:
+下面的代码输出两个整数：
 
 ```cpp
 int a = 123, b = 456;
 printf("%d %d\n", a, b);
 ```
 
-Sometimes the program should read a whole line from the input, possibly containing spaces. This can be accomplished by using the `getline` function:
+有时程序需要从输入中读取一整行，其中可能包含空格。这可以通过 `getline` 函数来实现：
 
 ```cpp
 string s;
 getline(cin, s);
 ```
 
-If the amount of data is unknown, the following loop is useful:
+如果数据量未知，下面的循环很有用：
 
 ```cpp
 while (cin >> x) {
-    // code
+    // 代码
 }
 ```
 
-This loop reads elements from the input one after another, until there is no more data available in the input.
+这个循环会从输入中一个接一个地读取元素，直到输入中没有更多可用的数据为止。
 
-In some contest systems, files are used for input and output. An easy solution for this is to write the code as usual using standard streams, but add the following lines to the beginning of the code:
+在某些竞赛系统中，使用文件进行输入输出。一个简单的解决办法是照常使用标准流编写代码，但在代码开头加上以下几行：
 
 ```cpp
 freopen("input.txt", "r", stdin);
 freopen("output.txt", "w", stdout);
 ```
 
-After this, the program reads the input from the file "input.txt" and writes the output to the file "output.txt".
+这样之后，程序就会从文件 “input.txt” 读取输入，并将输出写入文件 “output.txt”。
 
-## Working with numbers
+## 处理数字
 
-#### Integers
+#### 整数
 
-The most used integer type in competitive programming is `int`, which is a 32-bit type with a value range of $-2^{31} \ldots 2^{31}-1$ or about $-2 \cdot 10^9 \ldots 2 \cdot 10^9$. If the type `int` is not enough, the 64-bit type `long long` can be used. It has a value range of $-2^{63} \ldots 2^{63}-1$ or about $-9 \cdot 10^{18} \ldots 9 \cdot 10^{18}$.
+竞赛程序设计中用得最多的整数类型是 `int`，它是一种 32 位类型，取值范围为 $-2^{31} \ldots 2^{31}-1$，约等于 $-2 \cdot 10^9 \ldots 2 \cdot 10^9$。如果 `int` 类型不够用，可以使用 64 位类型 `long long`。其取值范围为 $-2^{63} \ldots 2^{63}-1$，约等于 $-9 \cdot 10^{18} \ldots 9 \cdot 10^{18}$。
 
-The following code defines a `long long` variable:
+下面的代码定义了一个 `long long` 变量：
 
 ```cpp
 long long x = 123456789123456789LL;
 ```
 
-The suffix `LL` means that the type of the number is `long long`.
+后缀 `LL` 表示这个数字的类型是 `long long`。
 
-A common mistake when using the type `long long` is that the type `int` is still used somewhere in the code. For example, the following code contains a subtle error:
+使用 `long long` 类型时一个常见的错误是，代码中某处仍然在使用 `int` 类型。例如，下面的代码包含一个隐蔽的错误：
 
 ```cpp
 int a = 123456789;
@@ -148,17 +152,17 @@ long long b = a*a;
 cout << b << "\n"; // -1757895751
 ```
 
-Even though the variable `b` is of type `long long`, both numbers in the expression `a*a` are of type `int` and the result is also of type `int`. Because of this, the variable `b` will contain a wrong result. The problem can be solved by changing the type of `a` to `long long` or by changing the expression to `(long long)a*a`.
+尽管变量 `b` 是 `long long` 类型，但表达式 `a*a` 中的两个数都是 `int` 类型，结果也是 `int` 类型。因此，变量 `b` 会得到一个错误的结果。把 `a` 的类型改为 `long long`，或者把表达式改为 `(long long)a*a`，都能解决这个问题。
 
-Usually contest problems are set so that the type `long long` is enough. Still, it is good to know that the `g++` compiler also provides a 128-bit type `__int128_t` with a value range of $-2^{127} \ldots 2^{127}-1$ or about $-10^{38} \ldots 10^{38}$. However, this type is not available in all contest systems.
+通常，竞赛题目在命制时都会保证 `long long` 类型足够。不过，了解一下也无妨：`g++` 编译器还提供了一种 128 位类型 `__int128_t`，其取值范围为 $-2^{127} \ldots 2^{127}-1$，约等于 $-10^{38} \ldots 10^{38}$。但并非所有竞赛系统都支持这种类型。
 
-#### Modular arithmetic
+#### 模运算
 
-We denote by $x \bmod m$ the remainder when $x$ is divided by $m$. For example, $17 \bmod 5 = 2$, because $17 = 3 \cdot 5 + 2$.
+我们用 $x \bmod m$ 表示 $x$ 除以 $m$ 的余数。例如，$17 \bmod 5 = 2$，因为 $17 = 3 \cdot 5 + 2$。
 
-Sometimes, the answer to a problem is a very large number but it is enough to output it "modulo $m$", i.e., the remainder when the answer is divided by $m$ (for example, "modulo $10^9+7$"). The idea is that even if the actual answer is very large, it suffices to use the types `int` and `long long`.
+有时，问题的答案是一个非常大的数，但只需输出它“模 $m$”的结果即可，也就是答案除以 $m$ 的余数（例如“模 $10^9+7$”）。这样做的思路是：即使实际答案非常大，也只需要用到 `int` 和 `long long` 类型。
 
-An important property of the remainder is that in addition, subtraction and multiplication, the remainder can be taken before the operation:
+余数的一个重要性质是：在加法、减法和乘法中，可以在运算之前先取余数：
 
 $$\begin{array}{rcr}
 (a+b) \bmod m & = & (a \bmod m + b \bmod m) \bmod m \\
@@ -166,9 +170,9 @@ $$\begin{array}{rcr}
 (a \cdot b) \bmod m & = & (a \bmod m \cdot b \bmod m) \bmod m
 \end{array}$$
 
-Thus, we can take the remainder after every operation and the numbers will never become too large.
+因此，我们可以在每次运算后都取余数，这样数值就永远不会变得过大。
 
-For example, the following code calculates $n!$, the factorial of $n$, modulo $m$:
+例如，下面的代码计算 $n!$，即 $n$ 的阶乘，对 $m$ 取模：
 
 ```cpp
 long long x = 1;
@@ -178,59 +182,59 @@ for (int i = 2; i <= n; i++) {
 cout << x%m << "\n";
 ```
 
-Usually we want the remainder to always be between $0\ldots m-1$. However, in C++ and other languages, the remainder of a negative number is either zero or negative. An easy way to make sure there are no negative remainders is to first calculate the remainder as usual and then add $m$ if the result is negative:
+通常我们希望余数始终介于 $0\ldots m-1$ 之间。然而在 C++ 及其他语言中，负数的余数要么是零，要么是负数。一种确保不会出现负余数的简单做法是：先照常计算余数，如果结果为负，再加上 $m$：
 
 ```cpp
 x = x%m;
 if (x < 0) x += m;
 ```
 
-However, this is only needed when there are subtractions in the code and the remainder may become negative.
+不过，只有当代码中存在减法、余数可能变为负数时才需要这样做。
 
-#### Floating point numbers
+#### 浮点数
 
-The usual floating point types in competitive programming are the 64-bit `double` and, as an extension in the `g++` compiler, the 80-bit `long double`. In most cases, `double` is enough, but `long double` is more accurate.
+竞赛程序设计中常用的浮点类型是 64 位的 `double`，以及作为 `g++` 编译器扩展的 80 位 `long double`。大多数情况下 `double` 就足够了，但 `long double` 更精确。
 
-The required precision of the answer is usually given in the problem statement. An easy way to output the answer is to use the `printf` function and give the number of decimal places in the formatting string. For example, the following code prints the value of $x$ with 9 decimal places:
+答案所需的精度通常会在题目描述中给出。输出答案的一个简单方法是使用 `printf` 函数，并在格式字符串中指定小数位数。例如，下面的代码输出 $x$ 的值，保留 9 位小数：
 
 ```cpp
 printf("%.9f\n", x);
 ```
 
-A difficulty when using floating point numbers is that some numbers cannot be represented accurately as floating point numbers, and there will be rounding errors. For example, the result of the following code is surprising:
+使用浮点数时的一个难点是，有些数无法用浮点数精确表示，会产生舍入误差。例如，下面这段代码的结果令人意外：
 
 ```cpp
 double x = 0.3*3+0.1;
 printf("%.20f\n", x); // 0.99999999999999988898
 ```
 
-Due to a rounding error, the value of `x` is a bit smaller than 1, while the correct value would be 1.
+由于舍入误差，`x` 的值比 1 略小，而正确的值应该是 1。
 
-It is risky to compare floating point numbers with the `==` operator, because it is possible that the values should be equal but they are not because of precision errors. A better way to compare floating point numbers is to assume that two numbers are equal if the difference between them is less than $\varepsilon$, where $\varepsilon$ is a small number.
+用 `==` 运算符比较浮点数是有风险的，因为两个本应相等的值可能由于精度误差而不相等。比较浮点数更好的做法是：如果两个数之差小于 $\varepsilon$，就认为它们相等，其中 $\varepsilon$ 是一个很小的数。
 
-In practice, the numbers can be compared as follows ($\varepsilon=10^{-9}$):
+实际中，可以像下面这样比较（$\varepsilon=10^{-9}$）：
 
 ```text
 if (abs(a-b) < 1e-9) {
-    // a and b are equal
+    // a 和 b 相等
 }
 ```
 
-Note that while floating point numbers are inaccurate, integers up to a certain limit can still be represented accurately. For example, using `double`, it is possible to accurately represent all integers whose absolute value is at most $2^{53}$.
+注意，尽管浮点数并不精确，但在一定范围内的整数仍然可以精确表示。例如，使用 `double` 可以精确表示绝对值不超过 $2^{53}$ 的所有整数。
 
-## Shortening code
+## 缩短代码
 
-Short code is ideal in competitive programming, because programs should be written as fast as possible. Because of this, competitive programmers often define shorter names for datatypes and other parts of code.
+在竞赛程序设计中，代码越短越好，因为程序应当尽可能快地写完。因此，竞赛选手经常为数据类型和代码的其他部分定义更短的名字。
 
-#### Type names
+#### 类型名
 
-Using the command `typedef` it is possible to give a shorter name to a datatype. For example, the name `long long` is long, so we can define a shorter name `ll`:
+使用 `typedef` 命令可以为数据类型起一个更短的名字。例如，`long long` 这个名字很长，所以我们可以定义更短的名字 `ll`：
 
 ```cpp
 typedef long long ll;
 ```
 
-After this, the code
+这样之后，代码
 
 ```cpp
 long long a = 123456789;
@@ -238,7 +242,7 @@ long long b = 987654321;
 cout << a*b << "\n";
 ```
 
-can be shortened as follows:
+就可以缩短成下面这样：
 
 ```cpp
 ll a = 123456789;
@@ -246,18 +250,18 @@ ll b = 987654321;
 cout << a*b << "\n";
 ```
 
-The command `typedef` can also be used with more complex types. For example, the following code gives the name `vi` for a vector of integers and the name `pi` for a pair that contains two integers.
+`typedef` 命令也可以用于更复杂的类型。例如，下面的代码为整数向量起了名字 `vi`，为包含两个整数的 pair 起了名字 `pi`。
 
 ```cpp
 typedef vector<int> vi;
 typedef pair<int,int> pi;
 ```
 
-#### Macros
+#### 宏
 
-Another way to shorten code is to define **macros**. A macro means that certain strings in the code will be changed before the compilation. In C++, macros are defined using the `#define` keyword.
+另一种缩短代码的方式是定义**宏**。宏意味着代码中的某些字符串会在编译之前被替换。在 C++ 中，使用 `#define` 关键字来定义宏。
 
-For example, we can define the following macros:
+例如，我们可以定义以下宏：
 
 ```text
 #define F first
@@ -266,7 +270,7 @@ For example, we can define the following macros:
 #define MP make_pair
 ```
 
-After this, the code
+这样之后，代码
 
 ```cpp
 v.push_back(make_pair(y1,x1));
@@ -274,7 +278,7 @@ v.push_back(make_pair(y2,x2));
 int d = v[i].first+v[i].second;
 ```
 
-can be shortened as follows:
+就可以缩短成下面这样：
 
 ```cpp
 v.PB(MP(y1,x1));
@@ -282,13 +286,13 @@ v.PB(MP(y2,x2));
 int d = v[i].F+v[i].S;
 ```
 
-A macro can also have parameters which makes it possible to shorten loops and other structures. For example, we can define the following macro:
+宏还可以带参数，这样可以缩短循环和其他结构。例如，我们可以定义以下宏：
 
 ```cpp
 #define REP(i,a,b) for (int i = a; i <= b; i++)
 ```
 
-After this, the code
+这样之后，代码
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -296,7 +300,7 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-can be shortened as follows:
+就可以缩短成下面这样：
 
 ```cpp
 REP(i,1,n) {
@@ -304,90 +308,90 @@ REP(i,1,n) {
 }
 ```
 
-Sometimes macros cause bugs that may be difficult to detect. For example, consider the following macro that calculates the square of a number:
+有时宏会引发难以察觉的 bug。例如，考虑下面这个计算一个数平方的宏：
 
 ```text
 #define SQ(a) a*a
 ```
 
-This macro *does not* always work as expected. For example, the code
+这个宏*并不*总是按预期工作。例如，代码
 
 ```cpp
 cout << SQ(3+3) << "\n";
 ```
 
-corresponds to the code
+对应的是代码
 
 ```cpp
 cout << 3+3*3+3 << "\n"; // 15
 ```
 
-A better version of the macro is as follows:
+这个宏更好的版本如下：
 
 ```text
 #define SQ(a) (a)*(a)
 ```
 
-Now the code
+现在，代码
 
 ```cpp
 cout << SQ(3+3) << "\n";
 ```
 
-corresponds to the code
+对应的是代码
 
 ```cpp
 cout << (3+3)*(3+3) << "\n"; // 36
 ```
 
-## Mathematics
+## 数学
 
-Mathematics plays an important role in competitive programming, and it is not possible to become a successful competitive programmer without having good mathematical skills. This section discusses some important mathematical concepts and formulas that are needed later in the book.
+数学在竞赛程序设计中扮演着重要的角色，没有良好的数学功底就不可能成为成功的竞赛选手。本节讨论一些重要的数学概念和公式，它们是本书后续内容所需要的。
 
-#### Sum formulas
+#### 求和公式
 
-Each sum of the form $$\sum_{x=1}^n x^k = 1^k+2^k+3^k+\ldots+n^k,$$ where $k$ is a positive integer, has a closed-form formula that is a polynomial of degree $k+1$. For example[^1], $$\sum_{x=1}^n x = 1+2+3+\ldots+n = \frac{n(n+1)}{2}$$ and $$\sum_{x=1}^n x^2 = 1^2+2^2+3^2+\ldots+n^2 = \frac{n(n+1)(2n+1)}{6}.$$
+形如 $$\sum_{x=1}^n x^k = 1^k+2^k+3^k+\ldots+n^k,$$ 的每个求和式，其中 $k$ 是正整数，都有一个闭式公式，它是一个 $k+1$ 次多项式。例如[^1]，$$\sum_{x=1}^n x = 1+2+3+\ldots+n = \frac{n(n+1)}{2}$$ 以及 $$\sum_{x=1}^n x^2 = 1^2+2^2+3^2+\ldots+n^2 = \frac{n(n+1)(2n+1)}{6}.$$
 
-An **arithmetic progression** is a sequence of numbers where the difference between any two consecutive numbers is constant. For example, $$3, 7, 11, 15$$ is an arithmetic progression with constant 4. The sum of an arithmetic progression can be calculated using the formula $$\underbrace{a + \cdots + b}_{n \,\, \textrm{numbers}} = \frac{n(a+b)}{2}$$ where $a$ is the first number, $b$ is the last number and $n$ is the amount of numbers. For example, $$3+7+11+15=\frac{4 \cdot (3+15)}{2} = 36.$$ The formula is based on the fact that the sum consists of $n$ numbers and the value of each number is $(a+b)/2$ on average.
+**等差数列**是指相邻两项之差为常数的数列。例如，$$3, 7, 11, 15$$ 是一个公差为 4 的等差数列。等差数列的和可以用公式 $$\underbrace{a + \cdots + b}_{n \,\, \textrm{numbers}} = \frac{n(a+b)}{2}$$ 计算，其中 $a$ 是首项，$b$ 是末项，$n$ 是项数。例如，$$3+7+11+15=\frac{4 \cdot (3+15)}{2} = 36.$$ 该公式依据的事实是：这个和由 $n$ 个数组成，且每个数的平均值等于 $(a+b)/2$。
 
-A **geometric progression** is a sequence of numbers where the ratio between any two consecutive numbers is constant. For example, $$3,6,12,24$$ is a geometric progression with constant 2. The sum of a geometric progression can be calculated using the formula $$a + ak + ak^2 + \cdots + b = \frac{bk-a}{k-1}$$ where $a$ is the first number, $b$ is the last number and the ratio between consecutive numbers is $k$. For example, $$3+6+12+24=\frac{24 \cdot 2 - 3}{2-1} = 45.$$
+**等比数列**是指相邻两项之比为常数的数列。例如，$$3,6,12,24$$ 是一个公比为 2 的等比数列。等比数列的和可以用公式 $$a + ak + ak^2 + \cdots + b = \frac{bk-a}{k-1}$$ 计算，其中 $a$ 是首项，$b$ 是末项，相邻两项之比为 $k$。例如，$$3+6+12+24=\frac{24 \cdot 2 - 3}{2-1} = 45.$$
 
-This formula can be derived as follows. Let $$S = a + ak + ak^2 + \cdots + b .$$ By multiplying both sides by $k$, we get $$kS = ak + ak^2 + ak^3 + \cdots + bk,$$ and solving the equation $$kS-S = bk-a$$ yields the formula.
+这个公式可以这样推导。设 $$S = a + ak + ak^2 + \cdots + b .$$ 两边同时乘以 $k$，得到 $$kS = ak + ak^2 + ak^3 + \cdots + bk,$$ 再解方程 $$kS-S = bk-a$$ 即可得到该公式。
 
-A special case of a sum of a geometric progression is the formula $$1+2+4+8+\ldots+2^{n-1}=2^n-1.$$
+等比数列求和的一个特例是公式 $$1+2+4+8+\ldots+2^{n-1}=2^n-1.$$
 
-A **harmonic sum** is a sum of the form $$\sum_{x=1}^n \frac{1}{x} = 1+\frac{1}{2}+\frac{1}{3}+\ldots+\frac{1}{n}.$$
+**调和级数**是形如 $$\sum_{x=1}^n \frac{1}{x} = 1+\frac{1}{2}+\frac{1}{3}+\ldots+\frac{1}{n}.$$ 的和。
 
-An upper bound for a harmonic sum is $\log_2(n)+1$. Namely, we can modify each term $1/k$ so that $k$ becomes the nearest power of two that does not exceed $k$. For example, when $n=6$, we can estimate the sum as follows: $$1+\frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\frac{1}{6} \le
-1+\frac{1}{2}+\frac{1}{2}+\frac{1}{4}+\frac{1}{4}+\frac{1}{4}.$$ This upper bound consists of $\log_2(n)+1$ parts ($1$, $2 \cdot 1/2$, $4 \cdot 1/4$, etc.), and the value of each part is at most 1.
+调和级数的一个上界是 $\log_2(n)+1$。也就是说，我们可以把每一项 $1/k$ 作如下改动：把 $k$ 变成不超过 $k$ 的最大 2 的幂。例如，当 $n=6$ 时，我们可以这样估计这个和：$$1+\frac{1}{2}+\frac{1}{3}+\frac{1}{4}+\frac{1}{5}+\frac{1}{6} \le
+1+\frac{1}{2}+\frac{1}{2}+\frac{1}{4}+\frac{1}{4}+\frac{1}{4}.$$ 这个上界由 $\log_2(n)+1$ 部分组成（$1$、$2 \cdot 1/2$、$4 \cdot 1/4$ 等），每部分的值至多为 1。
 
-#### Set theory
+#### 集合论
 
-A **set** is a collection of elements. For example, the set $$X=\{2,4,7\}$$ contains elements 2, 4 and 7. The symbol $\emptyset$ denotes an empty set, and $|S|$ denotes the size of a set $S$, i.e., the number of elements in the set. For example, in the above set, $|X|=3$.
+**集合**是元素的总体。例如，集合 $$X=\{2,4,7\}$$ 包含元素 2、4 和 7。符号 $\emptyset$ 表示空集，$|S|$ 表示集合 $S$ 的大小，即集合中元素的个数。例如，在上面的集合中 $|X|=3$。
 
-If a set $S$ contains an element $x$, we write $x \in S$, and otherwise we write $x \notin S$. For example, in the above set $$4 \in X \textrm{and} 5 \notin X.$$
+如果集合 $S$ 包含元素 $x$，我们写作 $x \in S$，否则写作 $x \notin S$。例如，在上面的集合中 $$4 \in X \textrm{and} 5 \notin X.$$
 
-New sets can be constructed using set operations:
+可以用集合运算来构造新的集合：
 
-- The **intersection** $A \cap B$ consists of elements that are in both $A$ and $B$. For example, if $A=\{1,2,5\}$ and $B=\{2,4\}$, then $A \cap B = \{2\}$.
+- **交集** $A \cap B$ 由同时属于 $A$ 和 $B$ 的元素组成。例如，若 $A=\{1,2,5\}$ 且 $B=\{2,4\}$，则 $A \cap B = \{2\}$。
 
-- The **union** $A \cup B$ consists of elements that are in $A$ or $B$ or both. For example, if $A=\{3,7\}$ and $B=\{2,3,8\}$, then $A \cup B = \{2,3,7,8\}$.
+- **并集** $A \cup B$ 由属于 $A$ 或 $B$ 或同时属于两者的元素组成。例如，若 $A=\{3,7\}$ 且 $B=\{2,3,8\}$，则 $A \cup B = \{2,3,7,8\}$。
 
-- The **complement** $\bar A$ consists of elements that are not in $A$. The interpretation of a complement depends on the **universal set**, which contains all possible elements. For example, if $A=\{1,2,5,7\}$ and the universal set is $\{1,2,\ldots,10\}$, then $\bar A = \{3,4,6,8,9,10\}$.
+- **补集** $\bar A$ 由不属于 $A$ 的元素组成。补集的含义取决于**全集**，全集包含了所有可能的元素。例如，若 $A=\{1,2,5,7\}$ 且全集为 $\{1,2,\ldots,10\}$，则 $\bar A = \{3,4,6,8,9,10\}$。
 
-- The **difference** $A \setminus B = A \cap \bar B$ consists of elements that are in $A$ but not in $B$. Note that $B$ can contain elements that are not in $A$. For example, if $A=\{2,3,7,8\}$ and $B=\{3,5,8\}$, then $A \setminus B = \{2,7\}$.
+- **差集** $A \setminus B = A \cap \bar B$ 由属于 $A$ 但不属于 $B$ 的元素组成。注意，$B$ 可以包含不属于 $A$ 的元素。例如，若 $A=\{2,3,7,8\}$ 且 $B=\{3,5,8\}$，则 $A \setminus B = \{2,7\}$。
 
-If each element of $A$ also belongs to $S$, we say that $A$ is a **subset** of $S$, denoted by $A \subset S$. A set $S$ always has $2^{|S|}$ subsets, including the empty set. For example, the subsets of the set $\{2,4,7\}$ are
+如果 $A$ 的每个元素也都属于 $S$，我们就说 $A$ 是 $S$ 的**子集**，记作 $A \subset S$。集合 $S$ 总有 $2^{|S|}$ 个子集，其中包括空集。例如，集合 $\{2,4,7\}$ 的子集是
 
-$\emptyset$, $\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ and $\{2,4,7\}$.
+$\emptyset$, $\{2\}$, $\{4\}$, $\{7\}$, $\{2,4\}$, $\{2,7\}$, $\{4,7\}$ 和 $\{2,4,7\}$。
 
-Some often used sets are $\mathbb{N}$ (natural numbers), $\mathbb{Z}$ (integers), $\mathbb{Q}$ (rational numbers) and $\mathbb{R}$ (real numbers). The set $\mathbb{N}$ can be defined in two ways, depending on the situation: either $\mathbb{N}=\{0,1,2,\ldots\}$ or $\mathbb{N}=\{1,2,3,...\}$.
+一些常用的集合包括 $\mathbb{N}$（自然数集）、$\mathbb{Z}$（整数集）、$\mathbb{Q}$（有理数集）和 $\mathbb{R}$（实数集）。根据具体情况，集合 $\mathbb{N}$ 可以有两种定义方式：$\mathbb{N}=\{0,1,2,\ldots\}$ 或 $\mathbb{N}=\{1,2,3,...\}$。
 
-We can also construct a set using a rule of the form $$\{f(n) : n \in S\},$$ where $f(n)$ is some function. This set contains all elements of the form $f(n)$, where $n$ is an element in $S$. For example, the set $$X=\{2n : n \in \mathbb{Z}\}$$ contains all even integers.
+我们也可以用形如 $$\{f(n) : n \in S\},$$ 的规则来构造集合，其中 $f(n)$ 是某个函数。这个集合包含所有形如 $f(n)$ 的元素，其中 $n$ 是 $S$ 中的元素。例如，集合 $$X=\{2n : n \in \mathbb{Z}\}$$ 包含所有偶数。
 
-#### Logic
+#### 逻辑
 
-The value of a logical expression is either **true** (1) or **false** (0). The most important logical operators are $\lnot$ (**negation**), $\land$ (**conjunction**), $\lor$ (**disjunction**), $\Rightarrow$ (**implication**) and $\Leftrightarrow$ (**equivalence**). The following table shows the meanings of these operators:
+逻辑表达式的取值要么是**真**（1），要么是**假**（0）。最重要的逻辑运算符有 $\lnot$（**否定**）、$\land$（**合取**）、$\lor$（**析取**）、$\Rightarrow$（**蕴含**）和 $\Leftrightarrow$（**等价**）。下表展示了这些运算符的含义：
 
 | $A$ | $B$ | $\lnot A$ | $\lnot B$ | $A \land B$ | $A \lor B$ | $A \Rightarrow B$ | $A \Leftrightarrow B$ |  |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -396,78 +400,78 @@ The value of a logical expression is either **true** (1) or **false** (0). The m
 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |  |
 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |  |
 
-The expression $\lnot A$ has the opposite value of $A$. The expression $A \land B$ is true if both $A$ and $B$ are true, and the expression $A \lor B$ is true if $A$ or $B$ or both are true. The expression $A \Rightarrow B$ is true if whenever $A$ is true, also $B$ is true. The expression $A \Leftrightarrow B$ is true if $A$ and $B$ are both true or both false.
+表达式 $\lnot A$ 的取值与 $A$ 相反。当 $A$ 和 $B$ 都为真时，表达式 $A \land B$ 为真；当 $A$ 或 $B$ 为真，或两者都为真时，表达式 $A \lor B$ 为真。若只要 $A$ 为真，$B$ 就也为真，则表达式 $A \Rightarrow B$ 为真。若 $A$ 和 $B$ 同时为真或同时为假，则表达式 $A \Leftrightarrow B$ 为真。
 
-A **predicate** is an expression that is true or false depending on its parameters. Predicates are usually denoted by capital letters. For example, we can define a predicate $P(x)$ that is true exactly when $x$ is a prime number. Using this definition, $P(7)$ is true but $P(8)$ is false.
+**谓词**是一个根据其参数取真或假的表达式。谓词通常用大写字母表示。例如，我们可以定义一个谓词 $P(x)$，当且仅当 $x$ 是质数时为真。根据这个定义，$P(7)$ 为真，而 $P(8)$ 为假。
 
-A **quantifier** connects a logical expression to the elements of a set. The most important quantifiers are $\forall$ (**for all**) and $\exists$ (**there is**). For example, $$\forall x (\exists y (y < x))$$ means that for each element $x$ in the set, there is an element $y$ in the set such that $y$ is smaller than $x$. This is true in the set of integers, but false in the set of natural numbers.
+**量词**把逻辑表达式与集合的元素联系起来。最重要的量词是 $\forall$（**对所有**）和 $\exists$（**存在**）。例如，$$\forall x (\exists y (y < x))$$ 表示对于集合中的每个元素 $x$，都存在集合中的一个元素 $y$ 使得 $y$ 小于 $x$。这在整数集中为真，但在自然数集中为假。
 
-Using the notation described above, we can express many kinds of logical propositions. For example, $$\forall x ((x>1 \land \lnot P(x)) \Rightarrow (\exists a (\exists b (a > 1 \land b > 1 \land x = ab))))$$ means that if a number $x$ is larger than 1 and not a prime number, then there are numbers $a$ and $b$ that are larger than $1$ and whose product is $x$. This proposition is true in the set of integers.
+利用上述记号，我们可以表达许多种逻辑命题。例如，$$\forall x ((x>1 \land \lnot P(x)) \Rightarrow (\exists a (\exists b (a > 1 \land b > 1 \land x = ab))))$$ 表示如果一个数 $x$ 大于 1 且不是质数，那么就存在数 $a$ 和 $b$，它们都大于 $1$ 且乘积为 $x$。这个命题在整数集中为真。
 
-#### Functions
+#### 函数
 
-The function $\lfloor x \rfloor$ rounds the number $x$ down to an integer, and the function $\lceil x \rceil$ rounds the number $x$ up to an integer. For example, $$\lfloor 3/2 \rfloor = 1  \textrm{and}  \lceil 3/2 \rceil = 2.$$
+函数 $\lfloor x \rfloor$ 把数 $x$ 向下取整为整数，函数 $\lceil x \rceil$ 把数 $x$ 向上取整为整数。例如，$$\lfloor 3/2 \rfloor = 1  \textrm{and}  \lceil 3/2 \rceil = 2.$$
 
-The functions $\min(x_1,x_2,\ldots,x_n)$ and $\max(x_1,x_2,\ldots,x_n)$ give the smallest and largest of values $x_1,x_2,\ldots,x_n$. For example, $$\min(1,2,3)=1  \textrm{and}  \max(1,2,3)=3.$$
+函数 $\min(x_1,x_2,\ldots,x_n)$ 和 $\max(x_1,x_2,\ldots,x_n)$ 分别给出值 $x_1,x_2,\ldots,x_n$ 中的最小值和最大值。例如，$$\min(1,2,3)=1  \textrm{and}  \max(1,2,3)=3.$$
 
-The **factorial** $n!$ can be defined $$\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n$$ or recursively $$\begin{array}{lcl}
+**阶乘** $n!$ 可以定义为 $$\prod_{x=1}^n x = 1 \cdot 2 \cdot 3 \cdot \ldots \cdot n$$，或递归地定义为 $$\begin{array}{lcl}
 0! & = & 1 \\
 n! & = & n \cdot (n-1)! \\
 \end{array}$$
 
-The **Fibonacci numbers** arise in many situations. They can be defined recursively as follows: $$\begin{array}{lcl}
+**斐波那契数**出现在许多场合。它们可以递归地定义如下：$$\begin{array}{lcl}
 f(0) & = & 0 \\
 f(1) & = & 1 \\
 f(n) & = & f(n-1)+f(n-2) \\
-\end{array}$$ The first Fibonacci numbers are $$0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, \ldots$$ There is also a closed-form formula for calculating Fibonacci numbers, which is sometimes called **Binet's formula**: $$f(n)=\frac{(1 + \sqrt{5})^n - (1-\sqrt{5})^n}{2^n \sqrt{5}}.$$
+\end{array}$$ 最初的斐波那契数是 $$0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, \ldots$$ 斐波那契数还有一个闭式公式，有时称为**比内公式**：$$f(n)=\frac{(1 + \sqrt{5})^n - (1-\sqrt{5})^n}{2^n \sqrt{5}}.$$
 
-#### Logarithms
+#### 对数
 
-The **logarithm** of a number $x$ is denoted $\log_k(x)$, where $k$ is the base of the logarithm. According to the definition, $\log_k(x)=a$ exactly when $k^a=x$.
+数 $x$ 的**对数**记作 $\log_k(x)$，其中 $k$ 是对数的底数。根据定义，$\log_k(x)=a$ 当且仅当 $k^a=x$。
 
-A useful property of logarithms is that $\log_k(x)$ equals the number of times we have to divide $x$ by $k$ before we reach the number 1. For example, $\log_2(32)=5$ because 5 divisions by 2 are needed:
+对数的一个有用性质是：$\log_k(x)$ 等于我们把 $x$ 除以 $k$ 直到得到数 1 所需的次数。例如，$\log_2(32)=5$，因为需要除以 2 五次：
 
 $$32 \rightarrow 16 \rightarrow 8 \rightarrow 4 \rightarrow 2 \rightarrow 1$$
 
-Logarithms are often used in the analysis of algorithms, because many efficient algorithms halve something at each step. Hence, we can estimate the efficiency of such algorithms using logarithms.
+对数常用于算法分析，因为许多高效算法在每一步都会把某个量减半。因此，我们可以用对数来估计这类算法的效率。
 
-The logarithm of a product is $$\log_k(ab) = \log_k(a)+\log_k(b),$$ and consequently, $$\log_k(x^n) = n \cdot \log_k(x).$$ In addition, the logarithm of a quotient is $$\log_k\Big(\frac{a}{b}\Big) = \log_k(a)-\log_k(b).$$ Another useful formula is $$\log_u(x) = \frac{\log_k(x)}{\log_k(u)},$$ and using this, it is possible to calculate logarithms to any base if there is a way to calculate logarithms to some fixed base.
+乘积的对数为 $$\log_k(ab) = \log_k(a)+\log_k(b),$$ 由此可得 $$\log_k(x^n) = n \cdot \log_k(x).$$ 此外，商的对数为 $$\log_k\Big(\frac{a}{b}\Big) = \log_k(a)-\log_k(b).$$ 另一个有用的公式是 $$\log_u(x) = \frac{\log_k(x)}{\log_k(u)},$$ 利用它，只要能够计算某个固定底数的对数，就可以计算任意底数的对数。
 
-The **natural logarithm** $\ln(x)$ of a number $x$ is a logarithm whose base is $e \approx 2.71828$. Another property of logarithms is that the number of digits of an integer $x$ in base $b$ is $\lfloor \log_b(x)+1 \rfloor$. For example, the representation of $123$ in base $2$ is 1111011 and $\lfloor \log_2(123)+1 \rfloor = 7$.
+数 $x$ 的**自然对数** $\ln(x)$ 是以 $e \approx 2.71828$ 为底的对数。对数的另一个性质是：整数 $x$ 在 $b$ 进制下的位数为 $\lfloor \log_b(x)+1 \rfloor$。例如，$123$ 在 $2$ 进制下的表示为 1111011，且 $\lfloor \log_2(123)+1 \rfloor = 7$。
 
-## Contests and resources
+## 竞赛与资源
 
 #### IOI
 
-The International Olympiad in Informatics (IOI) is an annual programming contest for secondary school students. Each country is allowed to send a team of four students to the contest. There are usually about 300 participants from 80 countries.
+国际信息学奥林匹克（IOI）是一年一度的中学生程序设计竞赛。每个国家可以派出一支由四名学生组成的代表队参赛。通常有来自 80 个国家的约 300 名参赛者。
 
-The IOI consists of two five-hour long contests. In both contests, the participants are asked to solve three algorithm tasks of various difficulty. The tasks are divided into subtasks, each of which has an assigned score. Even if the contestants are divided into teams, they compete as individuals.
+IOI 由两场各五小时的比赛组成。在这两场比赛中，参赛者需要解决三道难度各异的算法题目。题目被划分为若干子任务，每个子任务都有相应的分值。尽管选手被划分为队伍，但他们是作为个人进行竞争的。
 
-The IOI syllabus [45] regulates the topics that may appear in IOI tasks. Almost all the topics in the IOI syllabus are covered by this book.
+IOI 大纲 [45] 规定了 IOI 题目中可能涉及的主题。IOI 大纲中的几乎所有主题本书都已涵盖。
 
-Participants for the IOI are selected through national contests. Before the IOI, many regional contests are organized, such as the Baltic Olympiad in Informatics (BOI), the Central European Olympiad in Informatics (CEOI) and the Asia-Pacific Informatics Olympiad (APIO).
+IOI 的参赛者通过各国国内竞赛选拔。在 IOI 之前，会组织许多区域性竞赛，例如波罗的海信息学奥林匹克（BOI）、中欧信息学奥林匹克（CEOI）和亚太信息学奥林匹克（APIO）。
 
-Some countries organize online practice contests for future IOI participants, such as the Croatian Open Competition in Informatics [12] and the USA Computing Olympiad [76]. In addition, a large collection of problems from Polish contests is available online [68].
+一些国家为未来的 IOI 参赛者举办在线练习赛，例如克罗地亚信息学公开赛 [12] 和美国计算机奥林匹克竞赛 [76]。此外，波兰竞赛的大量题目也可以在线获取 [68]。
 
 #### ICPC
 
-The International Collegiate Programming Contest (ICPC) is an annual programming contest for university students. Each team in the contest consists of three students, and unlike in the IOI, the students work together; there is only one computer available for each team.
+国际大学生程序设计竞赛（ICPC）是一年一度的大学生程序设计竞赛。每支参赛队伍由三名学生组成，与 IOI 不同，学生们是共同协作的；每支队伍只有一台可用的计算机。
 
-The ICPC consists of several stages, and finally the best teams are invited to the World Finals. While there are tens of thousands of participants in the contest, there are only a small number[^2] of final slots available, so even advancing to the finals is a great achievement in some regions.
+ICPC 分为若干个阶段，最终最优秀的队伍会被邀请参加世界总决赛。尽管参赛者数以万计，但总决赛名额只有很少[^2]，因此在一些地区，即使只是晋级总决赛也是一项了不起的成就。
 
-In each ICPC contest, the teams have five hours of time to solve about ten algorithm problems. A solution to a problem is accepted only if it solves all test cases efficiently. During the contest, competitors may view the results of other teams, but for the last hour the scoreboard is frozen and it is not possible to see the results of the last submissions.
+在每场 ICPC 比赛中，各队有五小时的时间解决大约十道算法题目。只有高效地通过所有测试用例，一道题目的解答才会被接受。比赛期间，选手可以查看其他队伍的结果，但在最后一小时排行榜会冻结，无法看到最后提交的结果。
 
-The topics that may appear at the ICPC are not so well specified as those at the IOI. In any case, it is clear that more knowledge is needed at the ICPC, especially more mathematical skills.
+ICPC 可能涉及的主题不像 IOI 那样有明确的规范。无论如何，可以确定的是 ICPC 需要更多的知识，尤其是更强的数学能力。
 
-#### Online contests
+#### 在线竞赛
 
-There are also many online contests that are open for everybody. At the moment, the most active contest site is Codeforces, which organizes contests about weekly. In Codeforces, participants are divided into two divisions: beginners compete in Div2 and more experienced programmers in Div1. Other contest sites include AtCoder, CS Academy, HackerRank and Topcoder.
+此外还有许多面向所有人开放的在线竞赛。目前最活跃的竞赛网站是 Codeforces，它大约每周举办一次比赛。在 Codeforces 中，参赛者被分为两个组别：初学者参加 Div2，更有经验的选手参加 Div1。其他竞赛网站还包括 AtCoder、CS Academy、HackerRank 和 Topcoder。
 
-Some companies organize online contests with onsite finals. Examples of such contests are Facebook Hacker Cup, Google Code Jam and Yandex.Algorithm. Of course, companies also use those contests for recruiting: performing well in a contest is a good way to prove one's skills.
+有些公司会举办带线下决赛的在线竞赛，例如 Facebook Hacker Cup、Google Code Jam 和 Yandex.Algorithm。当然，公司也会借助这些竞赛来招聘：在竞赛中取得好成绩是证明自己能力的好方式。
 
-#### Books
+#### 书籍
 
-There are already some books (besides this book) that focus on competitive programming and algorithmic problem solving:
+除了本书之外，已经有一些专注于竞赛程序设计和算法问题求解的书：
 
 - S. S. Skiena and M. A. Revilla: *Programming Challenges: The Programming Contest Training Manual* [67]
 
@@ -475,9 +479,9 @@ There are already some books (besides this book) that focus on competitive progr
 
 - K. Diks et al.: *Looking for a Challenge? The Ultimate Problem Set from the University of Warsaw Programming Competitions* [16]
 
-The first two books are intended for beginners, whereas the last book contains advanced material.
+前两本书面向初学者，而最后一本包含进阶内容。
 
-Of course, general algorithm books are also suitable for competitive programmers. Some popular books are:
+当然，通用的算法书也适合竞赛选手。一些流行的书包括：
 
 - T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein: *Introduction to Algorithms* [14]
 
@@ -485,6 +489,6 @@ Of course, general algorithm books are also suitable for competitive programmers
 
 - S. S. Skiena: *The Algorithm Design Manual* [66]
 
-[^1]: There is even a general formula for such sums, called **Faulhaber's formula**, but it is too complex to be presented here.
+[^1]: 对于这类求和甚至有一个通用公式，称为 **Faulhaber 公式**，但它过于复杂，这里不作介绍。
 
-[^2]: The exact number of final slots varies from year to year; in 2017, there were 133 final slots.
+[^2]: 总决赛名额的确切数量每年都会变化；2017 年有 133 个总决赛名额。

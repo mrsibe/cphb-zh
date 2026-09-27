@@ -1,46 +1,46 @@
-# Shortest paths
+# 最短路
 
-Finding a shortest path between two nodes of a graph is an important problem that has many practical applications. For example, a natural problem related to a road network is to calculate the shortest possible length of a route between two cities, given the lengths of the roads.
+在图中两个结点之间寻找一条最短路是一个重要的问题，有许多实际应用。例如，与道路网络相关的一个自然问题是，给定各条道路的长度，计算两座城市之间一条路线的可能最短长度。
 
-In an unweighted graph, the length of a path equals the number of its edges, and we can simply use breadth-first search to find a shortest path. However, in this chapter we focus on weighted graphs where more sophisticated algorithms are needed for finding shortest paths.
+在无权图中，一条路径的长度等于其边的数量，我们可以直接使用广度优先搜索来寻找一条最短路。然而，本章我们关注的是带权图，寻找最短路需要更精妙的算法。
 
-## Bellman--Ford algorithm
+## Bellman--Ford 算法
 
-The **Bellman--Ford algorithm**[^1] finds shortest paths from a starting node to all nodes of the graph. The algorithm can process all kinds of graphs, provided that the graph does not contain a cycle with negative length. If the graph contains a negative cycle, the algorithm can detect this.
+**Bellman--Ford 算法**[^1] 求出从起始结点到图中所有结点的最短路。只要图中不包含长度为负的环，该算法就能处理各种图。如果图中包含负环，该算法能够检测出来。
 
-The algorithm keeps track of distances from the starting node to all nodes of the graph. Initially, the distance to the starting node is 0 and the distance to all other nodes in infinite. The algorithm reduces the distances by finding edges that shorten the paths until it is not possible to reduce any distance.
+该算法维护从起始结点到图中所有结点的距离。初始时，到起始结点的距离为 0，到所有其他结点的距离为无穷大。算法通过寻找能够缩短路径的边来不断减小距离，直到无法再减小任何距离为止。
 
-#### Example
+#### 例子
 
-Let us consider how the Bellman--Ford algorithm works in the following graph:
+让我们考察 Bellman--Ford 算法在下面这个图中的工作过程：
 
 ![](assets/images/ch13-fig01.svg)
 
-Each node of the graph is assigned a distance. Initially, the distance to the starting node is 0, and the distance to all other nodes is infinite.
+图中的每个结点都被赋予一个距离。初始时，到起始结点的距离为 0，到所有其他结点的距离为无穷大。
 
-The algorithm searches for edges that reduce distances. First, all edges from node 1 reduce distances:
+算法寻找能够减小距离的边。首先，从结点 1 出发的所有边都减小了距离：
 
 ![](assets/images/ch13-fig02.svg)
 
-After this, edges $2 \rightarrow 5$ and $3 \rightarrow 4$ reduce distances:
+在这之后，边 $2 \rightarrow 5$ 和 $3 \rightarrow 4$ 减小了距离：
 
 ![](assets/images/ch13-fig03.svg)
 
-Finally, there is one more change:
+最后，还有一处变化：
 
 ![](assets/images/ch13-fig04.svg)
 
-After this, no edge can reduce any distance. This means that the distances are final, and we have successfully calculated the shortest distances from the starting node to all nodes of the graph.
+在这之后，没有任何边能够再减小距离。这意味着这些距离就是最终结果，我们已经成功计算出从起始结点到图中所有结点的最短距离。
 
-For example, the shortest distance 3 from node 1 to node 5 corresponds to the following path:
+例如，从结点 1 到结点 5 的最短距离 3 对应于下面这条路径：
 
 ![](assets/images/ch13-fig05.svg)
 
-#### Implementation
+#### 实现
 
-The following implementation of the Bellman--Ford algorithm determines the shortest distances from a node $x$ to all nodes of the graph. The code assumes that the graph is stored as an edge list `edges` that consists of tuples of the form $(a,b,w)$, meaning that there is an edge from node $a$ to node $b$ with weight $w$.
+下面这个 Bellman--Ford 算法的实现求出从结点 $x$ 到图中所有结点的最短距离。代码假定图以边表 `edges` 的形式存储，它由形如 $(a,b,w)$ 的元组组成，表示存在一条从结点 $a$ 到结点 $b$、权为 $w$ 的边。
 
-The algorithm consists of $n-1$ rounds, and on each round the algorithm goes through all edges of the graph and tries to reduce the distances. The algorithm constructs an array `distance` that will contain the distances from $x$ to all nodes of the graph. The constant `INF` denotes an infinite distance.
+该算法由 $n-1$ 轮组成，每一轮算法都会遍历图中的所有边并尝试减小距离。算法构造一个数组 `distance`，其中将包含从 $x$ 到图中所有结点的距离。常量 `INF` 表示无穷大的距离。
 
 ```cpp
 for (int i = 1; i <= n; i++) distance[i] = INF;
@@ -54,81 +54,81 @@ for (int i = 1; i <= n-1; i++) {
 }
 ```
 
-The time complexity of the algorithm is $O(nm)$, because the algorithm consists of $n-1$ rounds and iterates through all $m$ edges during a round. If there are no negative cycles in the graph, all distances are final after $n-1$ rounds, because each shortest path can contain at most $n-1$ edges.
+该算法的时间复杂度为 $O(nm)$，因为算法由 $n-1$ 轮组成，且每一轮都遍历所有 $m$ 条边。如果图中没有负环，那么在 $n-1$ 轮之后所有距离都是最终结果，因为每条最短路最多包含 $n-1$ 条边。
 
-In practice, the final distances can usually be found faster than in $n-1$ rounds. Thus, a possible way to make the algorithm more efficient is to stop the algorithm if no distance can be reduced during a round.
+在实际中，通常能比 $n-1$ 轮更快地得到最终距离。因此，一种使算法更高效的方法是：如果某一轮中没有任何距离可以被减小，就停止算法。
 
-#### Negative cycles
+#### 负环
 
-The Bellman--Ford algorithm can also be used to check if the graph contains a cycle with negative length. For example, the graph
+Bellman--Ford 算法还可以用来检查图中是否包含长度为负的环。例如，下面这个图
 
 ![](assets/images/ch13-fig06.svg)
 
-contains a negative cycle $2 \rightarrow 3 \rightarrow 4 \rightarrow 2$ with length $-4$.
+包含长度为 $-4$ 的负环 $2 \rightarrow 3 \rightarrow 4 \rightarrow 2$。
 
-If the graph contains a negative cycle, we can shorten infinitely many times any path that contains the cycle by repeating the cycle again and again. Thus, the concept of a shortest path is not meaningful in this situation.
+如果图中包含负环，那么对于任何包含该环的路径，我们都可以通过反复绕行该环来将其无限次地缩短。因此，在这种情况下，最短路径的概念没有意义。
 
-A negative cycle can be detected using the Bellman--Ford algorithm by running the algorithm for $n$ rounds. If the last round reduces any distance, the graph contains a negative cycle. Note that this algorithm can be used to search for a negative cycle in the whole graph regardless of the starting node.
+通过运行 $n$ 轮 Bellman--Ford 算法可以检测负环。如果最后一轮减小了任何距离，则图中包含负环。注意，无论起始结点是哪一个，该算法都可以用来在整张图中搜索负环。
 
-#### SPFA algorithm
+#### SPFA 算法
 
-The **SPFA algorithm** ("Shortest Path Faster Algorithm") [23] is a variant of the Bellman--Ford algorithm, that is often more efficient than the original algorithm. The SPFA algorithm does not go through all the edges on each round, but instead, it chooses the edges to be examined in a more intelligent way.
+**SPFA 算法**（"Shortest Path Faster Algorithm"，即最短路快速算法）[23] 是 Bellman--Ford 算法的一个变体，通常比原算法更高效。SPFA 算法不在每一轮遍历所有边，而是以一种更智能的方式选择要检查的边。
 
-The algorithm maintains a queue of nodes that might be used for reducing the distances. First, the algorithm adds the starting node $x$ to the queue. Then, the algorithm always processes the first node in the queue, and when an edge $a \rightarrow b$ reduces a distance, node $b$ is added to the queue.
+该算法维护一个队列，其中存放可能用于减小距离的结点。首先，算法把起始结点 $x$ 加入队列。然后，算法总是处理队列中的第一个结点，并且当一条边 $a \rightarrow b$ 减小了某个距离时，就把结点 $b$ 加入队列。
 
-The efficiency of the SPFA algorithm depends on the structure of the graph: the algorithm is often efficient, but its worst case time complexity is still $O(nm)$ and it is possible to create inputs that make the algorithm as slow as the original Bellman--Ford algorithm.
+SPFA 算法的效率取决于图的结构：该算法通常很高效，但其最坏情况时间复杂度仍然是 $O(nm)$，并且可以构造出让该算法和原版 Bellman--Ford 算法一样慢的输入。
 
-## Dijkstra's algorithm
+## Dijkstra 算法
 
-**Dijkstra's algorithm**[^2] finds shortest paths from the starting node to all nodes of the graph, like the Bellman--Ford algorithm. The benefit of Dijsktra's algorithm is that it is more efficient and can be used for processing large graphs. However, the algorithm requires that there are no negative weight edges in the graph.
+**Dijkstra 算法**[^2] 和 Bellman--Ford 算法一样，求出从起始结点到图中所有结点的最短路。Dijkstra 算法的优点是它更高效，可用于处理大型图。然而，该算法要求图中没有负权边。
 
-Like the Bellman--Ford algorithm, Dijkstra's algorithm maintains distances to the nodes and reduces them during the search. Dijkstra's algorithm is efficient, because it only processes each edge in the graph once, using the fact that there are no negative edges.
+与 Bellman--Ford 算法一样，Dijkstra 算法维护到各结点的距离，并在搜索过程中不断减小它们。Dijkstra 算法之所以高效，是因为它利用了图中没有负边这一事实，对每条边只处理一次。
 
-#### Example
+#### 例子
 
-Let us consider how Dijkstra's algorithm works in the following graph when the starting node is node 1:
+让我们考察当起始结点为结点 1 时，Dijkstra 算法在下面这个图中的工作过程：
 
 ![](assets/images/ch13-fig07.svg)
 
-Like in the Bellman--Ford algorithm, initially the distance to the starting node is 0 and the distance to all other nodes is infinite.
+与 Bellman--Ford 算法中一样，初始时到起始结点的距离为 0，到所有其他结点的距离为无穷大。
 
-At each step, Dijkstra's algorithm selects a node that has not been processed yet and whose distance is as small as possible. The first such node is node 1 with distance 0.
+每一步中，Dijkstra 算法选择一个尚未被处理且距离尽可能小的结点。第一个这样的结点是距离为 0 的结点 1。
 
-When a node is selected, the algorithm goes through all edges that start at the node and reduces the distances using them:
+当一个结点被选中时，算法遍历从该结点出发的所有边，并利用它们来减小距离：
 
 ![](assets/images/ch13-fig08.svg)
 
-In this case, the edges from node 1 reduced the distances of nodes 2, 4 and 5, whose distances are now 5, 9 and 1.
+在这种情况下，从结点 1 出发的边减小了结点 2、4 和 5 的距离，它们现在的距离分别是 5、9 和 1。
 
-The next node to be processed is node 5 with distance 1. This reduces the distance to node 4 from 9 to 3:
+下一个要处理的结点是距离为 1 的结点 5。这把到结点 4 的距离从 9 减小到 3：
 
 ![](assets/images/ch13-fig09.svg)
 
-After this, the next node is node 4, which reduces the distance to node 3 to 9:
+在这之后，下一个结点是结点 4，它把到结点 3 的距离减小到 9：
 
 ![](assets/images/ch13-fig10.svg)
 
-A remarkable property in Dijkstra's algorithm is that whenever a node is selected, its distance is final. For example, at this point of the algorithm, the distances 0, 1 and 3 are the final distances to nodes 1, 5 and 4.
+Dijkstra 算法的一个显著性质是，每当一个结点被选中时，它的距离就是最终结果。例如，在算法的这个时刻，距离 0、1 和 3 分别是到结点 1、5 和 4 的最终距离。
 
-After this, the algorithm processes the two remaining nodes, and the final distances are as follows:
+在这之后，算法处理剩下的两个结点，最终距离如下：
 
 ![](assets/images/ch13-fig11.svg)
 
-#### Negative edges
+#### 负边
 
-The efficiency of Dijkstra's algorithm is based on the fact that the graph does not contain negative edges. If there is a negative edge, the algorithm may give incorrect results. As an example, consider the following graph:
+Dijkstra 算法的高效性建立在图中不包含负边这一事实之上。如果存在负边，该算法可能会给出错误的结果。作为一个例子，考虑下面这个图：
 
 ![](assets/images/ch13-fig12.svg)
 
-The shortest path from node 1 to node 4 is $1 \rightarrow 3 \rightarrow 4$ and its length is 1. However, Dijkstra's algorithm finds the path $1 \rightarrow 2 \rightarrow 4$ by following the minimum weight edges. The algorithm does not take into account that on the other path, the weight $-5$ compensates the previous large weight $6$.
+从结点 1 到结点 4 的最短路是 $1 \rightarrow 3 \rightarrow 4$，其长度为 1。然而，Dijkstra 算法沿着最小权重的边找到了路径 $1 \rightarrow 2 \rightarrow 4$。该算法没有考虑到在另一条路径上，权重 $-5$ 抵消了先前较大的权重 $6$。
 
-#### Implementation
+#### 实现
 
-The following implementation of Dijkstra's algorithm calculates the minimum distances from a node $x$ to other nodes of the graph. The graph is stored as adjacency lists so that `adj[`$a$`]` contains a pair $(b,w)$ always when there is an edge from node $a$ to node $b$ with weight $w$.
+下面这个 Dijkstra 算法的实现计算从结点 $x$ 到图中其他结点的最小距离。图以邻接表的形式存储，使得 `adj[`$a$`]` 中总包含一个二元组 $(b,w)$，只要存在一条从结点 $a$ 到结点 $b$、权为 $w$ 的边。
 
-An efficient implementation of Dijkstra's algorithm requires that it is possible to efficiently find the minimum distance node that has not been processed. An appropriate data structure for this is a priority queue that contains the nodes ordered by their distances. Using a priority queue, the next node to be processed can be retrieved in logarithmic time.
+Dijkstra 算法的高效实现要求能够高效地找到尚未处理的最小距离结点。适合此用途的数据结构是按距离排序的优先队列。使用优先队列，可以在对数时间内取出下一个要处理的结点。
 
-In the following code, the priority queue `q` contains pairs of the form $(-d,x)$, meaning that the current distance to node $x$ is $d$. The array $\texttt{distance}$ contains the distance to each node, and the array $\texttt{processed}$ indicates whether a node has been processed. Initially the distance is $0$ to $x$ and $\infty$ to all other nodes.
+在下面的代码中，优先队列 `q` 包含形如 $(-d,x)$ 的二元组，表示到结点 $x$ 的当前距离为 $d$。数组 $\texttt{distance}$ 包含到每个结点的距离，数组 $\texttt{processed}$ 表示一个结点是否已被处理。初始时到 $x$ 的距离为 $0$，到所有其他结点的距离为 $\infty$。
 
 ```cpp
 for (int i = 1; i <= n; i++) distance[i] = INF;
@@ -148,25 +148,25 @@ while (!q.empty()) {
 }
 ```
 
-Note that the priority queue contains *negative* distances to nodes. The reason for this is that the default version of the C++ priority queue finds maximum elements, while we want to find minimum elements. By using negative distances, we can directly use the default priority queue[^3]. Also note that there may be several instances of the same node in the priority queue; however, only the instance with the minimum distance will be processed.
+注意，优先队列中包含到结点的*负*距离。这样做的原因是，C++ 优先队列的默认版本寻找最大元素，而我们想要寻找最小元素。通过使用负距离，我们可以直接使用默认优先队列[^3]。还要注意，优先队列中可能存在同一个结点的多个实例；然而，只有距离最小的那个实例会被处理。
 
-The time complexity of the above implementation is $O(n+m \log m)$, because the algorithm goes through all nodes of the graph and adds for each edge at most one distance to the priority queue.
+上述实现的时间复杂度为 $O(n+m \log m)$，因为算法遍历图中的所有结点，并且对于每条边最多向优先队列中加入一个距离。
 
-## Floyd--Warshall algorithm
+## Floyd--Warshall 算法
 
-The **Floyd--Warshall algorithm**[^4] provides an alternative way to approach the problem of finding shortest paths. Unlike the other algorithms of this chapter, it finds all shortest paths between the nodes in a single run.
+**Floyd--Warshall 算法**[^4] 提供了解决最短路问题的另一种途径。与本章的其他算法不同，它在一次运行中求出结点之间的所有最短路。
 
-The algorithm maintains a two-dimensional array that contains distances between the nodes. First, distances are calculated only using direct edges between the nodes, and after this, the algorithm reduces distances by using intermediate nodes in paths.
+该算法维护一个二维数组，其中包含结点之间的距离。首先，只使用结点之间的直接边来计算距离，在这之后，算法通过使用路径中的中间结点来减小距离。
 
-#### Example
+#### 例子
 
-Let us consider how the Floyd--Warshall algorithm works in the following graph:
+让我们考察 Floyd--Warshall 算法在下面这个图中的工作过程：
 
 ![](assets/images/ch13-fig13.svg)
 
-Initially, the distance from each node to itself is $0$, and the distance between nodes $a$ and $b$ is $x$ if there is an edge between nodes $a$ and $b$ with weight $x$. All other distances are infinite.
+初始时，每个结点到自身的距离为 $0$，如果结点 $a$ 和 $b$ 之间有一条权为 $x$ 的边，则结点 $a$ 和 $b$ 之间的距离为 $x$。所有其他距离都是无穷大。
 
-In this graph, the initial array is as follows:
+在这个图中，初始数组如下：
 
 |     |        1 |        2 |        3 |        4 |        5 |
 |----:|---------:|---------:|---------:|---------:|---------:|
@@ -176,9 +176,9 @@ In this graph, the initial array is as follows:
 |   4 |        9 | $\infty$ |        7 |        0 |        2 |
 |   5 |        1 | $\infty$ | $\infty$ |        2 |        0 |
 
-The algorithm consists of consecutive rounds. On each round, the algorithm selects a new node that can act as an intermediate node in paths from now on, and distances are reduced using this node.
+该算法由连续的多轮组成。每一轮中，算法选择一个新结点，它从此刻起可以作为路径中的中间结点，并利用该结点来减小距离。
 
-On the first round, node 1 is the new intermediate node. There is a new path between nodes 2 and 4 with length 14, because node 1 connects them. There is also a new path between nodes 2 and 5 with length 6.
+第一轮中，结点 1 是新的中间结点。结点 2 和 4 之间出现了一条长度为 14 的新路径，因为结点 1 连接了它们。结点 2 和 5 之间也出现了一条长度为 6 的新路径。
 
 |     |        1 |      2 |        3 |      4 |        5 |
 |----:|---------:|-------:|---------:|-------:|---------:|
@@ -188,7 +188,7 @@ On the first round, node 1 is the new intermediate node. There is a new path bet
 |   4 |        9 | **14** |        7 |      0 |        2 |
 |   5 |        1 |  **6** | $\infty$ |      2 |        0 |
 
-On the second round, node 2 is the new intermediate node. This creates new paths between nodes 1 and 3 and between nodes 3 and 5:
+第二轮中，结点 2 是新的中间结点。这在结点 1 和 3 之间以及结点 3 和 5 之间创建了新的路径：
 
 |     |     1 |   2 |     3 |   4 |     5 |
 |----:|------:|----:|------:|----:|------:|
@@ -198,7 +198,7 @@ On the second round, node 2 is the new intermediate node. This creates new paths
 |   4 |     9 |  14 |     7 |   0 |     2 |
 |   5 |     1 |   6 | **8** |   2 |     0 |
 
-On the third round, node 3 is the new intermediate round. There is a new path between nodes 2 and 4:
+第三轮中，结点 3 是新的中间结点。结点 2 和 4 之间出现了一条新路径：
 
 |     |   1 |     2 |   3 |     4 |   5 |
 |----:|----:|------:|----:|------:|----:|
@@ -208,7 +208,7 @@ On the third round, node 3 is the new intermediate round. There is a new path be
 |   4 |   9 | **9** |   7 |     0 |   2 |
 |   5 |   1 |     6 |   8 |     2 |   0 |
 
-The algorithm continues like this, until all nodes have been appointed intermediate nodes. After the algorithm has finished, the array contains the minimum distances between any two nodes:
+算法如此继续下去，直到所有结点都被指定为中间结点。算法结束后，数组中包含任意两个结点之间的最小距离：
 
 |     |   1 |   2 |   3 |   4 |   5 |
 |----:|----:|----:|----:|----:|----:|
@@ -218,13 +218,13 @@ The algorithm continues like this, until all nodes have been appointed intermedi
 |   4 |   3 |   8 |   7 |   0 |   2 |
 |   5 |   1 |   6 |   8 |   2 |   0 |
 
-For example, the array tells us that the shortest distance between nodes 2 and 4 is 8. This corresponds to the following path:
+例如，数组告诉我们结点 2 和 4 之间的最短距离是 8。这对应于下面这条路径：
 
 ![](assets/images/ch13-fig14.svg)
 
-#### Implementation
+#### 实现
 
-The advantage of the Floyd--Warshall algorithm that it is easy to implement. The following code constructs a distance matrix where $\texttt{distance}[a][b]$ is the shortest distance between nodes $a$ and $b$. First, the algorithm initializes `distance` using the adjacency matrix `adj` of the graph:
+Floyd--Warshall 算法的优点是容易实现。下面的代码构造一个距离矩阵，其中 $\texttt{distance}[a][b]$ 是结点 $a$ 和 $b$ 之间的最短距离。首先，算法使用图的邻接矩阵 `adj` 来初始化 `distance`：
 
 ```cpp
 for (int i = 1; i <= n; i++) {
@@ -236,7 +236,7 @@ for (int i = 1; i <= n; i++) {
 }
 ```
 
-After this, the shortest distances can be found as follows:
+在这之后，可以如下求出最短距离：
 
 ```cpp
 for (int k = 1; k <= n; k++) {
@@ -249,14 +249,14 @@ for (int k = 1; k <= n; k++) {
 }
 ```
 
-The time complexity of the algorithm is $O(n^3)$, because it contains three nested loops that go through the nodes of the graph.
+该算法的时间复杂度为 $O(n^3)$，因为它包含三个嵌套循环，遍历图中的结点。
 
-Since the implementation of the Floyd--Warshall algorithm is simple, the algorithm can be a good choice even if it is only needed to find a single shortest path in the graph. However, the algorithm can only be used when the graph is so small that a cubic time complexity is fast enough.
+由于 Floyd--Warshall 算法的实现很简单，即使只需要求出图中的单条最短路，该算法也可能是一个不错的选择。然而，只有当图足够小、以至于三次方的时间复杂度足够快时，才能使用该算法。
 
-[^1]: The algorithm is named after R. E. Bellman and L. R. Ford who published it independently in 1958 and 1956, respectively [5, 27].
+[^1]: 该算法以 R. E. Bellman 和 L. R. Ford 命名，他们分别于 1958 年和 1956 年独立发表了该算法 [5, 27]。
 
-[^2]: E. W. Dijkstra published the algorithm in 1959 [15]; however, his original paper does not mention how to implement the algorithm efficiently.
+[^2]: E. W. Dijkstra 于 1959 年发表了该算法 [15]；然而，他的原始论文并未提及如何高效地实现该算法。
 
-[^3]: Of course, we could also declare the priority queue as in Chapter 4.5 and use positive distances, but the implementation would be a bit longer.
+[^3]: 当然，我们也可以像第 4.5 节那样声明优先队列并使用正距离，但那样实现会稍长一些。
 
-[^4]: The algorithm is named after R. W. Floyd and S. Warshall who published it independently in 1962 [26, 78].
+[^4]: 该算法以 R. W. Floyd 和 S. Warshall 命名，他们于 1962 年独立发表了该算法 [26, 78]。

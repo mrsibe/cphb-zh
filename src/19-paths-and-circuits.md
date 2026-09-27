@@ -1,163 +1,163 @@
-# Paths and circuits
+# 路径与回路
 
-This chapter focuses on two types of paths in graphs:
+本章关注图中的两类路径：
 
-- An **Eulerian path** is a path that goes through each edge exactly once.
+- **欧拉路径**是一条恰好经过每条边一次的路径。
 
-- A **Hamiltonian path** is a path that visits each node exactly once.
+- **哈密顿路径**是一条恰好访问每个结点一次的路径。
 
-While Eulerian and Hamiltonian paths look like similar concepts at first glance, the computational problems related to them are very different. It turns out that there is a simple rule that determines whether a graph contains an Eulerian path, and there is also an efficient algorithm to find such a path if it exists. On the contrary, checking the existence of a Hamiltonian path is a NP-hard problem, and no efficient algorithm is known for solving the problem.
+初看之下，欧拉路径和哈密顿路径像是相似的概念，但与它们相关的计算问题却大不相同。事实证明，判断一个图是否包含欧拉路径有一条简单的规则，而且如果存在这样的路径，也有高效的算法可以找出它。相反，判断哈密顿路径是否存在是一个 NP-hard 问题，目前尚无已知的高效算法可以求解。
 
-## Eulerian paths
+## 欧拉路径
 
-An **Eulerian path**[^1] is a path that goes exactly once through each edge of the graph. For example, the graph
+**欧拉路径**[^1]是一条恰好经过图中每条边一次的路径。例如，图
 
 ![](assets/images/ch19-fig01.svg)
 
-has an Eulerian path from node 2 to node 5:
+有一条从结点 2 到结点 5 的欧拉路径：
 
 ![](assets/images/ch19-fig02.svg)
 
-An **Eulerian circuit** is an Eulerian path that starts and ends at the same node. For example, the graph
+**欧拉回路**是一条起点和终点为同一结点的欧拉路径。例如，图
 
 ![](assets/images/ch19-fig03.svg)
 
-has an Eulerian circuit that starts and ends at node 1:
+有一条起点和终点都是结点 1 的欧拉回路：
 
 ![](assets/images/ch19-fig04.svg)
 
-#### Existence
+#### 存在性
 
-The existence of Eulerian paths and circuits depends on the degrees of the nodes. First, an undirected graph has an Eulerian path exactly when all the edges belong to the same connected component and
+欧拉路径和欧拉回路的存在性取决于结点的度。首先，无向图存在欧拉路径当且仅当所有边都属于同一个连通分量，并且
 
-- the degree of each node is even *or*
+- 每个结点的度都是偶数，*或者*
 
-- the degree of exactly two nodes is odd, and the degree of all other nodes is even.
+- 恰好有两个结点的度为奇数，而其他所有结点的度都是偶数。
 
-In the first case, each Eulerian path is also an Eulerian circuit. In the second case, the odd-degree nodes are the starting and ending nodes of an Eulerian path which is not an Eulerian circuit.
+在第一种情况下，每条欧拉路径同时也是欧拉回路。在第二种情况下，度为奇数的两个结点是一条欧拉路径的起点和终点，且该路径不是欧拉回路。
 
-For example, in the graph
+例如，在图
 
 ![](assets/images/ch19-fig05.svg)
 
-nodes 1, 3 and 4 have a degree of 2, and nodes 2 and 5 have a degree of 3. Exactly two nodes have an odd degree, so there is an Eulerian path between nodes 2 and 5, but the graph does not contain an Eulerian circuit.
+中，结点 1、3 和 4 的度为 2，结点 2 和 5 的度为 3。恰好有两个结点的度为奇数，因此结点 2 和 5 之间存在一条欧拉路径，但该图不包含欧拉回路。
 
-In a directed graph, we focus on indegrees and outdegrees of the nodes. A directed graph contains an Eulerian path exactly when all the edges belong to the same connected component and
+在有向图中，我们关注结点的入度和出度。有向图包含欧拉路径当且仅当所有边都属于同一个连通分量，并且
 
-- in each node, the indegree equals the outdegree, *or*
+- 每个结点的入度都等于出度，*或者*
 
-- in one node, the indegree is one larger than the outdegree, in another node, the outdegree is one larger than the indegree, and in all other nodes, the indegree equals the outdegree.
+- 在一个结点中，入度比出度大 1，在另一个结点中，出度比入度大 1，而其他所有结点的入度都等于出度。
 
-In the first case, each Eulerian path is also an Eulerian circuit, and in the second case, the graph contains an Eulerian path that begins at the node whose outdegree is larger and ends at the node whose indegree is larger.
+在第一种情况下，每条欧拉路径同时也是欧拉回路；在第二种情况下，该图包含一条欧拉路径，它始于出度较大的结点，止于入度较大的结点。
 
-For example, in the graph
+例如，在图
 
 ![](assets/images/ch19-fig06.svg)
 
-nodes 1, 3 and 4 have both indegree 1 and outdegree 1, node 2 has indegree 1 and outdegree 2, and node 5 has indegree 2 and outdegree 1. Hence, the graph contains an Eulerian path from node 2 to node 5:
+中，结点 1、3 和 4 的入度和出度均为 1，结点 2 的入度为 1、出度为 2，结点 5 的入度为 2、出度为 1。因此，该图包含一条从结点 2 到结点 5 的欧拉路径：
 
 ![](assets/images/ch19-fig07.svg)
 
-#### Hierholzer's algorithm
+#### Hierholzer 算法
 
-**Hierholzer's algorithm**[^2] is an efficient method for constructing an Eulerian circuit. The algorithm consists of several rounds, each of which adds new edges to the circuit. Of course, we assume that the graph contains an Eulerian circuit; otherwise Hierholzer's algorithm cannot find it.
+**Hierholzer 算法**[^2]是一种构造欧拉回路的高效方法。该算法由若干轮组成，每一轮都向回路中加入新的边。当然，我们假设图中包含欧拉回路；否则 Hierholzer 算法无法找到它。
 
-First, the algorithm constructs a circuit that contains some (not necessarily all) of the edges of the graph. After this, the algorithm extends the circuit step by step by adding subcircuits to it. The process continues until all edges have been added to the circuit.
+首先，该算法构造一条包含图中部分（不必是全部）边的回路。此后，该算法通过向其加入子回路，一步步地扩展这条回路。这一过程持续进行，直到所有边都被加入回路。
 
-The algorithm extends the circuit by always finding a node $x$ that belongs to the circuit but has an outgoing edge that is not included in the circuit. The algorithm constructs a new path from node $x$ that only contains edges that are not yet in the circuit. Sooner or later, the path will return to node $x$, which creates a subcircuit.
+该算法扩展回路的方式是：总是找出一个属于回路、但有一条不包含在回路中的出边的结点 $x$。该算法从结点 $x$ 出发构造一条新路径，其中只包含尚未在回路中的边。这条路径迟早会回到结点 $x$，从而形成一个子回路。
 
-If the graph only contains an Eulerian path, we can still use Hierholzer's algorithm to find it by adding an extra edge to the graph and removing the edge after the circuit has been constructed. For example, in an undirected graph, we add the extra edge between the two odd-degree nodes.
+如果图中只包含欧拉路径，我们仍然可以使用 Hierholzer 算法来找出它：向图中添加一条额外的边，并在构造出回路之后删去这条边。例如，在无向图中，我们在两个度为奇数的结点之间添加这条额外的边。
 
-Next we will see how Hierholzer's algorithm constructs an Eulerian circuit for an undirected graph.
+接下来我们将看到 Hierholzer 算法如何为一个无向图构造欧拉回路。
 
-#### Example
+#### 示例
 
-Let us consider the following graph:
+让我们考虑下面的图：
 
 ![](assets/images/ch19-fig08.svg)
 
-Suppose that the algorithm first creates a circuit that begins at node 1. A possible circuit is $1 \rightarrow 2 \rightarrow 3 \rightarrow 1$:
+假设该算法首先构造一条从结点 1 开始的回路。一条可能的回路是 $1 \rightarrow 2 \rightarrow 3 \rightarrow 1$：
 
 ![](assets/images/ch19-fig09.svg)
 
-After this, the algorithm adds the subcircuit $2 \rightarrow 5 \rightarrow 6 \rightarrow 2$ to the circuit:
+此后，该算法把子回路 $2 \rightarrow 5 \rightarrow 6 \rightarrow 2$ 加入回路：
 
 ![](assets/images/ch19-fig10.svg)
 
-Finally, the algorithm adds the subcircuit $6 \rightarrow 3 \rightarrow 4 \rightarrow 7 \rightarrow 6$ to the circuit:
+最后，该算法把子回路 $6 \rightarrow 3 \rightarrow 4 \rightarrow 7 \rightarrow 6$ 加入回路：
 
 ![](assets/images/ch19-fig11.svg)
 
-Now all edges are included in the circuit, so we have successfully constructed an Eulerian circuit.
+现在所有边都包含在回路中，因此我们成功地构造出了一条欧拉回路。
 
-## Hamiltonian paths
+## 哈密顿路径
 
-A **Hamiltonian path** is a path that visits each node of the graph exactly once. For example, the graph
+**哈密顿路径**是一条恰好访问图中每个结点一次的路径。例如，图
 
 ![](assets/images/ch19-fig12.svg)
 
-contains a Hamiltonian path from node 1 to node 3:
+包含一条从结点 1 到结点 3 的哈密顿路径：
 
 ![](assets/images/ch19-fig13.svg)
 
-If a Hamiltonian path begins and ends at the same node, it is called a **Hamiltonian circuit**. The graph above also has an Hamiltonian circuit that begins and ends at node 1:
+如果一条哈密顿路径的起点和终点是同一结点，则称其为**哈密顿回路**。上面的图也有一条起点和终点都是结点 1 的哈密顿回路：
 
 ![](assets/images/ch19-fig14.svg)
 
-#### Existence
+#### 存在性
 
-No efficient method is known for testing if a graph contains a Hamiltonian path, and the problem is NP-hard. Still, in some special cases, we can be certain that a graph contains a Hamiltonian path.
+目前尚无已知的高效方法可以判断一个图是否包含哈密顿路径，而且该问题是 NP-hard 的。不过，在某些特殊情况下，我们能够确定一个图包含哈密顿路径。
 
-A simple observation is that if the graph is complete, i.e., there is an edge between all pairs of nodes, it also contains a Hamiltonian path. Also stronger results have been achieved:
+一个简单的观察是：如果图是完全图，即所有结点对之间都有边，那么它也包含哈密顿路径。此外，还得到了更强的结果：
 
-- **Dirac's theorem**: If the degree of each node is at least $n/2$, the graph contains a Hamiltonian path.
+- **Dirac 定理**：如果每个结点的度至少为 $n/2$，则该图包含哈密顿路径。
 
-- **Ore's theorem**: If the sum of degrees of each non-adjacent pair of nodes is at least $n$, the graph contains a Hamiltonian path.
+- **Ore 定理**：如果每一对不相邻结点的度之和至少为 $n$，则该图包含哈密顿路径。
 
-A common property in these theorems and other results is that they guarantee the existence of a Hamiltonian path if the graph has *a large number* of edges. This makes sense, because the more edges the graph contains, the more possibilities there is to construct a Hamiltonian path.
+这些定理以及其他结果中的一个共同性质是：如果图具有*大量的*边，它们就保证哈密顿路径的存在。这是合理的，因为图包含的边越多，构造哈密顿路径的可能性就越大。
 
-#### Construction
+#### 构造
 
-Since there is no efficient way to check if a Hamiltonian path exists, it is clear that there is also no method to efficiently construct the path, because otherwise we could just try to construct the path and see whether it exists.
+既然没有高效的方法来判断哈密顿路径是否存在，那么显然也没有高效构造该路径的方法，否则我们只要尝试构造这条路径，就能看出它是否存在。
 
-A simple way to search for a Hamiltonian path is to use a backtracking algorithm that goes through all possible ways to construct the path. The time complexity of such an algorithm is at least $O(n!)$, because there are $n!$ different ways to choose the order of $n$ nodes.
+搜索哈密顿路径的一种简单方法是使用回溯算法，遍历所有可能的构造路径的方式。这种算法的时间复杂度至少为 $O(n!)$，因为选择 $n$ 个结点的顺序共有 $n!$ 种不同的方式。
 
-A more efficient solution is based on dynamic programming (see Chapter 10.5). The idea is to calculate values of a function $\texttt{possible}(S,x)$, where $S$ is a subset of nodes and $x$ is one of the nodes. The function indicates whether there is a Hamiltonian path that visits the nodes of $S$ and ends at node $x$. It is possible to implement this solution in $O(2^n n^2)$ time.
+一种更高效的解法基于动态规划（见第 10.5 章）。其思路是计算函数 $\texttt{possible}(S,x)$ 的值，其中 $S$ 是结点的一个子集，$x$ 是其中一个结点。该函数表示是否存在一条访问 $S$ 中结点、并以结点 $x$ 结尾的哈密顿路径。这个解法可以在 $O(2^n n^2)$ 时间内实现。
 
-## De Bruijn sequences
+## De Bruijn 序列
 
-A **De Bruijn sequence** is a string that contains every string of length $n$ exactly once as a substring, for a fixed alphabet of $k$ characters. The length of such a string is $k^n+n-1$ characters. For example, when $n=3$ and $k=2$, an example of a De Bruijn sequence is $$0001011100.$$ The substrings of this string are all combinations of three bits: 000, 001, 010, 011, 100, 101, 110 and 111.
+**De Bruijn 序列**是一个字符串，对于固定的 $k$ 字符字母表，它把每个长度为 $n$ 的字符串都恰好作为子串包含一次。这样的字符串长度为 $k^n+n-1$ 个字符。例如，当 $n=3$ 且 $k=2$ 时，一个 De Bruijn 序列的例子是 $$0001011100.$$ 该字符串的子串是所有三位二进制位的组合：000、001、010、011、100、101、110 和 111。
 
-It turns out that each De Bruijn sequence corresponds to an Eulerian path in a graph. The idea is to construct a graph where each node contains a string of $n-1$ characters and each edge adds one character to the string. The following graph corresponds to the above scenario:
+事实证明，每个 De Bruijn 序列都对应于图中的一个欧拉路径。其思路是构造一个图，其中每个结点包含一个长度为 $n-1$ 的字符串，每条边向字符串中添加一个字符。下面的图对应于上述情形：
 
 ![](assets/images/ch19-fig15.svg)
 
-An Eulerian path in this graph corresponds to a string that contains all strings of length $n$. The string contains the characters of the starting node and all characters of the edges. The starting node has $n-1$ characters and there are $k^n$ characters in the edges, so the length of the string is $k^n+n-1$.
+该图中的一条欧拉路径对应于一个包含所有长度为 $n$ 的字符串的字符串。该字符串包含起始结点的字符以及所有边上的字符。起始结点有 $n-1$ 个字符，边上有 $k^n$ 个字符，因此该字符串的长度为 $k^n+n-1$。
 
-## Knight's tours
+## 骑士巡游
 
-A **knight's tour** is a sequence of moves of a knight on an $n \times n$ chessboard following the rules of chess such that the knight visits each square exactly once. A knight's tour is called a *closed* tour if the knight finally returns to the starting square and otherwise it is called an *open* tour.
+**骑士巡游**是骑士在 $n \times n$ 棋盘上按国际象棋规则移动的一个序列，使得骑士恰好访问每个格子一次。如果骑士最终回到起始格子，则称该巡游为*闭合*巡游，否则称为*开放*巡游。
 
-For example, here is an open knight's tour on a $5 \times 5$ board:
+例如，下面是一个 $5 \times 5$ 棋盘上的开放骑士巡游：
 
 ![](assets/images/ch19-fig16.svg)
 
-A knight's tour corresponds to a Hamiltonian path in a graph whose nodes represent the squares of the board, and two nodes are connected with an edge if a knight can move between the squares according to the rules of chess.
+骑士巡游对应于图中的一个哈密顿路径，其中结点表示棋盘的格子，如果骑士能够按国际象棋规则在两个格子之间移动，则用一条边连接这两个结点。
 
-A natural way to construct a knight's tour is to use backtracking. The search can be made more efficient by using *heuristics* that attempt to guide the knight so that a complete tour will be found quickly.
+构造骑士巡游的一种自然方法是使用回溯。通过使用尝试引导骑士、以便快速找到完整巡游的*启发式方法*，可以使搜索更加高效。
 
-#### Warnsdorf's rule
+#### Warnsdorf 规则
 
-**Warnsdorf's rule** is a simple and effective heuristic for finding a knight's tour[^3]. Using the rule, it is possible to efficiently construct a tour even on a large board. The idea is to always move the knight so that it ends up in a square where the number of possible moves is as *small* as possible.
+**Warnsdorf 规则**是寻找骑士巡游的一种简单而有效的启发式方法[^3]。使用该规则，即使在大型棋盘上也能高效地构造出巡游。其思路是：总是移动骑士，使其落在可能走法数目尽可能*少*的格子中。
 
-For example, in the following situation, there are five possible squares to which the knight can move (squares $a \ldots e$):
+例如，在下面的情形中，骑士有五个可以移动到的格子（格子 $a \ldots e$）：
 
 ![](assets/images/ch19-fig17.svg)
 
-In this situation, Warnsdorf's rule moves the knight to square $a$, because after this choice, there is only a single possible move. The other choices would move the knight to squares where there would be three moves available.
+在该情形下，Warnsdorf 规则把骑士移到格子 $a$，因为做出这个选择后只有一种可能的走法。其他选择会把骑士移到有三种可选择走法的格子中。
 
-[^1]: L. Euler studied such paths in 1736 when he solved the famous Königsberg bridge problem. This was the birth of graph theory.
+[^1]: L. Euler 在 1736 年解决著名的柯尼斯堡七桥问题时研究了这类路径。这是图论的诞生。
 
-[^2]: The algorithm was published in 1873 after Hierholzer's death [39].
+[^2]: 该算法于 1873 年在 Hierholzer 去世后发表 [39]。
 
-[^3]: This heuristic was proposed in Warnsdorf's book [77] in 1823. There are also polynomial algorithms for finding knight's tours [58], but they are more complicated.
+[^3]: 这一启发式方法由 Warnsdorf 在其 1823 年的著作 [77] 中提出。寻找骑士巡游也有多项式算法 [58]，但它们更为复杂。
