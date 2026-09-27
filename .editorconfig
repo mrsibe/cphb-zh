@@ -1,0 +1,22 @@
+root = true
+
+# 全仓库默认：UTF-8 + LF + 末尾换行
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 正文由 pandoc 生成，且用行尾两空格表示 CommonMark 硬换行，不能自动裁剪
+[*.md]
+trim_trailing_whitespace = false
+
+# Makefile 必须使用 tab
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+[*.{typ,css,lua,mjs,js,json,yml,yaml,toml}]
+indent_size = 2

@@ -3,6 +3,17 @@
 本项目的正文只有一个来源：`src/*.md`。网站、PDF、EPUB 都从它生成，因此翻译时
 只需要遵守很少的几条规则。
 
+## 代码风格
+
+`src/*.md` 由 `tools/migrate.mjs` 从上游 LaTeX 生成，**不要用 Prettier 等工具整体格式化**：
+
+- 重新执行迁移会覆盖格式化结果，产生无意义的巨大 diff；
+- 行尾两空格是 CommonMark 硬换行，格式化器默认会删掉，PDF/EPUB 的换行会变；
+- 正文是“一段一行”（`--wrap=none`），这是书籍 Markdown 的常见写法，按列换行反而更难改、
+  diff 更吵。
+
+编辑器请遵循仓库根目录的 `.editorconfig`。README、CONTRIBUTING 等手写文档不受此限制。
+
 ## 工作流
 
 1. 选择一个还没有译完的章节（见文末进度表），提一个 issue 或直接开 PR 声明。
