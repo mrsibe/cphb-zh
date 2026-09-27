@@ -462,4 +462,4 @@ for (int k = 0; k < n; k++) {
 
 这段代码把 $k=0 \ldots n-1$ 时 $\texttt{partial}(S,k)$ 的值计算到数组 `sum` 中。由于 $\texttt{partial}(S,k)$ 总是基于 $\texttt{partial}(S,k-1)$，我们可以复用数组 `sum`，从而得到一种非常高效的实现。
 
-[^1]: 这项技术由 M. Held 和 R. M. Karp 于 1962 年提出 [38]。
+[^1]: 这项技术由 M. Held 和 R. M. Karp 于 1962 年提出 [34]。

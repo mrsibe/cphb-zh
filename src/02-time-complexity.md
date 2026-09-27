@@ -294,7 +294,7 @@ cout << best << "\n";
 
 这一比较表明，当输入规模较小时，所有算法都很高效；但更大的输入会让各算法在运行时间上呈现出显著差异。算法 1 在 $n=10^4$ 时变慢，算法 2 在 $n=10^5$ 时变慢。只有算法 3 能瞬间处理哪怕是最大的输入。
 
-[^1]: 关于该主题的一本经典著作是 M. R. Garey 和 D. S. Johnson 的 *Computers and Intractability: A Guide to the Theory of NP-Completeness* [31]。
+[^1]: 关于该主题的一本经典著作是 M. R. Garey 和 D. S. Johnson 的 *Computers and Intractability: A Guide to the Theory of NP-Completeness* [28]。
 
 [^2]: J. Bentley 的书 *Programming Pearls* [8] 让这个问题广为人知。
 

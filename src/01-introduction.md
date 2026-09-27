@@ -12,7 +12,7 @@
 
 ## 编程语言
 
-目前，竞赛中最常用的编程语言是 C++、Python 和 Java。例如，在 Google Code Jam 2017 中，排名前 3000 的参赛者里，79% 使用 C++，16% 使用 Python，8% 使用 Java [32]。也有一些参赛者使用了多种语言。
+目前，竞赛中最常用的编程语言是 C++、Python 和 Java。例如，在 Google Code Jam 2017 中，排名前 3000 的参赛者里，79% 使用 C++，16% 使用 Python，8% 使用 Java [29]。也有一些参赛者使用了多种语言。
 
 许多人认为 C++ 是竞赛选手的最佳选择，而且几乎所有的竞赛系统都提供 C++。使用 C++ 的好处在于它是一种非常高效的语言，其标准库还包含大量数据结构和算法。
 
@@ -447,11 +447,11 @@ $$32 \rightarrow 16 \rightarrow 8 \rightarrow 4 \rightarrow 2 \rightarrow 1$$
 
 IOI 由两场各五小时的比赛组成。在这两场比赛中，参赛者需要解决三道难度各异的算法题目。题目被划分为若干子任务，每个子任务都有相应的分值。尽管选手被划分为队伍，但他们是作为个人进行竞争的。
 
-IOI 大纲 [45] 规定了 IOI 题目中可能涉及的主题。IOI 大纲中的几乎所有主题本书都已涵盖。
+IOI 大纲 [41] 规定了 IOI 题目中可能涉及的主题。IOI 大纲中的几乎所有主题本书都已涵盖。
 
 IOI 的参赛者通过各国国内竞赛选拔。在 IOI 之前，会组织许多区域性竞赛，例如波罗的海信息学奥林匹克（BOI）、中欧信息学奥林匹克（CEOI）和亚太信息学奥林匹克（APIO）。
 
-一些国家为未来的 IOI 参赛者举办在线练习赛，例如克罗地亚信息学公开赛 [12] 和美国计算机奥林匹克竞赛 [76]。此外，波兰竞赛的大量题目也可以在线获取 [68]。
+一些国家为未来的 IOI 参赛者举办在线练习赛，例如克罗地亚信息学公开赛 [11] 和美国计算机奥林匹克竞赛 [68]。此外，波兰竞赛的大量题目也可以在线获取 [60]。
 
 #### ICPC
 
@@ -473,21 +473,21 @@ ICPC 可能涉及的主题不像 IOI 那样有明确的规范。无论如何，�
 
 除了本书之外，已经有一些专注于竞赛程序设计和算法问题求解的书：
 
-- S. S. Skiena and M. A. Revilla: *Programming Challenges: The Programming Contest Training Manual* [67]
+- S. S. Skiena and M. A. Revilla: *Programming Challenges: The Programming Contest Training Manual* [59]
 
-- S. Halim and F. Halim: *Competitive Programming 3: The New Lower Bound of Programming Contests* [37]
+- S. Halim and F. Halim: *Competitive Programming 3: The New Lower Bound of Programming Contests* [33]
 
-- K. Diks et al.: *Looking for a Challenge? The Ultimate Problem Set from the University of Warsaw Programming Competitions* [16]
+- K. Diks et al.: *Looking for a Challenge? The Ultimate Problem Set from the University of Warsaw Programming Competitions* [15]
 
 前两本书面向初学者，而最后一本包含进阶内容。
 
 当然，通用的算法书也适合竞赛选手。一些流行的书包括：
 
-- T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein: *Introduction to Algorithms* [14]
+- T. H. Cormen, C. E. Leiserson, R. L. Rivest and C. Stein: *Introduction to Algorithms* [13]
 
-- J. Kleinberg and É. Tardos: *Algorithm Design* [49]
+- J. Kleinberg and É. Tardos: *Algorithm Design* [45]
 
-- S. S. Skiena: *The Algorithm Design Manual* [66]
+- S. S. Skiena: *The Algorithm Design Manual* [58]
 
 [^1]: 对于这类求和甚至有一个通用公式，称为 **Faulhaber 公式**，但它过于复杂，这里不作介绍。
 

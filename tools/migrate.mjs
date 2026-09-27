@@ -113,37 +113,53 @@ function removeMacroN(src, name, n) {
 // Bibliography
 // ---------------------------------------------------------------------------
 
+/** True when the position `idx` sits inside a LaTeX `%` line comment. */
+function isCommented(tex, idx) {
+  const lineStart = tex.lastIndexOf("\n", idx) + 1;
+  return tex.slice(lineStart, idx).trimStart().startsWith("%");
+}
+
 function buildBibliography() {
   const tex = read(path.join(ORIG, "list.tex"));
   const re = /\\bibitem\{([^}]+)\}/g;
   const marks = [];
   let m;
-  while ((m = re.exec(tex)) !== null) marks.push({ key: m[1], start: m.index, bodyStart: re.lastIndex });
+  while ((m = re.exec(tex)) !== null) {
+    marks.push({
+      key: m[1],
+      start: m.index,
+      bodyStart: re.lastIndex,
+      commented: isCommented(tex, m.index),
+    });
+  }
 
   const endIdx = tex.indexOf("\\end{thebibliography}");
   const citeMap = new Map();
   const lines = [];
 
+  // All \bibitem act as body boundaries (so a commented-out entry is not
+  // swallowed by the previous one), but only live entries are emitted and
+  // numbered — upstream comments some entries out, and counting them would
+  // both produce empty entries and shift every following citation number.
+  let num = 0;
   marks.forEach((mark, i) => {
     const stop = i + 1 < marks.length ? marks[i + 1].start : endIdx;
+    if (mark.commented) return;
     const raw = tex.slice(mark.bodyStart, stop);
     const md = pandoc(raw)
       .replace(/:::.*$/gm, "")
       .replace(/\n{2,}/g, " ")
       .replace(/\s+/g, " ")
       .trim();
-    citeMap.set(mark.key, i + 1);
-    lines.push(`${i + 1}. ${md}`);
+    num += 1;
+    citeMap.set(mark.key, num);
+    lines.push(`${num}. ${md}`);
   });
 
-  const out =
-    "# Bibliography\n\n" +
-    "> 本页由 `tools/migrate.mjs` 从 `list.tex` 生成，正文中的 `\\cite` 引用会映射到这里。\n\n" +
-    lines.join("\n\n") +
-    "\n";
+  const out = "# Bibliography\n\n" + lines.join("\n\n") + "\n";
 
   fs.writeFileSync(path.join(SRC, "bibliography.md"), out, "utf8");
-  console.log(`bibliography.md  (${marks.length} entries)`);
+  console.log(`bibliography.md  (${num} entries)`);
   return citeMap;
 }
 
@@ -372,6 +388,14 @@ function writeSummary(chapters) {
 fs.mkdirSync(SRC, { recursive: true });
 fs.mkdirSync(IMAGES, { recursive: true });
 fs.mkdirSync(WORK, { recursive: true });
+
+// `--bib-only` regenerates src/bibliography.md without touching the (already
+// translated) chapters. It still writes the English heading; the committed
+// file keeps its Chinese `# 参考文献` heading.
+if (args.includes("--bib-only")) {
+  buildBibliography();
+  process.exit(0);
+}
 
 const citeMap = buildBibliography();
 const chapters = [];
